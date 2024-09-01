@@ -51,8 +51,8 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
       targetPosition: isHorizontal ? "left" : "top",
       sourcePosition: isHorizontal ? "right" : "bottom",
       //Hardcode a width and height for node so that elk can use it when layouting.
-      width: 150,
-      height: 50,
+      width: 200,
+      height: 200,
     })),
     edges: edges,
   };
