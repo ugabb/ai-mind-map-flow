@@ -1,5 +1,7 @@
+'use client'
+
 import { Handle, Node, NodeProps, NodeResizer, Position } from '@xyflow/react'
-import React from 'react'
+import React, { memo, useRef, useState } from 'react'
 
 export type DataNode = Node<{   
     label: string
@@ -8,15 +10,26 @@ export type DataNode = Node<{
 }> 
 
 const Squaree = (props: NodeProps<DataNode>) => {
-    const {selected, data} = props
+    const {selected, data, width} = props
+    
+    const [label, setLabel] = useState((typeof data.label === 'object') ? '' : data.label)
+    const [isEditing, setIsEditing] = useState(false)
+    
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    let str;
-    if(typeof data.label !== 'object'){
-      
-        str = data.label;
+    const handleDoubleClick = () => {
+        setIsEditing(true);
+        if (inputRef.current) {
+            inputRef.current.focus(); // Set focus on the input element when double-clicked
+        }
+    };
+
+    const handleInputBlur = () => {
+        setIsEditing(false);
     }
+
   return (
-    <div className='bg-violet-500 rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 ' > 
+    <div className='bg-violet-500 rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 ' onDoubleClick={handleDoubleClick}> 
         <NodeResizer
             minHeight={200}
             minWidth={200}
@@ -49,8 +62,8 @@ const Squaree = (props: NodeProps<DataNode>) => {
             position={Position.Left}
             className='-left-2 w-3 h-3 bg-blue-500'
         />
-        <div className='flex justify-center items-center h-full'>
-            <ul>
+        <div className='flex justify-center items-center h-full w-full text-wrap'>
+            <ul className='h-full w-full'>
                 { 
                 (typeof data.label === 'object') ? 
                 Object.entries(data.label).map(([key, value], index) =>(
@@ -58,7 +71,20 @@ const Squaree = (props: NodeProps<DataNode>) => {
                         <span className="jsonVisNode__label__key">{key} : </span>
                         <span>{String(value)}</span>
                     </li>                    
-                )) : str
+                )) : (
+                    <div className='flex justify-center items-center h-full w-full p-3'>
+                        {isEditing ? (
+                            <textarea
+                                className={`border-none bg-transparent w-full h-full max-w-[${width}px] focus:outline-none text-center text-white resize-none overflow-y-hidden`}
+                                value={label}
+                                onChange={(e) => setLabel(e.target.value)}
+                                onBlur={handleInputBlur}
+                            />
+                        ) : (
+                            <span className={`text-white w-full max-w-[${width}px] text-wrap text-center`}>{label}</span>
+                        )}
+                    </div>
+                )
                 }   
             </ul>
         </div>
@@ -66,4 +92,4 @@ const Squaree = (props: NodeProps<DataNode>) => {
   )
 }
 
-export default Squaree
+export const Square = memo(Squaree)

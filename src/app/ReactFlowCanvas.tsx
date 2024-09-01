@@ -13,8 +13,8 @@ import {
   Node,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import Squaree from '@/components/Squaree';
-import DefaultEdge from '@/components/edges/DefaultEdges';
+import {Square} from '@/components/Squaree';
+import {DefaultEdge} from '@/components/edges/DefaultEdges';
 import convertJsonToTree from '@/utils/convertJsonToTree';
 import convertTreeToNodes from '@/utils/convertTreeToNodes';
 
@@ -64,7 +64,6 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
     .layout(graph)
     .then((layoutedGraph) => ({
       nodes: layoutedGraph.children.map((node) => {
-        console.log("ELKS",node)
 
         return {
           ...node,
@@ -84,7 +83,7 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
 //   { id: '3', data: { label: 'Node 2' }, position: { x: 100, y: 50 }, type: 'square', width: 200, height: 200 }
 // ] satisfies Node[];
 
-const nodeTypes = { square: Squaree }; 
+const nodeTypes = { square: Square }; 
 const edgesTypes = { default: DefaultEdge }; 
 
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
@@ -113,7 +112,6 @@ export const SaveRestore = () => {
         const es = initialNodes === null ? edges : initialNodes[1];
         getLayoutedElements(ns, es, opts).then(
           ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
-            console.log("layoutedNodes", layoutedNodes, "layoutedEdges", layoutedEdges);
             //add layouted or repositioned nodes and edges to store, so that react flow will render the layouted or repositioned nodes and edges 
             setNodes(layoutedNodes);
             setEdges(layoutedEdges);
@@ -121,7 +119,7 @@ export const SaveRestore = () => {
           }
         );
       },
-      [nodes, edges]   //So that the useCallback will rememoize the nodes and edges variable if it values changed.
+      [nodes, edges, setNodes, setEdges]   //So that the useCallback will rememoize the nodes and edges variable if it values changed.
     );
 
     useLayoutEffect(() => {
