@@ -1,7 +1,9 @@
 'use client'
 
-import { Handle, Node, NodeProps, NodeResizer, Position } from '@xyflow/react'
+import { Connection, Edge, EdgeProps, Handle, Node, NodeProps, NodeResizer, Position, useReactFlow } from '@xyflow/react'
 import React, { memo, useRef, useState } from 'react'
+import { FiArrowRight } from 'react-icons/fi'
+import GhostSquare from './GhostSquare'
 
 export type DataNode = Node<{   
     label: string
@@ -9,11 +11,25 @@ export type DataNode = Node<{
     value?: any
 }> 
 
+export interface Direction {
+    top: boolean;
+    bottom: boolean;
+    left: boolean;
+    right: boolean;
+}
+
 const Squaree = (props: NodeProps<DataNode>) => {
-    const {selected, data, width} = props
+    const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY} = props
+    const { getEdge, addEdges, setEdges, addNodes} = useReactFlow()
     
     const [label, setLabel] = useState((typeof data.label === 'object') ? '' : data.label)
     const [isEditing, setIsEditing] = useState(false)
+    const [isAddingNode, setIsAddingNode] = useState<Direction>({
+        top: false,
+        bottom: false,
+        left: false,
+        right: false
+    });
     
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -27,6 +43,48 @@ const Squaree = (props: NodeProps<DataNode>) => {
     const handleInputBlur = () => {
         setIsEditing(false);
     }
+
+    const handleNewConnections = (newConnection: Connection) => {
+        const curentEdge = getEdge(id)
+        if(!curentEdge) return
+        const newEdge: Edge = {
+            id: `${curentEdge?.id}-${newConnection.target}`,
+            source: id,
+            target: newConnection.target,
+            type: 'default',
+            animated: true,
+        }
+        addEdges(newEdge)
+    }
+
+    const handleAddSideNode = (direction: string) => {
+        if(direction === "left" || direction === "right"){
+            if(!width) return
+            const newNode: Node = {
+                id: crypto.randomUUID(),
+                position: {
+                    x: positionAbsoluteX + (direction === "left" ? -width as number - 100 : width as number + 100),
+                    y: positionAbsoluteY
+                },
+                data: {label: ""},
+                type: "square",
+                width: width,
+                height: height,
+                expandParent: true
+            }
+
+            const newConnection: Connection = {
+                source: id,
+                target: newNode.id,
+                sourceHandle: direction,
+                targetHandle: direction === "left" ? "right" : "left"
+            }
+            
+            handleNewConnections(newConnection)
+
+            addNodes(newNode)
+        }
+    }   
 
   return (
     <div className='bg-violet-500 rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 ' onDoubleClick={handleDoubleClick}> 
@@ -42,25 +100,66 @@ const Squaree = (props: NodeProps<DataNode>) => {
             id="top"
             type="source"
             position={Position.Top}
-            className='-top-2 w-3 h-3 bg-blue-500'
+            className={`-top-6 w-3 h-3 bg-blue-500 ${!selected && 'hidden'}`}
         />
-        <Handle
-            id="right"
-            type="source"
-            position={Position.Right}
-            className='-right-2 w-3 h-3 bg-blue-500'
-        />
+
+        {isAddingNode.right ? (
+            <Handle
+                id="right"
+                type="source"
+                position={Position.Right}
+                className='-right-6 size-10 bg-blue-500 flex justify-center items-center'
+                onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
+                onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
+                onClick={() => handleAddSideNode("right")}
+            >
+                <FiArrowRight className='size-5 text-white' />
+            </Handle>
+        ) :
+            (
+                <Handle
+                    id="right"
+                    type="source"
+                    position={Position.Right}
+                    className={`-right-6 w-3 h-3 bg-blue-500 ${!selected && 'hidden'}`}
+                    onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
+                    onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
+                />
+            )
+        }
+
+        {isAddingNode.right && (
+                // <div
+                //     className='bg-indigo-500/20 rounded  min-w-[200px] min-h-[200px]'
+                //     style={{
+                //         position: 'absolute',
+                //         width: width as number,
+                //         height: height as number,
+                //         right: width && -width as number - 100, // Adjust the offset as needed
+                //         top: 5,
+                //         pointerEvents: 'none', // Allow clicks to pass through
+                //         zIndex: 1, // Ensure it's above the background
+                //     }}
+                // />
+                <GhostSquare 
+                    width={width as number}
+                    height={height as number}
+                    direction="right"
+                />
+            )
+        }
+
         <Handle
             id="bottom"
             type="source"
             position={Position.Bottom}
-            className='-bottom-2 w-3 h-3 bg-blue-500'
+            className={`-bottom-6 w-3 h-3 bg-blue-500 ${!selected && 'hidden'}`}
         />
         <Handle
             id="left"
             type="source"
             position={Position.Left}
-            className='-left-2 w-3 h-3 bg-blue-500'
+            className={`-left-6 w-3 h-3 bg-blue-500 ${!selected && 'hidden'}`}
         />
         <div className='flex justify-center items-center h-full w-full text-wrap'>
             <ul className='h-full w-full'>
