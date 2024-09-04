@@ -1,5 +1,4 @@
-import { useCallback, useMemo } from "react";
-import { Direction } from "./Squaree";
+import { useMemo } from "react";
 
 interface GhostSquareProps {
     width: number;
