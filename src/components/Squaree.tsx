@@ -20,7 +20,7 @@ export interface Direction {
 
 const Squaree = (props: NodeProps<DataNode>) => {
     const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY} = props
-    const { getEdge, addEdges, setEdges, addNodes} = useReactFlow()
+    const { getEdge, getEdges, addEdges, setEdges, addNodes} = useReactFlow()
     
     const [label, setLabel] = useState((typeof data.label === 'object') ? '' : data.label)
     const [isEditing, setIsEditing] = useState(false)
@@ -46,11 +46,14 @@ const Squaree = (props: NodeProps<DataNode>) => {
 
     const handleNewConnections = (newConnection: Connection) => {
         const curentEdge = getEdge(id)
-        if(!curentEdge) return
+        if(curentEdge) return
+        console.log(curentEdge)
         const newEdge: Edge = {
-            id: `${curentEdge?.id}-${newConnection.target}`,
-            source: id,
+            id: `${id}-${newConnection.target}`,
+            source: newConnection.source,
             target: newConnection.target,
+            sourceHandle: newConnection.sourceHandle,
+            targetHandle: newConnection.targetHandle,
             type: 'default',
             animated: true,
         }
@@ -84,14 +87,16 @@ const Squaree = (props: NodeProps<DataNode>) => {
 
             addNodes(newNode)
         }
+        
     }   
-
-  return (
+    console.log("Selected", selected,data.label)
+    
+    return (
     <div className='bg-violet-500 rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 ' onDoubleClick={handleDoubleClick}> 
         <NodeResizer
             minHeight={200}
             minWidth={200}
-            isVisible={selected}
+            isVisible={selected ? true : false}
             lineClassName='bg-blue-500'
 
             handleClassName='w-4 h-4 bg-white border-1 border-blue-500 rounded' 
@@ -100,7 +105,8 @@ const Squaree = (props: NodeProps<DataNode>) => {
             id="top"
             type="source"
             position={Position.Top}
-            className={`-top-6 w-3 h-3 bg-blue-500 ${!selected && 'hidden'}`}
+            className={`-top-6 w-3 h-3 bg-blue-500 `}
+            
         />
 
         {isAddingNode.right ? (
@@ -108,7 +114,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
                 id="right"
                 type="source"
                 position={Position.Right}
-                className='-right-6 size-10 bg-blue-500 flex justify-center items-center'
+                className='-right-6 size-10 bg-blue-500 flex justify-center items-center '
                 onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
                 onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
                 onClick={() => handleAddSideNode("right")}
@@ -121,7 +127,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
                     id="right"
                     type="source"
                     position={Position.Right}
-                    className={`-right-6 w-3 h-3 bg-blue-500 ${!selected && 'hidden'}`}
+                    className={`-right-6 w-3 h-3 bg-blue-500 `}
                     onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
                     onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
                 />
@@ -153,13 +159,13 @@ const Squaree = (props: NodeProps<DataNode>) => {
             id="bottom"
             type="source"
             position={Position.Bottom}
-            className={`-bottom-6 w-3 h-3 bg-blue-500 ${!selected && 'hidden'}`}
+            className={`-bottom-6 w-3 h-3 bg-blue-500  `}
         />
         <Handle
             id="left"
             type="source"
             position={Position.Left}
-            className={`-left-6 w-3 h-3 bg-blue-500 ${!selected && 'hidden'}`}
+            className={`-left-6 w-3 h-3 bg-blue-500 `}
         />
         <div className='flex justify-center items-center h-full w-full text-wrap'>
             <ul className='h-full w-full'>
