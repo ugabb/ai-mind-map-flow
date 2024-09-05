@@ -2,7 +2,7 @@
 
 import { Connection, Edge, EdgeProps, Handle, Node, NodeProps, NodeResizer, Position, useReactFlow } from '@xyflow/react'
 import React, { memo, useRef, useState } from 'react'
-import { FiArrowDown, FiArrowLeft, FiArrowRight } from 'react-icons/fi'
+import { FiArrowDown, FiArrowLeft, FiArrowRight, FiArrowUp } from 'react-icons/fi'
 import GhostSquare from './GhostSquare'
 
 export type DataNode = Node<{   
@@ -19,7 +19,7 @@ export interface Direction {
 }
 
 const Squaree = (props: NodeProps<DataNode>) => {
-    const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY} = props
+    const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY, targetPosition, sourcePosition} = props
     const { getEdge, getEdges, addEdges, setEdges, addNodes} = useReactFlow()
     
     const [label, setLabel] = useState((typeof data.label === 'object') ? '' : data.label)
@@ -33,7 +33,8 @@ const Squaree = (props: NodeProps<DataNode>) => {
     
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleDoubleClick = () => {
+    const handleEnableEditing = () => {
+        if(!selected) return
         setIsEditing(true);
         if (inputRef.current) {
             inputRef.current.focus(); // Set focus on the input element when double-clicked
@@ -55,7 +56,6 @@ const Squaree = (props: NodeProps<DataNode>) => {
             sourceHandle: newConnection.sourceHandle,
             targetHandle: newConnection.targetHandle,
             type: 'default',
-            animated: true,
         }
         addEdges(newEdge)
     }
@@ -114,10 +114,10 @@ const Squaree = (props: NodeProps<DataNode>) => {
         }
         
     }   
-    console.log("Selected", selected,data.label)
+    console.log("Selected", targetPosition, sourcePosition)
     
     return (
-    <div className='bg-violet-500 rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 ' onDoubleClick={handleDoubleClick}> 
+    <div className='bg-violet-500 rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 ' onClick={handleEnableEditing}> 
         <NodeResizer
             minHeight={200}
             minWidth={200}
@@ -136,7 +136,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
             onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, top: false }))}
             onClick={() => handleAddSideNode("top")}
         >
-            <FiArrowDown className='size-5 text-white' />
+            <FiArrowUp className='size-5 text-white' />
         </Handle>
         ) : (
                 <Handle
@@ -177,7 +177,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
                     id="right"
                     type="source"
                     position={Position.Right}
-                    className={`-right-6 w-3 h-3 bg-blue-500 `}
+                    className={`-right-6 w-3 h-3 bg-blue-500 ${(targetPosition === Position.Right || sourcePosition === Position.Right) && 'bg-transparent'}`}
                     onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
                     onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
                 />
@@ -262,33 +262,31 @@ const Squaree = (props: NodeProps<DataNode>) => {
 
 
 
-        <div className='flex justify-center items-center h-full w-full text-wrap'>
-            <ul className='h-full w-full'>
+            <div className='flex justify-center items-center h-full w-full text-left text-wrap p-3'>
                 { 
                 (typeof data.label === 'object') ? 
                 Object.entries(data.label).map(([key, value], index) =>(
-                    <li key={index}>
+                    <div key={index}>
                         <span className="jsonVisNode__label__key">{key} : </span>
                         <span>{String(value)}</span>
-                    </li>                    
+                    </div>                    
                 )) : (
-                    <div className='flex justify-center items-center h-full w-full p-3 text-wrap '>
-                        {selected ? (
+                    <>
+                        {selected && isEditing ? (
                             <textarea
-                                className={`border-none bg-transparent w-full min-h-full h-fit max-w-[${width}px] focus:outline-none text-center text-white resize-none overflow-y-hidden placeholder-zinc-200`}
+                                className={`w-full h-full  border-none bg-transparent focus:outline-none text-center  text-white resize-none placeholder-zinc-200 overflow-y-hidden`}
                                 value={label}
                                 onChange={(e) => setLabel(e.target.value)}
                                 onBlur={handleInputBlur}
                                 placeholder='Enter text here'
                             />
                         ) : (
-                            <span className={`text-white w-fit max-w-[${width}px] text-center`}>{label}</span>
+                            <span className={`text-white w-fit max-w-[${width}px] text-center cursor-text`}>{label}</span>
                         )}
-                    </div>
+                    </>
                 )
                 }   
-            </ul>
-        </div>
+            </div>
     </div>
   )
 }
