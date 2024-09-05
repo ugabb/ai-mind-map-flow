@@ -20,6 +20,7 @@ import convertTreeToNodes from '@/utils/convertTreeToNodes';
 
 import {json} from "@/json"
 import ELK from "elkjs/lib/elk.bundled.js";
+import { zinc } from 'tailwindcss/colors';
 
 const elk = new ELK(); 
 
@@ -150,7 +151,11 @@ export const SaveRestore = () => {
       fitViewOptions={{ padding: 2 }}
       className='h-screen w-screen'
     >
-        <Background />
+        <Background
+          gap={12}
+          size={2}
+          color={zinc[200]}
+        />
     </ReactFlow>
   );
 };
