@@ -3,7 +3,9 @@ import {
   BaseEdge,
   EdgeLabelRenderer,
   EdgeProps,
+  getBezierPath,
   getSmoothStepPath,
+  getSimpleBezierPath,
   useReactFlow,
 } from '@xyflow/react';
 
@@ -19,7 +21,7 @@ function DefaultEdge_({
   style = {},
   markerEnd,
 }: EdgeProps) {
-  const [edgePath, labelX, labelY] = getSmoothStepPath({
+  const [edgePath, labelX, labelY] = getSimpleBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
