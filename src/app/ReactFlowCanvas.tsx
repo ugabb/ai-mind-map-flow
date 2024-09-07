@@ -20,6 +20,8 @@ import convertTreeToNodes from '@/utils/convertTreeToNodes';
 
 import {json} from "@/json"
 import ELK from "elkjs/lib/elk.bundled.js";
+import { ActionsBar } from '@/components/Menubar';
+import { useNodeStore } from '@/store/NodeStore';
 
 const elk = new ELK(); 
 
@@ -92,6 +94,7 @@ const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 export const SaveRestore = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const { isCreatingNode } = useNodeStore()
 
   const onConnect = useCallback(
     (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
@@ -152,6 +155,7 @@ export const SaveRestore = () => {
       className='h-screen w-screen'
     >
         <Background />
+        <ActionsBar />
     </ReactFlow>
   );
 };
