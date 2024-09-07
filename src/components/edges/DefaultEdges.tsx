@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   BaseEdge,
   EdgeLabelRenderer,
@@ -8,7 +8,7 @@ import {
 } from '@xyflow/react';
 
 
-export default function DefaultEdge({
+function DefaultEdge_({
   id,
   sourceX,
   sourceY,
@@ -34,3 +34,5 @@ export default function DefaultEdge({
     </>
   );
 }
+
+export const DefaultEdge = memo(DefaultEdge_);
