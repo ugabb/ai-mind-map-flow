@@ -12,6 +12,7 @@
     "@xyflow/react": "^12.1.1",
     "ai-mind-map-flow": "file:",
     "dagre": "^0.8.5",
+    "elkjs": "^0.9.3",
     "next": "14.2.7",
     "react": "^18",
     "react-dom": "^18",
