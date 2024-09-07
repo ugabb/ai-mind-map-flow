@@ -1,7 +1,7 @@
 'use client'
 
 import { Connection, Edge, EdgeProps, Handle, Node, NodeProps, NodeResizer, Position, useReactFlow } from '@xyflow/react'
-import React, { memo, useRef, useState } from 'react'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { FiArrowDown, FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 import GhostSquare from './GhostSquare'
 
@@ -20,7 +20,7 @@ export interface Direction {
 
 const Squaree = (props: NodeProps<DataNode>) => {
     const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY} = props
-    const { getEdge, getEdges, addEdges, setEdges, addNodes} = useReactFlow()
+    const { getEdge, getEdges, addEdges, setEdges, addNodes, deleteElements} = useReactFlow()
     
     const [label, setLabel] = useState((typeof data.label === 'object') ? '' : data.label)
     const [isEditing, setIsEditing] = useState(false)
@@ -114,7 +114,23 @@ const Squaree = (props: NodeProps<DataNode>) => {
         }
         
     }   
-    console.log("Selected", selected,data.label)
+
+    const handleDeleteNode = useCallback((event: KeyboardEvent) => {
+        if(selected){
+            if(event.key === 'Delete' && id){
+                const nodesToDelete = [{id}]
+                deleteElements({nodes: nodesToDelete})
+            }
+        }
+    },[deleteElements, selected, id])
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleDeleteNode)
+
+        return () => {
+            document.removeEventListener('keydown', handleDeleteNode)
+        }
+    },[handleDeleteNode])
     
     return (
     <div className='bg-violet-500 rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 ' onDoubleClick={handleDoubleClick}> 
