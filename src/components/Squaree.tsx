@@ -274,8 +274,8 @@ const Squaree = (props: NodeProps<DataNode>) => {
                 )) : (
                     <div className='flex justify-center items-center h-full w-full p-3 text-wrap '>
                         {selected ? (
-                            <textarea
-                                className={`border-none bg-transparent w-full min-h-full h-fit max-w-[${width}px] focus:outline-none text-center text-white resize-none overflow-y-hidden placeholder-zinc-200`}
+                            <input
+                                className={`border-none bg-transparent w-full min-h-full h-fit max-w-[${width}px] focus:outline-none text-center text-white text-wrap break-words resize-none overflow-y-hidden placeholder-zinc-200`}
                                 value={label}
                                 onChange={(e) => setLabel(e.target.value)}
                                 onBlur={handleInputBlur}
