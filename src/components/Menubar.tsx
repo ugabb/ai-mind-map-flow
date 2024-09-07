@@ -4,16 +4,18 @@ import { Node, NodeProps, useReactFlow } from "@xyflow/react";
 import { useEffect } from "react";
 
 export const ActionsBar = () => {
-  const { addNodes } = useReactFlow();
+  const { addNodes, screenToFlowPosition } = useReactFlow();
   const { activeIsCreatingNode, disableIsCreatingNode, isCreatingNode } = useNodeStore();
 
   const handleClickToCreate = (event: any) => {
     if (isCreatingNode) {
-      const { offsetX, offSetY } = event;
+      const { clientX, clientY } = event;
+      console.log(clientX, clientY, event)
+      const nodePosition = screenToFlowPosition({ x: clientX, y: clientY });
 
       const node: Node = {
         id: crypto.randomUUID(),
-        position :{ x: offsetX, y: offSetY},
+        position :{ x: nodePosition.x, y: nodePosition.y},
         data: {label: ""},
         type: "square",
         width: 200,

@@ -3,7 +3,7 @@
 import { Connection, Edge, EdgeProps, Handle, Node, NodeProps, NodeResizer, Position, useReactFlow } from '@xyflow/react'
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { FiArrowDown, FiArrowLeft, FiArrowRight } from 'react-icons/fi'
-import GhostSquare from './GhostSquare'
+import { GhostSquare } from './GhostSquare'
 
 export type DataNode = Node<{   
     label: string

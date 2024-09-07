@@ -1,6 +1,11 @@
-"use client"
+"use client";
 
-import React, { useState, useCallback, useEffect, useLayoutEffect } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+} from "react";
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -11,19 +16,20 @@ import {
   ConnectionMode,
   Connection,
   Node,
-} from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
-import {Square} from '@/components/Squaree';
-import {DefaultEdge} from '@/components/edges/DefaultEdges';
-import convertJsonToTree from '@/utils/convertJsonToTree';
-import convertTreeToNodes from '@/utils/convertTreeToNodes';
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import { Square } from "@/components/Squaree";
+import { DefaultEdge } from "@/components/edges/DefaultEdges";
+import convertJsonToTree from "@/utils/convertJsonToTree";
+import convertTreeToNodes from "@/utils/convertTreeToNodes";
 
-import {json} from "@/json"
+import { json } from "@/json";
 import ELK from "elkjs/lib/elk.bundled.js";
-import { ActionsBar } from '@/components/Menubar';
-import { useNodeStore } from '@/store/NodeStore';
+import { ActionsBar } from "@/components/Menubar";
+import { useNodeStore } from "@/store/NodeStore";
+import { GhostSquare } from "@/components/GhostSquare";
 
-const elk = new ELK(); 
+const elk = new ELK();
 
 //Elk options for layouting the tree
 const elkOptions = {
@@ -31,23 +37,23 @@ const elkOptions = {
   "elk.layered.spacing.nodeNodeBetweenLayers": "200",
   "elk.spacing.nodeNode": "150",
   "elk.edgeRouting": "SPLINES",
-  'elk.layered.nodePlacement.strategy': 'SIMPLE'
+  "elk.layered.nodePlacement.strategy": "SIMPLE",
 };
 
 /**
- * 
- * @param {*} nodes array of nodes from store 
+ *
+ * @param {*} nodes array of nodes from store
  * @param {*} edges array of edges from store
  * @param {*} options options from elkOptions. Used for layouting tree
  * @returns promises that contains array of nodes or edges that already get layouted or repositioned
  */
 const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
   const isHorizontal = options?.["elk.direction"] === "RIGHT";
-  console.log(isHorizontal)
+  console.log(isHorizontal);
   const graph = {
     id: "root",
     layoutOptions: options,
-    //Passed array of nodes that contains target position and source position. The target position and source position change based on isHorizontal  
+    //Passed array of nodes that contains target position and source position. The target position and source position change based on isHorizontal
     children: nodes.map((node) => ({
       ...node,
       targetPosition: isHorizontal ? "left" : "top",
@@ -66,18 +72,16 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
     .layout(graph)
     .then((layoutedGraph) => ({
       nodes: layoutedGraph.children.map((node) => {
-
         return {
           ...node,
           // React Flow expects a position property on the node instead of `x` and `y` fields.
           position: { x: node.x, y: node.y },
-        }
+        };
       }),
       edges: layoutedGraph.edges,
     }))
     .catch(console.error);
 };
-
 
 // const initialNodes = [
 //   { id: '1', data: { label: 'Node 1' }, position: { x: 0, y: 0 }, type: 'square', width: 200, height: 200 },
@@ -85,55 +89,58 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
 //   { id: '3', data: { label: 'Node 2' }, position: { x: 100, y: 50 }, type: 'square', width: 200, height: 200 }
 // ] satisfies Node[];
 
-const nodeTypes = { square: Square }; 
-const edgesTypes = { default: DefaultEdge }; 
+const nodeTypes = { square: Square };
+const edgesTypes = { default: DefaultEdge };
 
 export const SaveRestore = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const { isCreatingNode } = useNodeStore()
+  const { isCreatingNode } = useNodeStore();
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = useCallback((event: any) => {
+    setMousePosition({ x: event.clientX, y: event.clientY });
+  },[setMousePosition]);
 
   const onConnect = useCallback(
     (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
-    [setEdges],
+    [setEdges]
   );
 
-    /**
+  /**
    * @param {*} direction an object contains direction. for elkjs to know which direction layouting to use for the tree
-   * @param {*} initialNodes array of nodes and edges [nodes, edges] .Using this because variable "nodes" from state still empty for the first time 
+   * @param {*} initialNodes array of nodes and edges [nodes, edges] .Using this because variable "nodes" from state still empty for the first time
    */
-    const onLayout = useCallback(
-      ({ direction }, initialNodes: any[][] | null = null) => {
-  
-        //Add direction to options for the direction of the tree
-        const opts = { "elk.direction": direction, ...elkOptions };
-        //initial nodes return [nodes, edges]
-        console.log("render on ");
-        const ns = initialNodes === null ? nodes : initialNodes[0];
-        const es = initialNodes === null ? edges : initialNodes[1];
-        getLayoutedElements(ns, es, opts).then(
-          ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
-            //add layouted or repositioned nodes and edges to store, so that react flow will render the layouted or repositioned nodes and edges 
-            setNodes(layoutedNodes);
-            setEdges(layoutedEdges);
-  
-          }
-        );
-      },
-      [nodes, edges, setNodes, setEdges]   //So that the useCallback will rememoize the nodes and edges variable if it values changed.
-    );
+  const onLayout = useCallback(
+    ({ direction }, initialNodes: any[][] | null = null) => {
+      //Add direction to options for the direction of the tree
+      const opts = { "elk.direction": direction, ...elkOptions };
+      //initial nodes return [nodes, edges]
+      console.log("render on ");
+      const ns = initialNodes === null ? nodes : initialNodes[0];
+      const es = initialNodes === null ? edges : initialNodes[1];
+      getLayoutedElements(ns, es, opts).then(
+        ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+          //add layouted or repositioned nodes and edges to store, so that react flow will render the layouted or repositioned nodes and edges
+          setNodes(layoutedNodes);
+          setEdges(layoutedEdges);
+        }
+      );
+    },
+    [nodes, edges, setNodes, setEdges] //So that the useCallback will rememoize the nodes and edges variable if it values changed.
+  );
 
-    useLayoutEffect(() => {
-      const nodeTree = convertJsonToTree(json); //to convert json to tree
-      let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
-      onLayout({ direction: "DOWN" }, convertedNodes); 
-  
-      //so that when needToRenderJson change, useLayoutEffect wil reexecute the callback. needToRenderJson change everytime user click run button in the page. The run button is in sidebar component.
-    }, [json]);   
-  
-    useEffect(() => {
-      console.log("edges",edges);
-    },[edges])
+  useLayoutEffect(() => {
+    const nodeTree = convertJsonToTree(json); //to convert json to tree
+    let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
+    onLayout({ direction: "DOWN" }, convertedNodes);
+
+    //so that when needToRenderJson change, useLayoutEffect wil reexecute the callback. needToRenderJson change everytime user click run button in the page. The run button is in sidebar component.
+  }, [json]);
+
+  useEffect(() => {
+    console.log("nodes", nodes);
+  }, [nodes]);
 
   return (
     <ReactFlow
@@ -142,7 +149,7 @@ export const SaveRestore = () => {
       nodeTypes={nodeTypes}
       edgeTypes={edgesTypes}
       defaultEdgeOptions={{
-        type: 'default',
+        type: "default",
       }}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
@@ -151,11 +158,23 @@ export const SaveRestore = () => {
       // onInit={setRfInstance}
       fitView
       fitViewOptions={{ padding: 2 }}
-      className='h-screen w-screen'
+      className="h-screen w-screen"
+      onMouseMove={handleMouseMove}
     >
-        <Background />
-        <ActionsBar />
+      {isCreatingNode && (
+        <div
+          className="bg-indigo-400/20 rounded  min-w-[200px] min-h-[200px]"
+          style={{
+            position: "absolute",
+            left: mousePosition?.x - 8, 
+            top: mousePosition?.y - 8, 
+            pointerEvents: "none", // Allow clicks to pass through
+            zIndex: 1, // Ensure it's above the background
+          }}
+        />
+      )}
+      <Background />
+      <ActionsBar />
     </ReactFlow>
   );
 };
-
