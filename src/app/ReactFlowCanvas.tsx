@@ -33,11 +33,13 @@ const elk = new ELK();
 
 //Elk options for layouting the tree
 const elkOptions = {
-  "elk.algorithm": "layered",
+  "elk.algorithm": "mrtree",
   "elk.layered.spacing.nodeNodeBetweenLayers": "200",
   "elk.spacing.nodeNode": "150",
   "elk.edgeRouting": "SPLINES",
   "elk.layered.nodePlacement.strategy": "SIMPLE",
+  "elk.mrtree.edgeRoutingMode": "AVOID_OVERLAP",
+  "elk.animate": true,
 };
 
 /**
@@ -65,7 +67,6 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
     edges: edges,
   };
 
-  // console.log(graph);
 
   //Return promises
   return elk
@@ -81,13 +82,7 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
       edges: layoutedGraph.edges,
     }))
     .catch(console.error);
-};
-
-// const initialNodes = [
-//   { id: '1', data: { label: 'Node 1' }, position: { x: 0, y: 0 }, type: 'square', width: 200, height: 200 },
-//   { id: '2', data: { label: 'Node 2' }, position: { x: 0, y: 50 }, type: 'square', width: 200, height: 200 },
-//   { id: '3', data: { label: 'Node 2' }, position: { x: 100, y: 50 }, type: 'square', width: 200, height: 200 }
-// ] satisfies Node[];
+}; 
 
 const nodeTypes = { square: Square };
 const edgesTypes = { default: DefaultEdge };
