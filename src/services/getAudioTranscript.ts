@@ -1,0 +1,34 @@
+import axios from 'axios';
+
+interface GetAudioTranscriptResponse{
+    data: string,
+    status: number
+}
+
+export async function getAudioTranscript(audio: File): Promise<GetAudioTranscriptResponse>{
+    try {
+        if (!audio) {
+            throw new Error('No audio file provided');
+        }
+        const formData = new FormData()
+        formData.append("file", audio)
+        console.log(formData, audio)
+        const { data, status,  } = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/transcribe`,
+            formData, // Pass formData directly as the second argument
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Axios will handle the boundary automatically
+                },
+            }
+        );
+
+        return {
+            data,
+            status
+        }
+    } catch (error) {
+        console.error(error)
+        return error
+    }
+}

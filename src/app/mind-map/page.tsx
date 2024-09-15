@@ -125,13 +125,13 @@ const MindMapCanvas = () => {
     [nodes, edges, setNodes, setEdges] //So that the useCallback will rememoize the nodes and edges variable if it values changed.
   );
 
-  useLayoutEffect(() => {
-    const nodeTree = convertJsonToTree(json); //to convert json to tree
-    let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
-    onLayout({ direction: "DOWN" }, convertedNodes);
+  // useLayoutEffect(() => {
+  //   const nodeTree = convertJsonToTree(json); //to convert json to tree
+  //   let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
+  //   onLayout({ direction: "DOWN" }, convertedNodes);
 
-    //so that when needToRenderJson change, useLayoutEffect wil reexecute the callback. needToRenderJson change everytime user click run button in the page. The run button is in sidebar component.
-  }, [json]);
+  //   //so that when needToRenderJson change, useLayoutEffect wil reexecute the callback. needToRenderJson change everytime user click run button in the page. The run button is in sidebar component.
+  // }, [json]);
 
   useEffect(() => {
     console.log("nodes", nodes);

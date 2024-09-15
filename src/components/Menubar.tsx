@@ -1,7 +1,10 @@
 import { useNodeStore } from "@/store/NodeStore";
-import * as Toolbar from "@radix-ui/react-toolbar";
+import * as T from "@radix-ui/react-toolbar";
 import { Node, NodeProps, useReactFlow } from "@xyflow/react";
 import { useEffect } from "react";
+import { Button } from "@/components/ui/button"
+import { GenerateMindMapModal } from "./GenerateMindMapModal";
+
 
 export const ActionsBar = () => {
   const { addNodes, screenToFlowPosition } = useReactFlow();
@@ -37,20 +40,24 @@ export const ActionsBar = () => {
   },[isCreatingNode])
 
   return (
-    <Toolbar.Root className="w-96 h-20 rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
-      <Toolbar.Button />
-      <Toolbar.Separator />
-      <Toolbar.Link />
-      <Toolbar.ToggleGroup
+    <T.Root className="w-96 h-20 rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
+      <T.Button />
+      <T.Separator />
+      <T.Link />
+      <T.ToggleGroup
         type="single"
         className="flex items-center gap-5 px-2 "
       >
-        <Toolbar.ToggleItem
+        <T.ToggleItem
           onClick={() => activeIsCreatingNode()}
           value="Teste"
           className="w-24 h-24 bg-indigo-500 rounded-md hover:-translate-y-3 transition-transform"
         />
-      </Toolbar.ToggleGroup>
-    </Toolbar.Root>
+
+        <T.ToggleItem value="generate-mind-map">
+          <GenerateMindMapModal />
+        </T.ToggleItem>
+      </T.ToggleGroup>
+    </T.Root>
   );
 };

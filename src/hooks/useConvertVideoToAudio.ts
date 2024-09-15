@@ -1,11 +1,17 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
 import { useState } from "react";
+import {toast} from "react-hot-toast";
 
 export const useConvertVideoToAudio = (ffmpeg: FFmpeg) => {
   const [progress, setProgress] = useState<number>(0);
 
-  async function convertVideoToAudio(video: File): Promise<File> {
+  async function convertVideoToAudio(video: File): Promise<File | null> {
+    if(!video) {
+      toast.error("No video file selected");
+      return null
+    };
+
     await ffmpeg.load();
 
     await ffmpeg.writeFile("input.mp4", await fetchFile(video));
