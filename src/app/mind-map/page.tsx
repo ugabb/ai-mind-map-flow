@@ -90,7 +90,7 @@ const edgesTypes = { default: DefaultEdge };
 const MindMapCanvas = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const { isCreatingNode } = useNodeStore();
+  const { isCreatingNode, mindMap } = useNodeStore();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = useCallback((event: any) => {
@@ -125,13 +125,11 @@ const MindMapCanvas = () => {
     [nodes, edges, setNodes, setEdges] //So that the useCallback will rememoize the nodes and edges variable if it values changed.
   );
 
-  // useLayoutEffect(() => {
-  //   const nodeTree = convertJsonToTree(json); //to convert json to tree
-  //   let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
-  //   onLayout({ direction: "DOWN" }, convertedNodes);
-
-  //   //so that when needToRenderJson change, useLayoutEffect wil reexecute the callback. needToRenderJson change everytime user click run button in the page. The run button is in sidebar component.
-  // }, [json]);
+  useLayoutEffect(() => {
+    const nodeTree = convertJsonToTree(mindMap); //to convert json to tree
+    let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
+    onLayout({ direction: "DOWN" }, convertedNodes);
+  }, [mindMap]);
 
   useEffect(() => {
     console.log("nodes", nodes);

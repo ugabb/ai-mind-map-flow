@@ -16,11 +16,14 @@ import { LuTrash2 } from "react-icons/lu";
 import { getAudioTranscript } from "@/services/getAudioTranscript";
 import { generateMindMap } from "@/services/generateMindMap";
 import { ImSpinner2 } from "react-icons/im";
+import { useNodeStore } from "@/store/NodeStore";
 
 export const GenerateMindMapModal = () => {
     const [ loading, setLoading ] = useState(false);
     const [convertedAudio, setConvertedAudio] = useState<File | null>(null);
     const [video, setVideo] = useState<File | null>(null);
+
+    const { setMindMap } = useNodeStore()
 
     const ffmpeg = useRef<FFmpeg>(new FFmpeg());
 
@@ -37,10 +40,10 @@ export const GenerateMindMapModal = () => {
         if(!convertedAudio) return;
         setLoading(true)
 
-        const { data, status } = await getAudioTranscript(convertedAudio)
+        const { transcription, status } = await getAudioTranscript(convertedAudio)
         if(status !== 200) return;
-        const mindMap = await generateMindMap(data.transcription)
-        console.log(mindMap)
+        const mindMap = await generateMindMap(transcription)
+        setMindMap(mindMap)
         setLoading(false)
     }
 
@@ -69,7 +72,7 @@ export const GenerateMindMapModal = () => {
                 <Input
                     type="file"
                     accept="video/*"
-                    onChange={(e) => setVideo(e.target.files?.[0])}
+                    onChange={(e) => setVideo(e.target.files?.[0] || null)}
                 />
             )}
             <Button onClick={handleConvert}>Convert</Button>

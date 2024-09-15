@@ -2,7 +2,9 @@ import { Edge, XYPosition } from "@xyflow/react";
 import { create } from "zustand";
 
 export interface NodeState {
-    // nodes: Node[];
+    nodes: Node[];
+    mindMap: string;
+    setMindMap: (mindMap: string) => void;
     // currentNodePosition: XYPosition;
     // addNode: (node: Node) => void;
     // updateNodePosition: (nodeId: string, position: XYPosition) => void;
@@ -19,6 +21,11 @@ export interface NodeState {
 
 export const useNodeStore = create<NodeState>()((set) => ({
     isCreatingNode: false,
+    nodes: [],
+    mindMap: "",
+    setMindMap: (mindMap: string) => {
+        set(() => ({ mindMap: JSON.parse(mindMap) }));
+    },
     activeIsCreatingNode() {
         set(() => ({ isCreatingNode: true }));
     },

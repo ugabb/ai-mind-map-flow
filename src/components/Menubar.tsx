@@ -1,9 +1,10 @@
-import { useNodeStore } from "@/store/NodeStore";
+
 import * as T from "@radix-ui/react-toolbar";
 import { Node, NodeProps, useReactFlow } from "@xyflow/react";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button"
 import { GenerateMindMapModal } from "./GenerateMindMapModal";
+import { useNodeStore } from "@/store/NodeStore";
 
 
 export const ActionsBar = () => {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 interface GetAudioTranscriptResponse{
-    data: string,
+    transcription: string,
     status: number
 }
 
@@ -24,11 +24,14 @@ export async function getAudioTranscript(audio: File): Promise<GetAudioTranscrip
         );
 
         return {
-            data,
+            transcription: data.transcription,
             status
         }
     } catch (error) {
         console.error(error)
-        return error
+       return {
+        status: 500,
+        transcription: ''
+       }
     }
 }

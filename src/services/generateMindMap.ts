@@ -6,7 +6,7 @@ export async function generateMindMap(transcription: string){
             transcription
         })
 
-        return JSON.parse(data)
+        return data.mindMap
     } catch (error) {
         console.error(error)
         return {
