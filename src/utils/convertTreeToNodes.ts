@@ -55,7 +55,7 @@ function traverseNodeChild(arrayOfNode: NodeProps[], parentNode: NodeProps) {
   }
   arrayOfNode.forEach((node) => {
     addChildNode(node, parentNode);
-    if (node.children.length > 0) {
+    if (node.children && node.children.length > 0) {
       traverseNodeChild(node.children, node);
     }
   });
@@ -68,7 +68,8 @@ function convertTreeToNodes(nodeTree: NodeProps, isRoot = false) {
     addRootNode(nodeTree);
     convertTreeToNodes(nodeTree);
 } else {
-    traverseNodeChild(nodeTree.children, nodeTree);
+  // @ts-ignore
+    traverseNodeChild(nodeTree.children , nodeTree);
   }
   console.log("convertTreeToNodes", nodes, edges);
   return [nodes, edges];

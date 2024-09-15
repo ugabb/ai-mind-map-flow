@@ -1,5 +1,3 @@
-import { FileConverting } from "@/components/FileConverting";
-
 
 export default function Home() {
  

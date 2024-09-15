@@ -50,6 +50,7 @@ const elkOptions = {
  * @returns promises that contains array of nodes or edges that already get layouted or repositioned
  */
 const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
+  // @ts-ignore
   const isHorizontal = options?.["elk.direction"] === "RIGHT";
   console.log(isHorizontal);
   const graph = {
@@ -72,7 +73,7 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
   return elk
     .layout(graph)
     .then((layoutedGraph) => ({
-      nodes: layoutedGraph.children.map((node) => {
+      nodes: layoutedGraph.children && layoutedGraph.children.map((node) => {
         return {
           ...node,
           // React Flow expects a position property on the node instead of `x` and `y` fields.
@@ -107,18 +108,23 @@ const MindMapCanvas = () => {
    * @param {*} initialNodes array of nodes and edges [nodes, edges] .Using this because variable "nodes" from state still empty for the first time
    */
   const onLayout = useCallback(
-    ({ direction }, initialNodes: any[][] | null = null) => {
-      //Add direction to options for the direction of the tree
+    ({ direction }: {direction: any}, initialNodes: any[][] | null = null) => {
+      console.log({direction})
+
       const opts = { "elk.direction": direction, ...elkOptions };
-      //initial nodes return [nodes, edges]
-      console.log("render on ");
+
       const ns = initialNodes === null ? nodes : initialNodes[0];
       const es = initialNodes === null ? edges : initialNodes[1];
       getLayoutedElements(ns, es, opts).then(
-        ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
-          //add layouted or repositioned nodes and edges to store, so that react flow will render the layouted or repositioned nodes and edges
-          setNodes(layoutedNodes);
-          setEdges(layoutedEdges);
+        (layoutedGraph) => {
+          if (layoutedGraph) {
+            const { nodes: layoutedNodes, edges: layoutedEdges } = layoutedGraph;
+            //add layouted or repositioned nodes and edges to store, so that react flow will render the layouted or repositioned nodes and edges
+            // @ts-ignore
+            setNodes(layoutedNodes);
+            // @ts-ignore
+            setEdges(layoutedEdges);
+          }
         }
       );
     },
@@ -126,10 +132,10 @@ const MindMapCanvas = () => {
   );
 
   useLayoutEffect(() => {
-    const nodeTree = convertJsonToTree(mindMap); //to convert json to tree
+    const nodeTree = convertJsonToTree(json); //to convert json to tree
     let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
     onLayout({ direction: "DOWN" }, convertedNodes);
-  }, [mindMap]);
+  }, [json]);
 
   useEffect(() => {
     console.log("nodes", nodes);
