@@ -1,9 +1,9 @@
 'use client'
 
 import { Connection, Edge, EdgeProps, Handle, Node, NodeProps, NodeResizer, Position, useReactFlow } from '@xyflow/react'
-import React, { memo, useRef, useState } from 'react'
-import { FiArrowDown, FiArrowLeft, FiArrowRight, FiArrowUp } from 'react-icons/fi'
-import GhostSquare from './GhostSquare'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { FiArrowDown, FiArrowLeft, FiArrowRight } from 'react-icons/fi'
+import { GhostSquare } from './GhostSquare'
 
 export type DataNode = Node<{   
     label: string
@@ -19,8 +19,8 @@ export interface Direction {
 }
 
 const Squaree = (props: NodeProps<DataNode>) => {
-    const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY, targetPosition, sourcePosition} = props
-    const { getEdge, getEdges, addEdges, setEdges, addNodes} = useReactFlow()
+    const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY} = props
+    const { getEdge, getEdges, addEdges, setEdges, addNodes, deleteElements} = useReactFlow()
     
     const [label, setLabel] = useState((typeof data.label === 'object') ? '' : data.label)
     const [isEditing, setIsEditing] = useState(false)
@@ -114,7 +114,23 @@ const Squaree = (props: NodeProps<DataNode>) => {
         }
         
     }   
-    console.log("Selected", targetPosition, sourcePosition)
+
+    const handleDeleteNode = useCallback((event: KeyboardEvent) => {
+        if(selected){
+            if(event.key === 'Delete' && id){
+                const nodesToDelete = [{id}]
+                deleteElements({nodes: nodesToDelete})
+            }
+        }
+    },[deleteElements, selected, id])
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleDeleteNode)
+
+        return () => {
+            document.removeEventListener('keydown', handleDeleteNode)
+        }
+    },[handleDeleteNode])
     
     return (
     <div className='bg-violet-500 rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 ' onClick={handleEnableEditing}> 
@@ -271,10 +287,10 @@ const Squaree = (props: NodeProps<DataNode>) => {
                         <span>{String(value)}</span>
                     </div>                    
                 )) : (
-                    <>
-                        {selected && isEditing ? (
-                            <textarea
-                                className={`w-full h-full  border-none bg-transparent focus:outline-none text-center  text-white resize-none placeholder-zinc-200 overflow-y-hidden`}
+                    <div className='flex justify-center items-center h-full w-full p-3 text-wrap '>
+                        {selected ? (
+                            <input
+                                className={`border-none bg-transparent w-full min-h-full h-fit max-w-[${width}px] focus:outline-none text-center text-white text-wrap break-words resize-none overflow-y-hidden placeholder-zinc-200`}
                                 value={label}
                                 onChange={(e) => setLabel(e.target.value)}
                                 onBlur={handleInputBlur}

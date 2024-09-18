@@ -1,13 +1,10 @@
-import { ReactFlowProvider } from "@xyflow/react";
-import Image from "next/image";
-import { SaveRestore } from "./ReactFlowCanvas";
 
 export default function Home() {
+ 
+
   return (
-   <main className="h-screen w-screen">
-      <ReactFlowProvider>
-        <SaveRestore />
-      </ReactFlowProvider>
-   </main>
+    <main className="h-screen w-screen">
+      <h1>AI Mind Map</h1>
+    </main>
   );
 }

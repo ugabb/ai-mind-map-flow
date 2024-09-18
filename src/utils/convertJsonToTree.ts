@@ -71,12 +71,18 @@ const jsonToTree = (data: any, newNode: NodeProps, isRoot = false) => {
               }
 
               childNodeForPropertyWithValueArray.value = valueFromArray;
-              childNode.children.push(childNodeForPropertyWithValueArray);
+              if(childNode.children) childNode.children.push(childNodeForPropertyWithValueArray);
             }
           })
           if(isRoot){
+            if (!newNode.children) {
+              newNode.children = [];
+            }
             newNode.children.push(childNode);
           }else{
+            if (!node.children) {
+              node.children = [];
+            }
             node.children.push(childNode);
           }
         } else {
@@ -112,10 +118,10 @@ const jsonToTree = (data: any, newNode: NodeProps, isRoot = false) => {
               children: [],
             };
             childChildNode.value = value[i];
-            childNodeAddition.children.push(childChildNode);
+            if(childNodeAddition.children) childNodeAddition.children.push(childChildNode);
           }
           // newNode.children.push(childNodeAddition);
-          node.children.push(childNodeAddition);
+          if(node.children) node.children.push(childNodeAddition);
         }
       } else {
         const childNode: NodeProps = {
@@ -135,15 +141,15 @@ const jsonToTree = (data: any, newNode: NodeProps, isRoot = false) => {
         
         jsonToTree(value, childNode);
         if(isRoot){
-          newNode.children.push(childNode);
+           if(newNode.children)newNode.children.push(childNode);
         }else{
-          node.children.push(childNode);
+           if(node.children)node.children.push(childNode);
         }
       }
      
     });
     if(isRoot !== true){
-      newNode.children.push(node);
+      if(newNode.children) newNode.children.push(node);
     }else{
       newNode.key = 'root'
     }
