@@ -41,7 +41,7 @@ export const ActionsBar = () => {
   },[isCreatingNode])
 
   return (
-    <T.Root className="w-96 h-20 rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
+    <T.Root className="flex items-center w-96 h-20 rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
       <T.Button />
       <T.Separator />
       <T.Link />
@@ -52,7 +52,7 @@ export const ActionsBar = () => {
         <T.ToggleItem
           onClick={() => activeIsCreatingNode()}
           value="Teste"
-          className="w-24 h-24 bg-indigo-500 rounded-md hover:-translate-y-3 transition-transform"
+          className="w-24 h-24 translate-y-8 bg-indigo-500 rounded-md hover:translate-y-5 transition-transform"
         />
 
         <T.ToggleItem value="generate-mind-map">

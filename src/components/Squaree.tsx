@@ -2,7 +2,7 @@
 
 import { Connection, Edge, EdgeProps, Handle, Node, NodeProps, NodeResizer, Position, useReactFlow } from '@xyflow/react'
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { FiArrowDown, FiArrowLeft, FiArrowRight } from 'react-icons/fi'
+import { FiArrowDown, FiArrowLeft, FiArrowRight, FiArrowUp } from 'react-icons/fi'
 import { GhostSquare } from './GhostSquare'
 
 export type DataNode = Node<{   
@@ -19,7 +19,7 @@ export interface Direction {
 }
 
 const Squaree = (props: NodeProps<DataNode>) => {
-    const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY} = props
+    const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY, targetPosition, sourcePosition} = props
     const { getEdge, getEdges, addEdges, setEdges, addNodes, deleteElements} = useReactFlow()
     
     const [label, setLabel] = useState((typeof data.label === 'object') ? '' : data.label)
@@ -299,7 +299,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
                         ) : (
                             <span className={`text-white w-fit max-w-[${width}px] text-center cursor-text`}>{label}</span>
                         )}
-                    </>
+                    </div>
                 )
                 }   
             </div>
