@@ -48,7 +48,6 @@ const Squaree = (props: NodeProps<DataNode>) => {
     const handleNewConnections = (newConnection: Connection) => {
         const curentEdge = getEdge(id)
         if(curentEdge) return
-        console.log(curentEdge)
         const newEdge: Edge = {
             id: `${id}-${newConnection.target}`,
             source: newConnection.source,
@@ -131,22 +130,21 @@ const Squaree = (props: NodeProps<DataNode>) => {
             document.removeEventListener('keydown', handleDeleteNode)
         }
     },[handleDeleteNode])
-    console.log({width}, {height})
     
     return (
     <div className='bg-violet-500 rounded-lg min-w-[200px]  w-fit min-h-[200px] h-fit p-5 ' onClick={handleEnableEditing}> 
         <NodeResizer
-            minHeight={width}
-            minWidth={height}
+            minHeight={height}
+            minWidth={width}
             isVisible={selected ? true : false}
             lineClassName='bg-blue-500'
-
             handleClassName='w-4 h-4 bg-white border-1 border-blue-500 rounded' 
+                         
         />
         {isAddingNode.top ? (
             <Handle
                 id="top"
-                type="source"
+                type="target"
                 position={Position.Top}
                 className={`-top-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-up.svg')] bg-no-repeat bg-center`}
                 onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, top: true }))}
@@ -156,7 +154,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
         ) : (
                 <Handle
                     id="top"
-                    type="source"
+                    type="target"
                     position={Position.Top}
                     className={`-top-6 w-3 h-3 bg-blue-500`}
                     onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, top: true }))}
@@ -170,38 +168,6 @@ const Squaree = (props: NodeProps<DataNode>) => {
                     width={width as number}
                     height={height as number}
                     direction="top"
-                />
-            )
-        }
-
-        {isAddingNode.right ? (
-            <Handle
-                id="right"
-                type="source"
-                position={Position.Right}
-                className={`-right-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-right.svg')] bg-no-repeat bg-center`}
-                onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
-                onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
-                onClick={() => handleAddSideNode("right")}
-            />
-        ) :
-            (
-                <Handle
-                    id="right"
-                    type="source"
-                    position={Position.Right}
-                    className={`-right-6 w-3 h-3 bg-blue-500 ${(targetPosition === Position.Right || sourcePosition === Position.Right) && 'bg-transparent'}`}
-                    onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
-                    onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
-                />
-            )
-        }
-
-        {isAddingNode.right && (
-                <GhostSquare 
-                    width={width as number}
-                    height={height as number}
-                    direction="right"
                 />
             )
         }
@@ -236,6 +202,41 @@ const Squaree = (props: NodeProps<DataNode>) => {
                 />
             )
         }
+
+
+        {isAddingNode.right ? (
+            <Handle
+                id="right"
+                type="source"
+                position={Position.Right}
+                className={`-right-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-right.svg')] bg-no-repeat bg-center`}
+                onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
+                onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
+                onClick={() => handleAddSideNode("right")}
+            />
+        ) :
+            (
+                <Handle
+                    id="right"
+                    type="source"
+                    position={Position.Right}
+                    className={`-right-6 w-3 h-3 bg-blue-500 ${(targetPosition === Position.Right || sourcePosition === Position.Right) && 'bg-transparent'}`}
+                    onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
+                    onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
+                />
+            )
+        }
+
+        {isAddingNode.right && (
+                <GhostSquare 
+                    width={width as number}
+                    height={height as number}
+                    direction="right"
+                />
+            )
+        }
+
+
 
         {isAddingNode.left ? (
             <Handle
@@ -275,7 +276,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
                 { 
                 (typeof data.label === 'object') ? 
                 Object.entries(data.label).map(([key, value], index) =>(
-                    <div key={index} className='flex flex-col justify-center items-center p-3'>
+                    <div key={index} className='flex flex-col justify-center items-center p-3 w-full h-full'>
                         <span className="">{key} : {String(value)}</span>
                     </div>                    
                 )) : (
@@ -289,7 +290,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
                                 placeholder='Enter text here'
                             />
                         ) : (
-                            <span className={`text-white w-fit max-w-[${width}px] text-center cursor-text`}>{label}</span>
+                            <span className={`text-white w-fit max-w-[${width}px] text-center cursor-text `}>{label}</span>
                         )}
                     </div>
                 )

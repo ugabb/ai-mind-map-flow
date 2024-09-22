@@ -1,5 +1,10 @@
-import { EdgeProps,NodeProps } from "@xyflow/react";
+import { Edge, EdgeProps,NodeProps, Position } from "@xyflow/react";
 import { nanoid } from "nanoid/non-secure";
+
+function generateEdgeId(sourceId: string, targetId: string) {
+  return `edge-${sourceId}-${targetId}`;
+}
+
 
 let nodes: NodeProps[] = [];
 let edges: any[] = [];
@@ -14,7 +19,9 @@ function addRootNode(node: NodeProps) {
     isConnectable: true,
     type: "square",
     zIndex: 0,
-    children: []
+    children: [],
+    sourcePosition: Position.Bottom,
+    targetPosition: Position.Top,
   };
 
   nodes = [...nodes, newNode];
@@ -37,16 +44,18 @@ function addChildNode(node: NodeProps, parentNode: NodeProps) {
     zIndex: 0,
     parent: parentNode.id,
     children: [],
+    sourcePosition: Position.Bottom,
+    targetPosition: Position.Top,
   };
-  const newEdge = {
-    id: nanoid(),
+  const newEdge: Edge = {
+    id: generateEdgeId(parentNode.id,node.id),
     source: `${parentNode.id}`,
     target: `${node.id}`,
-    
   };
 
   nodes = [...nodes, newNode];
   edges = [...edges, newEdge];
+  // console.log("[TESTE]",newEdge,newNode)
 }
 
 function traverseNodeChild(arrayOfNode: NodeProps[], parentNode: NodeProps) {
@@ -71,7 +80,7 @@ function convertTreeToNodes(nodeTree: NodeProps, isRoot = false) {
   // @ts-ignore
     traverseNodeChild(nodeTree.children , nodeTree);
   }
-  console.log("convertTreeToNodes", nodes, edges);
+  // console.log("[VMO ver]",nodes,edges)
   return [nodes, edges];
 }
 

@@ -16,6 +16,7 @@ import {
   ConnectionMode,
   Connection,
   Node,
+  useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Squaree";
@@ -40,6 +41,7 @@ const elkOptions = {
   "elk.layered.nodePlacement.strategy": "SIMPLE",
   "elk.mrtree.edgeRoutingMode": "AVOID_OVERLAP",
   "elk.animate": true,
+  "elk.direction": "DOWN",
 };
 
 /**
@@ -52,15 +54,14 @@ const elkOptions = {
 const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
   // @ts-ignore
   const isHorizontal = options?.["elk.direction"] === "RIGHT";
-  console.log(isHorizontal);
   const graph = {
     id: "root",
     layoutOptions: options,
     //Passed array of nodes that contains target position and source position. The target position and source position change based on isHorizontal
     children: nodes.map((node) => ({
       ...node,
-      targetPosition: isHorizontal ? "left" : "top",
-      sourcePosition: isHorizontal ? "right" : "bottom",
+      targetPosition: "top",
+      sourcePosition: "bottom",
       //Hardcode a width and height for node so that elk can use it when layouting.
       width: 200,
       height: 200,
@@ -84,6 +85,8 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
     }))
     .catch(console.error);
 }; 
+
+
 
 const nodeTypes = { square: Square };
 const edgesTypes = { default: DefaultEdge };
@@ -124,6 +127,8 @@ const MindMapCanvas = () => {
             setNodes(layoutedNodes);
             // @ts-ignore
             setEdges(layoutedEdges);
+            console.log("Final Node Positions: ", layoutedNodes);
+            console.log("Final Edge Connections: ", layoutedEdges);
           }
         }
       );
@@ -137,9 +142,9 @@ const MindMapCanvas = () => {
     onLayout({ direction: "DOWN" }, convertedNodes);
   }, [json]);
 
-  useEffect(() => {
-    console.log("nodes", nodes);
-  }, [nodes]);
+  // useEffect(() => {
+  //   console.log("nodes", nodes);
+  // }, [nodes]);
 
   return (
     <ReactFlow
