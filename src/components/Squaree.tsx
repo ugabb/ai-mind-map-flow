@@ -131,12 +131,13 @@ const Squaree = (props: NodeProps<DataNode>) => {
             document.removeEventListener('keydown', handleDeleteNode)
         }
     },[handleDeleteNode])
+    console.log({width}, {height})
     
     return (
-    <div className='bg-violet-500 rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 ' onClick={handleEnableEditing}> 
+    <div className='bg-violet-500 rounded-lg min-w-[200px]  w-fit min-h-[200px] h-fit p-5 ' onClick={handleEnableEditing}> 
         <NodeResizer
-            minHeight={200}
-            minWidth={200}
+            minHeight={width}
+            minWidth={height}
             isVisible={selected ? true : false}
             lineClassName='bg-blue-500'
 
@@ -144,22 +145,20 @@ const Squaree = (props: NodeProps<DataNode>) => {
         />
         {isAddingNode.top ? (
             <Handle
-            id="top"
-            type="source"
-            position={Position.Top}
-            className='-top-6 size-10 bg-blue-500 flex justify-center items-center '
-            onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, top: true }))}
-            onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, top: false }))}
-            onClick={() => handleAddSideNode("top")}
-        >
-            <FiArrowUp className='size-5 text-white' />
-        </Handle>
+                id="top"
+                type="source"
+                position={Position.Top}
+                className={`-top-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-up.svg')] bg-no-repeat bg-center`}
+                onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, top: true }))}
+                onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, top: false }))}
+                onClick={() => handleAddSideNode("top")}
+            />
         ) : (
                 <Handle
                     id="top"
                     type="source"
                     position={Position.Top}
-                    className={`-top-6 w-3 h-3 bg-blue-500  `}
+                    className={`-top-6 w-3 h-3 bg-blue-500`}
                     onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, top: true }))}
                     onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, top: false }))}
                 />
@@ -180,13 +179,11 @@ const Squaree = (props: NodeProps<DataNode>) => {
                 id="right"
                 type="source"
                 position={Position.Right}
-                className='-right-6 size-10 bg-blue-500 flex justify-center items-center '
+                className={`-right-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-right.svg')] bg-no-repeat bg-center`}
                 onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
                 onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
                 onClick={() => handleAddSideNode("right")}
-            >
-                <FiArrowRight className='size-5 text-white' />
-            </Handle>
+            />
         ) :
             (
                 <Handle
@@ -214,13 +211,11 @@ const Squaree = (props: NodeProps<DataNode>) => {
             id="bottom"
             type="source"
             position={Position.Bottom}
-            className='-bottom-6 size-10 bg-blue-500 flex justify-center items-center '
+            className={`-bottom-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-down.svg')] bg-no-repeat bg-center`}
             onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, bottom: true }))}
             onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, bottom: false }))}
             onClick={() => handleAddSideNode("bottom")}
-        >
-            <FiArrowDown className='size-5 text-white' />
-        </Handle>
+        />
         ) : (
                 <Handle
                     id="bottom"
@@ -247,13 +242,11 @@ const Squaree = (props: NodeProps<DataNode>) => {
                 id="left"
                 type="source"
                 position={Position.Left}
-                className='-left-6 size-10 bg-blue-500 flex justify-center items-center '
+                className={`-left-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-left.svg')] bg-no-repeat bg-center`}
                 onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, left: true }))}
                 onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, left: false }))}
                 onClick={() => handleAddSideNode("left")}
-            >
-                <FiArrowLeft className='size-5 text-white' />
-            </Handle>
+            />
         ) :
             (
                 <Handle
@@ -282,9 +275,8 @@ const Squaree = (props: NodeProps<DataNode>) => {
                 { 
                 (typeof data.label === 'object') ? 
                 Object.entries(data.label).map(([key, value], index) =>(
-                    <div key={index}>
-                        <span className="jsonVisNode__label__key">{key} : </span>
-                        <span>{String(value)}</span>
+                    <div key={index} className='flex flex-col justify-center items-center p-3'>
+                        <span className="">{key} : {String(value)}</span>
                     </div>                    
                 )) : (
                     <div className='flex justify-center items-center h-full w-full p-3 text-wrap '>
