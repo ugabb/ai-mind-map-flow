@@ -1,22 +1,16 @@
 "use client";
 
-import React, {
+import {
   useState,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
+  useCallback, useLayoutEffect
 } from "react";
 import {
-  ReactFlow,
-  ReactFlowProvider,
-  useNodesState,
+  ReactFlow, useNodesState,
   useEdgesState,
   addEdge,
   Background,
   ConnectionMode,
-  Connection,
-  Node,
-  useReactFlow,
+  Connection
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Squaree";
@@ -24,11 +18,10 @@ import { DefaultEdge } from "@/components/edges/DefaultEdges";
 import convertJsonToTree from "@/utils/convertJsonToTree";
 import convertTreeToNodes from "@/utils/convertTreeToNodes";
 
-import { json } from "@/json";
 import ELK from "elkjs/lib/elk.bundled.js";
 import { ActionsBar } from "@/components/Menubar";
 import { useNodeStore } from "@/store/NodeStore";
-import { GhostSquare } from "@/components/GhostSquare";
+import { ImSpinner8 } from "react-icons/im";
 
 const elk = new ELK();
 
@@ -69,24 +62,23 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
     edges: edges,
   };
 
-
   //Return promises
   return elk
     .layout(graph)
     .then((layoutedGraph) => ({
-      nodes: layoutedGraph.children && layoutedGraph.children.map((node) => {
-        return {
-          ...node,
-          // React Flow expects a position property on the node instead of `x` and `y` fields.
-          position: { x: node.x, y: node.y },
-        };
-      }),
+      nodes:
+        layoutedGraph.children &&
+        layoutedGraph.children.map((node) => {
+          return {
+            ...node,
+            // React Flow expects a position property on the node instead of `x` and `y` fields.
+            position: { x: node.x, y: node.y },
+          };
+        }),
       edges: layoutedGraph.edges,
     }))
     .catch(console.error);
-}; 
-
-
+};
 
 const nodeTypes = { square: Square };
 const edgesTypes = { default: DefaultEdge };
@@ -94,12 +86,15 @@ const edgesTypes = { default: DefaultEdge };
 const MindMapCanvas = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const { isCreatingNode, mindMap } = useNodeStore();
+  const { isCreatingNode, mindMap, mindMapLoadingRequest } = useNodeStore();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseMove = useCallback((event: any) => {
-    setMousePosition({ x: event.clientX, y: event.clientY });
-  },[setMousePosition]);
+  const handleMouseMove = useCallback(
+    (event: any) => {
+      setMousePosition({ x: event.clientX, y: event.clientY });
+    },
+    [setMousePosition]
+  );
 
   const onConnect = useCallback(
     (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
@@ -111,27 +106,28 @@ const MindMapCanvas = () => {
    * @param {*} initialNodes array of nodes and edges [nodes, edges] .Using this because variable "nodes" from state still empty for the first time
    */
   const onLayout = useCallback(
-    ({ direction }: {direction: any}, initialNodes: any[][] | null = null) => {
-      console.log({direction})
+    (
+      { direction }: { direction: any },
+      initialNodes: any[][] | null = null
+    ) => {
+      console.log({ direction });
 
       const opts = { "elk.direction": direction, ...elkOptions };
 
       const ns = initialNodes === null ? nodes : initialNodes[0];
       const es = initialNodes === null ? edges : initialNodes[1];
-      getLayoutedElements(ns, es, opts).then(
-        (layoutedGraph) => {
-          if (layoutedGraph) {
-            const { nodes: layoutedNodes, edges: layoutedEdges } = layoutedGraph;
-            //add layouted or repositioned nodes and edges to store, so that react flow will render the layouted or repositioned nodes and edges
-            // @ts-ignore
-            setNodes(layoutedNodes);
-            // @ts-ignore
-            setEdges(layoutedEdges);
-            console.log("Final Node Positions: ", layoutedNodes);
-            console.log("Final Edge Connections: ", layoutedEdges);
-          }
+      getLayoutedElements(ns, es, opts).then((layoutedGraph) => {
+        if (layoutedGraph) {
+          const { nodes: layoutedNodes, edges: layoutedEdges } = layoutedGraph;
+          //add layouted or repositioned nodes and edges to store, so that react flow will render the layouted or repositioned nodes and edges
+          // @ts-ignore
+          setNodes(layoutedNodes);
+          // @ts-ignore
+          setEdges(layoutedEdges);
+          console.log("Final Node Positions: ", layoutedNodes);
+          console.log("Final Edge Connections: ", layoutedEdges);
         }
-      );
+      });
     },
     [nodes, edges, setNodes, setEdges] //So that the useCallback will rememoize the nodes and edges variable if it values changed.
   );
@@ -170,8 +166,8 @@ const MindMapCanvas = () => {
           className="bg-indigo-400/20 rounded  min-w-[200px] min-h-[200px]"
           style={{
             position: "absolute",
-            left: mousePosition?.x - 8, 
-            top: mousePosition?.y - 8, 
+            left: mousePosition?.x - 8,
+            top: mousePosition?.y - 8,
             pointerEvents: "none", // Allow clicks to pass through
             zIndex: 1, // Ensure it's above the background
           }}
@@ -179,6 +175,12 @@ const MindMapCanvas = () => {
       )}
       <Background />
       <ActionsBar />
+
+      {mindMapLoadingRequest && (
+        <div className="fixed inset-0 flex items-center justify-center z-[999] bg-black/20">
+          <ImSpinner8 className="w-10 h-10 text-indigo-500 animate-spin" />
+        </div>
+      )}
     </ReactFlow>
   );
 };

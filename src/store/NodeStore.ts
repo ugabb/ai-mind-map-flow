@@ -17,6 +17,8 @@ export interface NodeState {
     // nodePosition: (position: XYPosition) => void;
   
     // edges: Edge[];
+    mindMapLoadingRequest: boolean;
+    setMindMapLoadingRequest: (isLoading: boolean) => void;
 }
 
 export const useNodeStore = create<NodeState>()((set) => ({
@@ -32,4 +34,8 @@ export const useNodeStore = create<NodeState>()((set) => ({
     disableIsCreatingNode() {
         set(() => ({ isCreatingNode: false }));
     },
+    mindMapLoadingRequest: false,
+    setMindMapLoadingRequest: (isLoading: boolean) => {
+        set(() => ({ mindMapLoadingRequest: isLoading }));
+    }
 }))
