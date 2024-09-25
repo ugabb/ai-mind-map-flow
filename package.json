@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ffmpeg/core": "^0.12.6",
     "@ffmpeg/ffmpeg": "^0.12.6",
     "@ffmpeg/types": "^0.12.2",
     "@ffmpeg/util": "^0.12.1",

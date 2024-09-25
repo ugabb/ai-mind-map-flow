@@ -137,10 +137,10 @@ const MindMapCanvas = () => {
   );
 
   useLayoutEffect(() => {
-    const nodeTree = convertJsonToTree(json); //to convert json to tree
+    const nodeTree = convertJsonToTree(mindMap); //to convert json to tree
     let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
     onLayout({ direction: "DOWN" }, convertedNodes);
-  }, [json]);
+  }, [mindMap]);
 
   // useEffect(() => {
   //   console.log("nodes", nodes);

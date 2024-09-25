@@ -86,7 +86,7 @@ export const GenerateMindMapModal = () => {
         )}
       </DialogContent>
       {loading && (
-        <ImSpinner2 className="size-5 text-indigo-500" />
+        <ImSpinner2 className="size-5 text-indigo-500 animate-spin" />
       )}
     </Dialog>
   );
