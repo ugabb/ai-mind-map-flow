@@ -1,48 +1,80 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { fetchFile } from "@ffmpeg/util";
+import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import { useState } from "react";
 import {toast} from "react-hot-toast";
 
 export const useConvertVideoToAudio = (ffmpeg: FFmpeg) => {
   const [progress, setProgress] = useState<number>(0);
 
-  async function convertVideoToAudio(video: File): Promise<File | null> {
-    if(!video) {
-      toast.error("No video file selected");
-      return null
-    };
-
-    await ffmpeg.load();
-
-    await ffmpeg.writeFile("input.mp4", await fetchFile(video));
-
-    ffmpeg.on("progress", (progress) => {
-      setProgress(Math.round(progress.progress * 100));
+  const load = async () => {
+    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd'
+    ffmpeg.on('log', ({ message }) => {
+        console.log("[MESSAGE LOG]",message);
+    });
+    // toBlobURL is used to bypass CORS issue, urls with the same
+    // domain can be used directly.
+    const isLoaded = await ffmpeg.load({
+        coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+        wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
     });
 
-    await ffmpeg.exec([
-      "-i", // Input file flag
-      "input.mp4", // Input file name
-      "-map", // Select stream(s) flag
-      "0:a", // Select the first audio stream from the input file
-      "-b:a", // Set audio bitrate flag
-      "20k", // Audio bitrate value (20 kilobits per second)
-      "-acodec", // Set audio codec flag
-      "libmp3lame", // Audio codec to use (libmp3lame for MP3 encoding)
-      "output.mp3", // Output file name
-    ]);
-
-    const data = await ffmpeg.readFile("output.mp3");
-    const audioFileBlob = new Blob([data], { type: "audio/mpeg" });
-    const audioFile = new File([audioFileBlob], "audio.mp3", {
-      type: "audio/mpeg",
-    });
-
-    return audioFile;
+    return isLoaded;
   }
+  
+
+  async function convertVideoToAudio(video: File): Promise<File | null> {
+    try {
+      if (!video) {
+        toast.error("No video file selected");
+        return null;
+      }
+
+      await load()
+  
+      // const IsFFmpegLoaded = await ffmpeg.load({
+      //   coreURL,
+      //   wasmURL,
+      // // });
+      // if(!IsFFmpegLoaded){
+      //   toast.error("FFmpeg not loaded");
+      //   return null;
+      // }
+
+      await ffmpeg.writeFile("input.mp4", await fetchFile(video));
+  
+      ffmpeg.on("progress", (progress) => {
+        setProgress(Math.round(progress.progress * 100));
+      });
+  
+      const convert = await ffmpeg.exec([
+        "-i", 
+        "input.mp4", 
+        "-map", 
+        "0:a", 
+        "-b:a", 
+        "20k", 
+        "-acodec", 
+        "libmp3lame", 
+        "output.mp3",
+      ]);
+
+      console.log(convert);     
+  
+      const data = await ffmpeg.readFile("output.mp3");
+      const audioFileBlob = new Blob([data], { type: "audio/mpeg" });
+      return new File([audioFileBlob], "audio.mp3", { type: "audio/mpeg" });
+  
+    } catch (error) {
+      console.error("Conversion error:", error);
+      toast.error("Error converting video to audio.");
+      return null;
+    }
+  }
+  
 
   return {
     convertVideoToAudio,
     progress,
+    load
   };
 };

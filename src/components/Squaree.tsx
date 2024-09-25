@@ -2,7 +2,7 @@
 
 import { Connection, Edge, EdgeProps, Handle, Node, NodeProps, NodeResizer, Position, useReactFlow } from '@xyflow/react'
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { FiArrowDown, FiArrowLeft, FiArrowRight } from 'react-icons/fi'
+import { FiArrowDown, FiArrowLeft, FiArrowRight, FiArrowUp } from 'react-icons/fi'
 import { GhostSquare } from './GhostSquare'
 
 export type DataNode = Node<{   
@@ -19,7 +19,7 @@ export interface Direction {
 }
 
 const Squaree = (props: NodeProps<DataNode>) => {
-    const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY} = props
+    const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY, targetPosition, sourcePosition} = props
     const { getEdge, getEdges, addEdges, setEdges, addNodes, deleteElements} = useReactFlow()
     
     const [label, setLabel] = useState((typeof data.label === 'object') ? '' : data.label)
@@ -33,7 +33,8 @@ const Squaree = (props: NodeProps<DataNode>) => {
     
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const handleDoubleClick = () => {
+    const handleEnableEditing = () => {
+        if(!selected) return
         setIsEditing(true);
         if (inputRef.current) {
             inputRef.current.focus(); // Set focus on the input element when double-clicked
@@ -47,7 +48,6 @@ const Squaree = (props: NodeProps<DataNode>) => {
     const handleNewConnections = (newConnection: Connection) => {
         const curentEdge = getEdge(id)
         if(curentEdge) return
-        console.log(curentEdge)
         const newEdge: Edge = {
             id: `${id}-${newConnection.target}`,
             source: newConnection.source,
@@ -55,7 +55,6 @@ const Squaree = (props: NodeProps<DataNode>) => {
             sourceHandle: newConnection.sourceHandle,
             targetHandle: newConnection.targetHandle,
             type: 'default',
-            animated: true,
         }
         addEdges(newEdge)
     }
@@ -133,33 +132,31 @@ const Squaree = (props: NodeProps<DataNode>) => {
     },[handleDeleteNode])
     
     return (
-    <div className='bg-violet-500 rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 ' onDoubleClick={handleDoubleClick}> 
+    <div className='bg-violet-500 rounded-lg min-w-[200px]  w-fit min-h-[200px] h-fit p-5 ' onClick={handleEnableEditing}> 
         <NodeResizer
-            minHeight={200}
-            minWidth={200}
+            minHeight={height}
+            minWidth={width}
             isVisible={selected ? true : false}
             lineClassName='bg-blue-500'
-
             handleClassName='w-4 h-4 bg-white border-1 border-blue-500 rounded' 
+                         
         />
         {isAddingNode.top ? (
             <Handle
-            id="top"
-            type="source"
-            position={Position.Top}
-            className='-top-6 size-10 bg-blue-500 flex justify-center items-center '
-            onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, top: true }))}
-            onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, top: false }))}
-            onClick={() => handleAddSideNode("top")}
-        >
-            <FiArrowDown className='size-5 text-white' />
-        </Handle>
+                id="top"
+                type="target"
+                position={Position.Top}
+                className={`-top-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-up.svg')] bg-no-repeat bg-center`}
+                onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, top: true }))}
+                onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, top: false }))}
+                onClick={() => handleAddSideNode("top")}
+            />
         ) : (
                 <Handle
                     id="top"
-                    type="source"
+                    type="target"
                     position={Position.Top}
-                    className={`-top-6 w-3 h-3 bg-blue-500  `}
+                    className={`-top-6 w-3 h-3 bg-blue-500`}
                     onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, top: true }))}
                     onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, top: false }))}
                 />
@@ -175,52 +172,16 @@ const Squaree = (props: NodeProps<DataNode>) => {
             )
         }
 
-        {isAddingNode.right ? (
-            <Handle
-                id="right"
-                type="source"
-                position={Position.Right}
-                className='-right-6 size-10 bg-blue-500 flex justify-center items-center '
-                onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
-                onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
-                onClick={() => handleAddSideNode("right")}
-            >
-                <FiArrowRight className='size-5 text-white' />
-            </Handle>
-        ) :
-            (
-                <Handle
-                    id="right"
-                    type="source"
-                    position={Position.Right}
-                    className={`-right-6 w-3 h-3 bg-blue-500 `}
-                    onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
-                    onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
-                />
-            )
-        }
-
-        {isAddingNode.right && (
-                <GhostSquare 
-                    width={width as number}
-                    height={height as number}
-                    direction="right"
-                />
-            )
-        }
-
         {isAddingNode.bottom ? (
             <Handle
             id="bottom"
             type="source"
             position={Position.Bottom}
-            className='-bottom-6 size-10 bg-blue-500 flex justify-center items-center '
+            className={`-bottom-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-down.svg')] bg-no-repeat bg-center`}
             onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, bottom: true }))}
             onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, bottom: false }))}
             onClick={() => handleAddSideNode("bottom")}
-        >
-            <FiArrowDown className='size-5 text-white' />
-        </Handle>
+        />
         ) : (
                 <Handle
                     id="bottom"
@@ -242,18 +203,51 @@ const Squaree = (props: NodeProps<DataNode>) => {
             )
         }
 
+
+        {isAddingNode.right ? (
+            <Handle
+                id="right"
+                type="source"
+                position={Position.Right}
+                className={`-right-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-right.svg')] bg-no-repeat bg-center`}
+                onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
+                onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
+                onClick={() => handleAddSideNode("right")}
+            />
+        ) :
+            (
+                <Handle
+                    id="right"
+                    type="source"
+                    position={Position.Right}
+                    className={`-right-6 w-3 h-3 bg-blue-500 ${(targetPosition === Position.Right || sourcePosition === Position.Right) && 'bg-transparent'}`}
+                    onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, right: true }))}
+                    onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, right: false }))}
+                />
+            )
+        }
+
+        {isAddingNode.right && (
+                <GhostSquare 
+                    width={width as number}
+                    height={height as number}
+                    direction="right"
+                />
+            )
+        }
+
+
+
         {isAddingNode.left ? (
             <Handle
                 id="left"
                 type="source"
                 position={Position.Left}
-                className='-left-6 size-10 bg-blue-500 flex justify-center items-center '
+                className={`-left-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-left.svg')] bg-no-repeat bg-center`}
                 onMouseOver={() => setIsAddingNode((prev) => ({ ...prev, left: true }))}
                 onMouseLeave={() => setIsAddingNode((prev) => ({ ...prev, left: false }))}
                 onClick={() => handleAddSideNode("left")}
-            >
-                <FiArrowLeft className='size-5 text-white' />
-            </Handle>
+            />
         ) :
             (
                 <Handle
@@ -278,15 +272,13 @@ const Squaree = (props: NodeProps<DataNode>) => {
 
 
 
-        <div className='flex justify-center items-center h-full w-full text-wrap'>
-            <ul className='h-full w-full'>
+            <div className='flex justify-center items-center h-full w-full text-left text-wrap p-3'>
                 { 
                 (typeof data.label === 'object') ? 
                 Object.entries(data.label).map(([key, value], index) =>(
-                    <li key={index}>
-                        <span className="jsonVisNode__label__key">{key} : </span>
-                        <span>{String(value)}</span>
-                    </li>                    
+                    <div key={index} className='flex flex-col justify-center items-center p-3 w-full h-full'>
+                        <span className="">{key} : {String(value)}</span>
+                    </div>                    
                 )) : (
                     <div className='flex justify-center items-center h-full w-full p-3 text-wrap '>
                         {selected ? (
@@ -298,13 +290,12 @@ const Squaree = (props: NodeProps<DataNode>) => {
                                 placeholder='Enter text here'
                             />
                         ) : (
-                            <span className={`text-white w-fit max-w-[${width}px] text-center`}>{label}</span>
+                            <span className={`text-white w-fit max-w-[${width}px] text-center cursor-text `}>{label}</span>
                         )}
                     </div>
                 )
                 }   
-            </ul>
-        </div>
+            </div>
     </div>
   )
 }
