@@ -83,7 +83,7 @@ export default function Login() {
                 Don&apos;t have an account?
               </span>
               <Link
-                href={"/login"}
+                href={"/sign-up"}
                 className="text-sm text-indigo-500 hover:underline transition-all"
               >
                 Click here!
