@@ -16,6 +16,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -29,8 +32,24 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log(data);
+  const router = useRouter();
+
+  const onSubmit = async (data: LoginFormValues) => {
+    try {
+      const { status, data: reqData } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/authenticate`,
+        data
+      );
+
+      if (status === 200) {
+        toast.success("Login successful!");
+        localStorage.setItem("ai.mind.map.token", reqData.token);
+        router.push("/mind-map");
+      }
+    } catch (error) {
+      toast.error("Invalid credentials");
+      console.error(error);
+    }
   };
 
   return (
