@@ -19,6 +19,7 @@ import Link from "next/link";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { ImSpinner8 } from "react-icons/im";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -94,8 +95,13 @@ export default function Login() {
             <Button
               type="submit"
               className="bg-indigo-500 text-zinc-200 font-semibold hover:bg-indigo-600 w-full"
+              disabled={form.formState.isSubmitting}
             >
-              Login
+              {form.formState.isSubmitting ? (
+                <ImSpinner8 className="size-5 text-indigo-100 animate-spin" />
+              ) : (
+                "Sign Up"
+              )}
             </Button>
             <div className="space-x-2">
               <span className="text-sm text-zinc-600">
