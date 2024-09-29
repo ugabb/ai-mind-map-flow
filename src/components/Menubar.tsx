@@ -3,11 +3,14 @@ import { Node, useReactFlow } from "@xyflow/react";
 import { useEffect } from "react";
 import { GenerateMindMapModal } from "./GenerateMindMapModal";
 import { useNodeStore } from "@/store/NodeStore";
+import { useAuthContext } from "@/app/context/useAuth";
 
 export const ActionsBar = () => {
   const { addNodes, screenToFlowPosition } = useReactFlow();
   const { activeIsCreatingNode, disableIsCreatingNode, isCreatingNode } =
     useNodeStore();
+
+  const { currentUser } = useAuthContext();
 
   const handleClickToCreate = (event: any) => {
     if (isCreatingNode) {
@@ -52,6 +55,10 @@ export const ActionsBar = () => {
 
         <T.ToggleItem value="generate-mind-map">
           <GenerateMindMapModal />
+        </T.ToggleItem>
+
+        <T.ToggleItem value="user">
+          <p>{currentUser?.name}</p>
         </T.ToggleItem>
       </T.ToggleGroup>
     </T.Root>

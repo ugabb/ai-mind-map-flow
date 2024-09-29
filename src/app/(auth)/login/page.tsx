@@ -11,46 +11,32 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage,
+  FormLabel
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
+import { useAuthContext } from "@/app/context/useAuth";
 
 const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
 
+  const { login } = useAuthContext();
+
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormValues) => {
-    try {
-      const { status, data: reqData } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/user/authenticate`,
-        data
-      );
-
-      if (status === 200) {
-        toast.success("Login successful!");
-        localStorage.setItem("ai.mind.map.token", reqData.token);
-        router.push("/mind-map");
-      }
-    } catch (error) {
-      toast.error("Invalid credentials");
-      console.error(error);
-    }
+    login(data)
   };
 
   return (
