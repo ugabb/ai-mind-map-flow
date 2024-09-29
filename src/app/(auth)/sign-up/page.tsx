@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,10 +17,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
+import { useAuthContext } from "@/app/context/useAuth";
+import { useCallback, useState } from "react";
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -29,53 +30,65 @@ const signUpSchema = z.object({
   profilePicture: z.string().optional(),
 });
 
-type SignUpFormValues = z.infer<typeof signUpSchema>;
+export type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export default function SignUp() {
+  const [preview, setPreview] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
   });
 
-  const router = useRouter();
+  const { signUp } = useAuthContext();
 
   const onSubmit = async (data: SignUpFormValues) => {
-    if (data.password !== data.confirmPassword) {
-      form.setError("confirmPassword", {
-        type: "manual",
-        message: "Passwords do not match",
-      });
-      form.setError("password", {
-        type: "manual",
-        message: "Passwords do not match",
-      });
-      return;
-    }
+    signUp(data);
+  };
 
-    const formData = {
-      email: data.email,
-      password: data.password,
-      name: data.name,
-      ...(data.profilePicture && { profilePicture: data.profilePicture }),
-    };
+  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setError(null); // Reset any existing errors
 
-    try {
-      const { status } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/user`,
-        formData
-      );
-
-      if (status === 201) {
-        toast.success("Sign Up successfully!");
-        router.push("/login");
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0]; // Assuming a single file upload
+      if (file.type.startsWith("image/")) {
+        const objectUrl = URL.createObjectURL(file); // Create a preview URL for the image
+        setPreview(objectUrl); // Set preview
+      } else {
+        setError("Please drop an image file (e.g., .jpg, .png)"); // Handle non-image files
+        setPreview(null); // Clear any previous preview
       }
-    } catch (error) {
-      toast.error("Errro while signing up");
-      console.error(error);
+    }
+  }, []);
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null); // Reset any existing errors
+
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith("image/")) {
+        const objectUrl = URL.createObjectURL(file); // Create a URL for preview
+        setPreview(objectUrl); // Set the preview
+      } else {
+        setError("Please select an image file (e.g., .jpg, .png)");
+        setPreview(null);
+      }
     }
   };
 
+  const handleRemove = () => {
+    setPreview(null); // Remove preview
+  };
+
   return (
-    <div className="p-5 min-w-[533px]">
+    <div className="px-5 py-20 min-w-[533px]">
       <div className="mb-5">
         <h1 className="text-3xl font-bold">Sign Up</h1>
         <p className="text-base text-zinc-600">Welcome! Enter your e-mail</p>
@@ -174,6 +187,56 @@ export default function SignUp() {
               )}
             />
           </div>
+
+          <FormField
+            control={form.control}
+            name="profilePicture"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                {!preview ? (
+                  <>
+                    <FormLabel htmlFor={field.name}>Drop your photo</FormLabel>
+                    <FormControl className="flex justify-center items-center h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400">
+                      <Input
+                        {...field}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                        onChange={handleFileSelect}
+                        placeholder="drop your profile photo"
+                        type="file"
+                        disabled
+                        className={`${
+                          form.formState?.errors?.confirmPassword &&
+                          "border border-red-500"
+                        } w-full`}
+                      />
+                    </FormControl>
+                    {form.formState?.errors?.confirmPassword ? (
+                      <FormMessage>
+                        {form.formState.errors.confirmPassword?.message}
+                      </FormMessage>
+                    ) : (
+                      <FormDescription></FormDescription>
+                    )}
+                  </>
+                ) : (
+                  <div className="relative h-48 w-48">
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="h-48 w-48 object-cover rounded-full"
+                    />
+                    <button
+                      onClick={handleRemove}
+                      className="absolute w-5 h-5 top-0 right-0 p-2 bg-red-600 text-white rounded-full flex items-center justify-center"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                )}
+              </FormItem>
+            )}
+          />
 
           <div className="flex flex-col gap-1 justify-center items-center w-full">
             <Button
