@@ -21,7 +21,7 @@ function DefaultEdge_({
   style = {},
   markerEnd,
 }: EdgeProps) {
-  const [edgePath, labelX, labelY] = getSimpleBezierPath({
+  const [edgePath, labelX, labelY] = getSmoothStepPath ({
     sourceX,
     sourceY,
     sourcePosition,
