@@ -1,16 +1,15 @@
 "use client";
 
+import { useState, useCallback, useLayoutEffect } from "react";
 import {
-  useState,
-  useCallback, useLayoutEffect
-} from "react";
-import {
-  ReactFlow, useNodesState,
+  ReactFlow,
+  useNodesState,
   useEdgesState,
   addEdge,
   Background,
   ConnectionMode,
-  Connection
+  Connection,
+  MarkerType,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Squaree";
@@ -22,6 +21,9 @@ import ELK from "elkjs/lib/elk.bundled.js";
 import { ActionsBar } from "@/components/Menubar";
 import { useNodeStore } from "@/store/NodeStore";
 import { ImSpinner8 } from "react-icons/im";
+import { json } from "@/json";
+
+import { zinc } from "tailwindcss/colors";
 
 const elk = new ELK();
 
@@ -133,10 +135,10 @@ const MindMapCanvas = () => {
   );
 
   useLayoutEffect(() => {
-    const nodeTree = convertJsonToTree(mindMap); //to convert json to tree
+    const nodeTree = convertJsonToTree(json); //to convert json to tree
     let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
     onLayout({ direction: "DOWN" }, convertedNodes);
-  }, [mindMap]);
+  }, [json]);
 
   // useEffect(() => {
   //   console.log("nodes", nodes);
@@ -150,12 +152,17 @@ const MindMapCanvas = () => {
       edgeTypes={edgesTypes}
       defaultEdgeOptions={{
         type: "default",
+        markerEnd: {
+          type: MarkerType.Arrow,
+          width: 25,
+          height: 25,
+          color: zinc[400],
+        },
       }}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       connectionMode={ConnectionMode.Loose}
-      // onInit={setRfInstance}
       fitView
       fitViewOptions={{ padding: 2 }}
       className="h-screen w-screen"
