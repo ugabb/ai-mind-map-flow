@@ -1,13 +1,23 @@
 import * as T from "@radix-ui/react-toolbar";
-import { Node, useReactFlow } from "@xyflow/react";
-import { useEffect } from "react";
+import { Node, ReactFlowInstance, useReactFlow } from "@xyflow/react";
+import { useCallback, useEffect, useState } from "react";
 import { GenerateMindMapModal } from "./GenerateMindMapModal";
 import { useNodeStore } from "@/store/NodeStore";
+import { LuSave } from "react-icons/lu";
+import { Button } from "./ui/button";
 
-export const ActionsBar = () => {
-  const { addNodes, screenToFlowPosition } = useReactFlow();
+const flowKey = "flow_key";
+
+interface MenuBarProps {
+  rfInstance: ReactFlowInstance | null;
+}
+
+export const ActionsBar = (props: MenuBarProps) => {
+  const { rfInstance } = props;
+  const { addNodes, screenToFlowPosition, setViewport } = useReactFlow();
   const { activeIsCreatingNode, disableIsCreatingNode, isCreatingNode } =
     useNodeStore();
+
 
   const handleClickToCreate = (event: any) => {
     if (isCreatingNode) {
@@ -38,6 +48,16 @@ export const ActionsBar = () => {
     };
   }, [isCreatingNode]);
 
+  const onSave = useCallback(() => {
+    if (rfInstance) {
+      const flow = rfInstance.toObject();
+      console.log(JSON.stringify(flow))
+      localStorage.setItem(flowKey, JSON.stringify(flow));
+    }else{
+      console.error("rfInstance is null")
+    }
+  }, [rfInstance]);
+
   return (
     <T.Root className="flex items-center w-96 h-20 rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
       <T.Button />
@@ -52,6 +72,11 @@ export const ActionsBar = () => {
 
         <T.ToggleItem value="generate-mind-map">
           <GenerateMindMapModal />
+        </T.ToggleItem>
+        <T.ToggleItem value="save-mind-map">
+          <Button onClick={onSave}>
+            <LuSave />
+          </Button>
         </T.ToggleItem>
       </T.ToggleGroup>
     </T.Root>
