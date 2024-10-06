@@ -3,6 +3,7 @@ import { Node, ReactFlowInstance, useReactFlow } from "@xyflow/react";
 import { useCallback, useEffect } from "react";
 import { GenerateMindMapModal } from "./GenerateMindMapModal";
 import { useNodeStore } from "@/store/NodeStore";
+import { useAuthContext } from "@/app/context/useAuth";
 import { Button } from "./ui/button";
 import { saveMindMap, SaveMindRequest } from "@/services/saveMindMap";
 import { SaveMindMapModal } from "./SaveMindMapModal";
@@ -18,6 +19,8 @@ export const ActionsBar = (props: MenuBarProps) => {
   const { addNodes, screenToFlowPosition, setViewport } = useReactFlow();
   const { activeIsCreatingNode, disableIsCreatingNode, isCreatingNode } =
     useNodeStore();
+
+  const { currentUser } = useAuthContext();
 
   const handleClickToCreate = (event: any) => {
     if (isCreatingNode) {
@@ -77,6 +80,10 @@ export const ActionsBar = (props: MenuBarProps) => {
 
         <T.ToggleItem value="generate-mind-map">
           <GenerateMindMapModal />
+        </T.ToggleItem>
+
+        <T.ToggleItem value="user">
+          <p>{currentUser?.name}</p>
         </T.ToggleItem>
         <T.ToggleItem value="save-mind-map">
           <Button>

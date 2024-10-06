@@ -19,6 +19,7 @@ export async function getAudioTranscript(audio: File): Promise<GetAudioTranscrip
             {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Axios will handle the boundary automatically
+                    'Authorization': `Bearer ${localStorage.getItem('ai.mind.map.token')}`
                 },
             }
         );

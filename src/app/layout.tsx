@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./styles/globals.css";
-const inter = Inter({ subsets: ["latin"] });
+import { AuthProvider } from "./context/useAuth";
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+});
 import { CustomQueryClientProvider } from "@/components/CustomQueryClientProvider";
 
 export const metadata: Metadata = {
@@ -17,9 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={poppins.className}>
         <CustomQueryClientProvider>
-          {children}
+          <AuthProvider>{children}</AuthProvider>
         </CustomQueryClientProvider>
         <Toaster />
       </body>
