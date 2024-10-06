@@ -10,7 +10,9 @@ import {
   addEdge,
   Background,
   ConnectionMode,
-  Connection
+  Connection,
+  MarkerType,
+  ReactFlowInstance,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Squaree";
@@ -22,6 +24,7 @@ import ELK from "elkjs/lib/elk.bundled.js";
 import { ActionsBar } from "@/components/Menubar";
 import { useNodeStore } from "@/store/NodeStore";
 import { ImSpinner8 } from "react-icons/im";
+import { zinc } from "tailwindcss/colors";
 
 const elk = new ELK();
 
@@ -88,6 +91,8 @@ const MindMapCanvas = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { isCreatingNode, mindMap, mindMapLoadingRequest } = useNodeStore();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
+  
 
   const handleMouseMove = useCallback(
     (event: any) => {
@@ -150,7 +155,14 @@ const MindMapCanvas = () => {
       edgeTypes={edgesTypes}
       defaultEdgeOptions={{
         type: "default",
+        markerEnd: {
+          type: MarkerType.Arrow,
+          width: 25,
+          height: 25,
+          color: zinc[400],
+        },
       }}
+      onInit={setRfInstance}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
@@ -174,11 +186,11 @@ const MindMapCanvas = () => {
         />
       )}
       <Background />
-      <ActionsBar />
+      <ActionsBar rfInstance={rfInstance} />
 
       {mindMapLoadingRequest && (
         <div className="fixed inset-0 flex items-center justify-center z-[999] bg-black/20">
-          <ImSpinner8 className="w-10 h-10 text-indigo-500 animate-spin" />
+          <ImSpinner8 className="w-10 h-10 text-indigo-500 animate-spin z-50" />
         </div>
       )}
     </ReactFlow>
