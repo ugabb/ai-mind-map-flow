@@ -4,11 +4,8 @@ import { useCallback, useEffect } from "react";
 import { GenerateMindMapModal } from "./GenerateMindMapModal";
 import { useNodeStore } from "@/store/NodeStore";
 import { useAuthContext } from "@/app/context/useAuth";
-import { Button } from "./ui/button";
 import { saveMindMap, SaveMindRequest } from "@/services/saveMindMap";
 import { SaveMindMapModal } from "./SaveMindMapModal";
-
-const flowKey = "flow_key";
 
 interface MenuBarProps {
   rfInstance: ReactFlowInstance | null;
@@ -67,7 +64,7 @@ export const ActionsBar = (props: MenuBarProps) => {
 
 
   return (
-    <T.Root className="flex items-center w-96 h-20 rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
+    <T.Root className="flex items-center w-full h-20 max-w-[1024px] rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
       <T.Button />
       <T.Separator />
       <T.Link />
@@ -86,9 +83,7 @@ export const ActionsBar = (props: MenuBarProps) => {
           <p>{currentUser?.name}</p>
         </T.ToggleItem>
         <T.ToggleItem value="save-mind-map">
-          <Button>
             <SaveMindMapModal onSave={onSave} />
-          </Button>
         </T.ToggleItem>
       </T.ToggleGroup>
     </T.Root>

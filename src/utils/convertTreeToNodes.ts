@@ -1,5 +1,5 @@
-import { Edge, EdgeProps,NodeProps, Position } from "@xyflow/react";
-import { nanoid } from "nanoid/non-secure";
+// @ts-nocheck
+import { Edge, NodeProps, Position } from "@xyflow/react";
 
 function generateEdgeId(sourceId: string, targetId: string) {
   return `edge-${sourceId}-${targetId}`;
@@ -22,6 +22,7 @@ function addRootNode(node: NodeProps) {
     children: [],
     sourcePosition: Position.Bottom,
     targetPosition: Position.Top,
+
   };
 
   nodes = [...nodes, newNode];

@@ -13,6 +13,8 @@ import {
   Connection,
   MarkerType,
   ReactFlowInstance,
+  Edge,
+  Node
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Squaree";
@@ -37,7 +39,6 @@ const elkOptions = {
   "elk.layered.nodePlacement.strategy": "SIMPLE",
   "elk.mrtree.edgeRoutingMode": "AVOID_OVERLAP",
   "elk.animate": true,
-  "elk.direction": "DOWN",
 };
 
 /**
@@ -87,8 +88,8 @@ const nodeTypes = { square: Square };
 const edgesTypes = { default: DefaultEdge };
 
 const MindMapCanvas = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { isCreatingNode, mindMap, mindMapLoadingRequest } = useNodeStore();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
@@ -117,8 +118,7 @@ const MindMapCanvas = () => {
     ) => {
       console.log({ direction });
 
-      const opts = { "elk.direction": direction, ...elkOptions };
-
+      const opts = { ...elkOptions, "elk.direction": direction };
       const ns = initialNodes === null ? nodes : initialNodes[0];
       const es = initialNodes === null ? edges : initialNodes[1];
       getLayoutedElements(ns, es, opts).then((layoutedGraph) => {
@@ -143,10 +143,6 @@ const MindMapCanvas = () => {
     onLayout({ direction: "DOWN" }, convertedNodes);
   }, [mindMap]);
 
-  // useEffect(() => {
-  //   console.log("nodes", nodes);
-  // }, [nodes]);
-
   return (
     <ReactFlow
       nodes={nodes}
@@ -167,7 +163,6 @@ const MindMapCanvas = () => {
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       connectionMode={ConnectionMode.Loose}
-      // onInit={setRfInstance}
       fitView
       fitViewOptions={{ padding: 2 }}
       className="h-screen w-screen"

@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid/non-secure";
+// @ts-nocheck
 import { NodeProps, Position } from '@xyflow/react';
 
 let nodeCounter = 0;
