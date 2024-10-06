@@ -1,10 +1,11 @@
 import * as T from "@radix-ui/react-toolbar";
 import { Node, ReactFlowInstance, useReactFlow } from "@xyflow/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { GenerateMindMapModal } from "./GenerateMindMapModal";
 import { useNodeStore } from "@/store/NodeStore";
-import { LuSave } from "react-icons/lu";
 import { Button } from "./ui/button";
+import { saveMindMap, SaveMindRequest } from "@/services/saveMindMap";
+import { SaveMindMapModal } from "./SaveMindMapModal";
 
 const flowKey = "flow_key";
 
@@ -17,7 +18,6 @@ export const ActionsBar = (props: MenuBarProps) => {
   const { addNodes, screenToFlowPosition, setViewport } = useReactFlow();
   const { activeIsCreatingNode, disableIsCreatingNode, isCreatingNode } =
     useNodeStore();
-
 
   const handleClickToCreate = (event: any) => {
     if (isCreatingNode) {
@@ -48,15 +48,20 @@ export const ActionsBar = (props: MenuBarProps) => {
     };
   }, [isCreatingNode]);
 
-  const onSave = useCallback(() => {
-    if (rfInstance) {
-      const flow = rfInstance.toObject();
-      console.log(JSON.stringify(flow))
-      localStorage.setItem(flowKey, JSON.stringify(flow));
-    }else{
-      console.error("rfInstance is null")
-    }
-  }, [rfInstance]);
+  const onSave = useCallback(
+    async (title: string) => {
+      if (rfInstance) {
+        const mindMapData: SaveMindRequest = {
+          title,
+          mindMap: rfInstance.toObject(),
+        };
+
+        await saveMindMap(mindMapData);
+      }
+    },
+    [rfInstance]
+  );
+
 
   return (
     <T.Root className="flex items-center w-96 h-20 rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
@@ -74,8 +79,8 @@ export const ActionsBar = (props: MenuBarProps) => {
           <GenerateMindMapModal />
         </T.ToggleItem>
         <T.ToggleItem value="save-mind-map">
-          <Button onClick={onSave}>
-            <LuSave />
+          <Button>
+            <SaveMindMapModal onSave={onSave} />
           </Button>
         </T.ToggleItem>
       </T.ToggleGroup>
