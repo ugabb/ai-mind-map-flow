@@ -17,8 +17,8 @@ export function Sidebar({ className, playlists }: SidebarProps) {
             AI Mind Map
           </h2>
           <div className="space-y-1">
-            <Button asChild variant="secondary">
-              <Link href={"/home"} className="w-full justify-start">
+            <Button asChild variant="secondary" className="justify-start">
+              <Link href={"/home"} className="flex w-full">
                 <PiHouseSimple className="h-5 w-5 mr-2 text-indigo-500" />
                 Home
               </Link>
