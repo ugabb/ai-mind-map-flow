@@ -1,12 +1,24 @@
+"use client"
+
 import { CardActions } from "@/components/CardActions";
 import { CardMindMap } from "@/components/CardMindMap";
 import { Sidebar } from "@/components/Sidebar";
+import { fetchMindMap, MindMapResponse } from "@/services/fetchMindMaps";
+import { useQuery } from "@tanstack/react-query";
 import { PiPlusCircle, PiShare, PiShareNetwork } from "react-icons/pi";
 
+const USERID = "66f944142879239540d23bdd"
+
 export default function Home() {
+  
+  const {data: mindMaps} = useQuery<MindMapResponse[]>({
+    queryKey: ["mindmaps", USERID],
+    queryFn: () => fetchMindMap(USERID),
+  });
+
   return (
     <div className="flex flex-col bg-background">
-      <div className="flex items-center justify-end gap-5 p-3 w-full">
+      <div className="hidden md:flex items-center justify-end gap-5 p-3 w-full">
         <label className="grid cursor-pointer place-items-center">
           <input
             type="checkbox"
@@ -47,29 +59,23 @@ export default function Home() {
       <div className="flex border-t border-zinc-100">
         <Sidebar playlists={[]} />
         <div className="flex flex-col px-10 py-5 gap-10 w-full">
-          <h1 className="text-xl font-bold ">Mind Maps</h1>
+          <h1 className="text-xl font-bold">Mind Maps</h1>
 
           <div className="flex gap-5 items-center w-full">
-            <CardActions>
-              <PiPlusCircle size={30} className="text-indigo-500" />
-              Create Mind Map
-            </CardActions>
-            <CardActions>
-              <PiShareNetwork size={30} className="text-indigo-500" />
-              Share Mind Map
-            </CardActions>
+            <CardActions icon={PiPlusCircle} text="Create Mind Map" />
+            <CardActions icon={PiShareNetwork} text="Share Mind Map" />
           </div>
 
-          <div className="grid grid-cols-4 w-full gap-5">
-            {Array.from({length: 20}).map((_, index) => (
-                <CardMindMap
-                    key={index}
-                    mindMap={{
-                    id: index.toString(),
-                    title: "Mind Map " + (index + 1),
-                    lastUpdatedTime: "18:30",
-                    }}
-                />
+          <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 w-full gap-5">
+            {mindMaps && mindMaps.map((map, index) => (
+              <CardMindMap
+                key={map.id}
+                mindMap={{
+                  id: map.id,
+                  title: map.title,
+                  lastUpdatedTime: map.updatedAt,
+                }}
+              />
             ))}
           </div>
         </div>
