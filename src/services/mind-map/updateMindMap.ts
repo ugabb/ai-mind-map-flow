@@ -20,7 +20,7 @@ export interface UpdateMindMapRequest {
 export async function updateMindMap({userId, mindMapId, title, mindMap}: UpdateMindMapRequest): Promise<MindMapResponse[]> {
     try {
         const { data, status } = await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/update-mind-map/${mindMapId}/userId/${userId}`, {
-            title,
+            ...(title && { title }),
             mindMap
         });
 
