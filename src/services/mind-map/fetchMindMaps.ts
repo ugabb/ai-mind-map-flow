@@ -1,13 +1,5 @@
+import { MindMapResponse } from "@/types/mind-map";
 import axios from "axios";
-
-export interface MindMapResponse {
-    id: string;
-    title: string;
-    mindMap: JSON;
-    createdAt: string;
-    updatedAt: string;
-    userId: string;
-}
 
 export async function fetchMindMap(userId: string): Promise<MindMapResponse[]> {
     try {
