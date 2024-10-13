@@ -22,7 +22,7 @@ interface MenuBarProps {
 export const ActionsBar = (props: MenuBarProps) => {
   const { rfInstance } = props;
   const { addNodes, screenToFlowPosition, setViewport, setEdges, setNodes, viewportInitialized } = useReactFlow();
-  const { activeIsCreatingNode, disableIsCreatingNode, isCreatingNode } =
+  const { activeIsCreatingNode, disableIsCreatingNode, isCreatingNode, setCurrentMindMap } =
     useNodeStore();
 
   const { currentUser } = useAuthContext();
@@ -111,8 +111,6 @@ export const ActionsBar = (props: MenuBarProps) => {
   const onRestore = useCallback(() => {
     const restoreFlow = async () => {
       if (!mindMapData?.mindMap) return;
-  
-      console.log("[MIND MAP]", mindMapData?.mindMap);
       const flow = mindMapData.mindMap;
   
       if (flow) {
@@ -120,6 +118,7 @@ export const ActionsBar = (props: MenuBarProps) => {
         setNodes(flow.nodes || []);
         setEdges(flow.edges || []);
         setViewport({ x, y, zoom });
+        setCurrentMindMap(mindMapData);
       }
     };
   
@@ -139,6 +138,7 @@ export const ActionsBar = (props: MenuBarProps) => {
       <T.Button />
       <T.Separator />
       <T.Link />
+      {mindMapData?.title}
       <T.ToggleGroup type="single" className="flex items-center gap-5 px-2 ">
         <T.ToggleItem
           onClick={() => activeIsCreatingNode()}

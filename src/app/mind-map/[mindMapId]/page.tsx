@@ -16,7 +16,8 @@ import {
   ReactFlowInstance,
   Edge,
   Node,
-  useReactFlow
+  useReactFlow,
+  Panel 
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Squaree";
@@ -34,6 +35,8 @@ import { useParams } from "next/navigation";
 import { getMindMap } from "@/services/mind-map/getMindMap";
 import { useAuthContext } from "@/app/context/useAuth";
 import { USERID } from "@/app/home/page";
+import { PiArrowLeft, PiHouse } from "react-icons/pi";
+import Link from "next/link";
 
 const elk = new ELK();
 
@@ -97,7 +100,7 @@ const edgesTypes = { default: DefaultEdge };
 const MindMapCanvas = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-  const { isCreatingNode, mindMap, mindMapLoadingRequest, setMindMap } = useNodeStore();
+  const { isCreatingNode, mindMapToGenerate, mindMapLoadingRequest, currentMindMap } = useNodeStore();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
 
@@ -141,12 +144,10 @@ const MindMapCanvas = () => {
   );
 
   useLayoutEffect(() => {
-    const nodeTree = convertJsonToTree(mindMap); //to convert json to tree
+    const nodeTree = convertJsonToTree(mindMapToGenerate); //to convert json to tree
     let convertedNodes = convertTreeToNodes(nodeTree, false); //to convert tree to nodes
     onLayout({ direction: "DOWN" }, convertedNodes);
-  }, [mindMap]);
-
-
+  }, [mindMapToGenerate]);
   return (
     <ReactFlow
       nodes={nodes}
@@ -184,6 +185,17 @@ const MindMapCanvas = () => {
           }}
         />
       )}
+
+      {
+        currentMindMap?.mindMap && rfInstance && (
+          <Panel position="top-left" className="flex gap-3 items-center bg-indigo-50 p-3 rounded-lg">
+            <Link href='/home'>
+              <PiArrowLeft className="size-5 text-zinc-900" />
+            </Link>
+            <h1 className=" text-xl font-medium">{currentMindMap?.title || "Untitled"}</h1>
+          </Panel>
+        )
+      }
       <Background />
       <ActionsBar rfInstance={rfInstance} />
 

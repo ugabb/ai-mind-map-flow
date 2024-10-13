@@ -21,7 +21,7 @@ export const GenerateMindMapModal = () => {
   const [convertedAudio, setConvertedAudio] = useState<File | null>(null);
   const [video, setVideo] = useState<File | null>(null);
 
-  const { setMindMap, setMindMapLoadingRequest } = useNodeStore();
+  const { setMindMapToGenerate, setMindMapLoadingRequest } = useNodeStore();
 
   const ffmpeg = useRef<FFmpeg>(new FFmpeg());
 
@@ -43,7 +43,8 @@ export const GenerateMindMapModal = () => {
     const { transcription, status } = await getAudioTranscript(convertedAudio);
     if (status !== 200) return;
     const mindMap = await generateMindMap(transcription);
-    setMindMap(mindMap);
+
+    setMindMapToGenerate(mindMap);
     setMindMapLoadingRequest(false);
   };
 
