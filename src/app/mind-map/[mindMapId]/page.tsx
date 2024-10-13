@@ -31,7 +31,7 @@ import { ImSpinner8 } from "react-icons/im";
 import { zinc } from "tailwindcss/colors";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { getMindMap } from "@/services/getMindMap";
+import { getMindMap } from "@/services/mind-map/getMindMap";
 import { useAuthContext } from "@/app/context/useAuth";
 import { USERID } from "@/app/home/page";
 

@@ -17,24 +17,17 @@ import toast from "react-hot-toast";
 
 interface SaveMindMapModalProps {
   onSave: (title: string) => Promise<void>;
+  isPending: boolean;
 }
 
 export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
-  const { onSave } = props;
+  const { onSave, isPending } = props;
   const titleRef = useRef<HTMLInputElement>(null);
-
-  const { mutateAsync: saveMindMapMutation, isPending } = useMutation({
-    mutationKey: ["save-mindMap"],
-    mutationFn: () => onSave(titleRef.current ? titleRef.current.value : ""),
-    onSuccess() {
-      toast.success("Mind Map saved successfully");
-    },
-  });
+  
 
   return (
     <Dialog>
-      <DialogTrigger>
-          Save Mind Map
+      <DialogTrigger className="hover:bg-indigo-200 p-2 rounded-xl">
           <LuSave />
       </DialogTrigger>
       <DialogContent>
@@ -44,7 +37,7 @@ export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
         <Input placeholder="Title" ref={titleRef} />
         <Button
           onClick={() => {
-            saveMindMapMutation();
+            onSave(titleRef.current ? titleRef.current.value : "");
           }}
         >
           {isPending ? (

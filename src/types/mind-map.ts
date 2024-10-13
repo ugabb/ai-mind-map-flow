@@ -1,4 +1,4 @@
-import { Edge, Node } from "@xyflow/react";
+import { Edge, Node, ReactFlowJsonObject } from "@xyflow/react";
 
 export interface MindMap {
     nodes: Node[];
@@ -8,4 +8,13 @@ export interface MindMap {
         y: number;
         zoom: number;
     }
+}
+
+export interface MindMapResponse {
+    id: string;
+    title: string;
+    mindMap: ReactFlowJsonObject<Node, Edge>;
+    createdAt: string;
+    updatedAt: string;
+    userId: string;
 }

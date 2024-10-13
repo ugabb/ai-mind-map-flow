@@ -13,8 +13,8 @@ import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { useConvertVideoToAudio } from "@/hooks/useConvertVideoToAudio";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { LuTrash2 } from "react-icons/lu";
-import { getAudioTranscript } from "@/services/getAudioTranscript";
-import { generateMindMap } from "@/services/generateMindMap";
+import { getAudioTranscript } from "@/services/mind-map/getAudioTranscript";
+import { generateMindMap } from "@/services/mind-map/generateMindMap";
 import { useNodeStore } from "@/store/NodeStore";
 
 export const GenerateMindMapModal = () => {

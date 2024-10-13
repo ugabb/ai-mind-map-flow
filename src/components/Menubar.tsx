@@ -4,13 +4,16 @@ import { useCallback, useEffect } from "react";
 import { GenerateMindMapModal } from "./GenerateMindMapModal";
 import { useNodeStore } from "@/store/NodeStore";
 import { useAuthContext } from "@/app/context/useAuth";
-import { saveMindMap, SaveMindRequest } from "@/services/saveMindMap";
+import { saveMindMap, SaveMindRequest } from "@/services/mind-map/saveMindMap";
 import { SaveMindMapModal } from "./SaveMindMapModal";
 import { Button } from "./ui/button";
-import { useQuery } from "@tanstack/react-query";
-import { getMindMap } from "@/services/getMindMap";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getMindMap } from "@/services/mind-map/getMindMap";
 import { useParams } from "next/navigation";
 import { USERID } from "@/app/home/page";
+import { updateMindMap, UpdateMindMapRequest } from "@/services/mind-map/updateMindMap";
+import { ImSpinner8 } from "react-icons/im";
+import toast from "react-hot-toast";
 
 interface MenuBarProps {
   rfInstance: ReactFlowInstance | null;
@@ -29,6 +32,27 @@ export const ActionsBar = (props: MenuBarProps) => {
   const {data: mindMapData} = useQuery({
     queryKey: ["mindmaps", params.mindMapId],
     queryFn: () => getMindMap(USERID,params.mindMapId as string),
+  })
+
+  const {mutateAsync: saveMindMapFn, isPending: isSaving} = useMutation({
+    mutationKey: ["save-mindMap", USERID, params.mindMapId],
+    mutationFn: (data: SaveMindRequest) => saveMindMap(data),
+    onError: () => {
+      toast.error("Error while saving Mind Map")
+    },
+    onSuccess: () => {
+      toast.success("Mind Map saved successfully")
+    }
+  })
+  const {mutateAsync: updateMindMapFn, isPending: isUpdating} = useMutation({
+    mutationKey: ["update-mindMap", USERID, params.mindMapId],
+    mutationFn: (data: UpdateMindMapRequest) => updateMindMap(data),
+    onError: () => {
+      toast.error("Error while updating Mind Map")
+    },
+    onSuccess: () => {
+      toast.success("Mind Map updated successfully")
+    }
   })
 
   const handleClickToCreate = (event: any) => {
@@ -63,17 +87,25 @@ export const ActionsBar = (props: MenuBarProps) => {
   const onSave = useCallback(
     async (title: string) => {
       if (rfInstance) {
-        const mindMapObj: SaveMindRequest = {
-          title,
-          mindMap: rfInstance.toObject(),
-        };
+        const mindMapId = mindMapData?.id
+        if (mindMapId) {
+          await updateMindMapFn({
+            userId: USERID,
+            mindMapId,
+            title,
+            mindMap: rfInstance.toObject(),
+          });
+        } else {
+          await saveMindMapFn({
+            title,
+            mindMap: rfInstance.toObject(),
+            userId: USERID,
+          });
+        }
 
-        console.log("[MIND MAP OBJE]", mindMapObj);
-
-        await saveMindMap(mindMapObj);
       }
     },
-    [rfInstance]
+    [mindMapData?.id, rfInstance]
   );
 
   const onRestore = useCallback(() => {
@@ -100,7 +132,6 @@ export const ActionsBar = (props: MenuBarProps) => {
       onRestore();
     }
   }, [mindMapData, onRestore]);
-  
 
 
   return (
@@ -123,7 +154,7 @@ export const ActionsBar = (props: MenuBarProps) => {
           <p>{currentUser?.name}</p>
         </T.ToggleItem>
         <T.ToggleItem asChild value="save-mind-map">
-            <SaveMindMapModal onSave={onSave} />
+            <SaveMindMapModal onSave={onSave} isPending={isSaving || isUpdating} />
         </T.ToggleItem>
         <T.ToggleItem value="restore-mind-map" onClick={onRestore}>
           Restore

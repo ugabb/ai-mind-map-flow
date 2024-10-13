@@ -3,11 +3,11 @@
 import { CardActions } from "@/components/CardActions";
 import { CardMindMap } from "@/components/CardMindMap";
 import { Sidebar } from "@/components/Sidebar";
-import { fetchMindMap, MindMapResponse } from "@/services/fetchMindMaps";
+import { fetchMindMap, MindMapResponse } from "@/services/mind-map/fetchMindMaps";
 import { useQuery } from "@tanstack/react-query";
 import { PiPlusCircle, PiShare, PiShareNetwork } from "react-icons/pi";
 
-const USERID = "66f944142879239540d23bdd"
+export const USERID = "66f944142879239540d23bdd"
 
 export default function Home() {
   
