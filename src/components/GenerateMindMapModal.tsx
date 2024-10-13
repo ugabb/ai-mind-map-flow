@@ -49,8 +49,8 @@ export const GenerateMindMapModal = () => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button>Generate Mind Map</Button>
+      <DialogTrigger>
+        Generate Mind Map 
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

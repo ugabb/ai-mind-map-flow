@@ -33,11 +33,9 @@ export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button>
+      <DialogTrigger>
           Save Mind Map
           <LuSave />
-        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
