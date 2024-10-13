@@ -70,7 +70,7 @@ export const ActionsBar = (props: MenuBarProps) => {
 
         console.log("[MIND MAP OBJE]", mindMapObj);
 
-        // await saveMindMap(mindMapObj);
+        await saveMindMap(mindMapObj);
       }
     },
     [rfInstance]
