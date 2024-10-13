@@ -3,7 +3,8 @@
 import { CardActions } from "@/components/CardActions";
 import { CardMindMap } from "@/components/CardMindMap";
 import { Sidebar } from "@/components/Sidebar";
-import { fetchMindMap, MindMapResponse } from "@/services/mind-map/fetchMindMaps";
+import { fetchMindMap } from "@/services/mind-map/fetchMindMaps";
+import { MindMapResponse } from "@/types/mind-map";
 import { useQuery } from "@tanstack/react-query";
 import { PiPlusCircle, PiShare, PiShareNetwork } from "react-icons/pi";
 
@@ -67,14 +68,10 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 w-full gap-5">
-            {mindMaps && mindMaps.map((map, index) => (
+            {mindMaps && mindMaps.map((mindMap, index) => (
               <CardMindMap
-                key={map.id}
-                mindMap={{
-                  id: map.id,
-                  title: map.title,
-                  lastUpdatedTime: map.updatedAt,
-                }}
+                key={mindMap.id}
+                mindMap={mindMap}
               />
             ))}
           </div>

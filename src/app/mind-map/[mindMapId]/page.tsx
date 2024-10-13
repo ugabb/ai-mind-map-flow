@@ -2,8 +2,7 @@
 
 import {
   useState,
-  useCallback, useLayoutEffect,
-  useEffect
+  useCallback, useLayoutEffect
 } from "react";
 import {
   ReactFlow, useNodesState,
@@ -15,9 +14,7 @@ import {
   MarkerType,
   ReactFlowInstance,
   Edge,
-  Node,
-  useReactFlow,
-  Panel 
+  Node, Panel
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Squaree";
@@ -30,12 +27,7 @@ import { ActionsBar } from "@/components/Menubar";
 import { useNodeStore } from "@/store/NodeStore";
 import { ImSpinner8 } from "react-icons/im";
 import { zinc } from "tailwindcss/colors";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { getMindMap } from "@/services/mind-map/getMindMap";
-import { useAuthContext } from "@/app/context/useAuth";
-import { USERID } from "@/app/home/page";
-import { PiArrowLeft, PiHouse } from "react-icons/pi";
+import { PiArrowLeft } from "react-icons/pi";
 import Link from "next/link";
 
 const elk = new ELK();
@@ -106,9 +98,10 @@ const MindMapCanvas = () => {
 
   const handleMouseMove = useCallback(
     (event: any) => {
+      if (!isCreatingNode) return;
       setMousePosition({ x: event.clientX, y: event.clientY });
     },
-    [setMousePosition]
+    [setMousePosition, isCreatingNode]
   );
 
   const onConnect = useCallback(
@@ -144,10 +137,12 @@ const MindMapCanvas = () => {
   );
 
   useLayoutEffect(() => {
+    if(!mindMapToGenerate) return;
     const nodeTree = convertJsonToTree(mindMapToGenerate); //to convert json to tree
     let convertedNodes = convertTreeToNodes(nodeTree, false); //to convert tree to nodes
     onLayout({ direction: "DOWN" }, convertedNodes);
   }, [mindMapToGenerate]);
+
   return (
     <ReactFlow
       nodes={nodes}
