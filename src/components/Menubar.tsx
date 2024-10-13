@@ -6,6 +6,11 @@ import { useNodeStore } from "@/store/NodeStore";
 import { useAuthContext } from "@/app/context/useAuth";
 import { saveMindMap, SaveMindRequest } from "@/services/saveMindMap";
 import { SaveMindMapModal } from "./SaveMindMapModal";
+import { Button } from "./ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { getMindMap } from "@/services/getMindMap";
+import { useParams } from "next/navigation";
+import { USERID } from "@/app/home/page";
 
 interface MenuBarProps {
   rfInstance: ReactFlowInstance | null;
@@ -13,11 +18,18 @@ interface MenuBarProps {
 
 export const ActionsBar = (props: MenuBarProps) => {
   const { rfInstance } = props;
-  const { addNodes, screenToFlowPosition, setViewport } = useReactFlow();
+  const { addNodes, screenToFlowPosition, setViewport, setEdges, setNodes, viewportInitialized } = useReactFlow();
   const { activeIsCreatingNode, disableIsCreatingNode, isCreatingNode } =
     useNodeStore();
 
   const { currentUser } = useAuthContext();
+
+  const params = useParams();
+
+  const {data: mindMapData} = useQuery({
+    queryKey: ["mindmaps", params.mindMapId],
+    queryFn: () => getMindMap(USERID,params.mindMapId as string),
+  })
 
   const handleClickToCreate = (event: any) => {
     if (isCreatingNode) {
@@ -51,16 +63,44 @@ export const ActionsBar = (props: MenuBarProps) => {
   const onSave = useCallback(
     async (title: string) => {
       if (rfInstance) {
-        const mindMapData: SaveMindRequest = {
+        const mindMapObj: SaveMindRequest = {
           title,
           mindMap: rfInstance.toObject(),
         };
 
-        await saveMindMap(mindMapData);
+        console.log("[MIND MAP OBJE]", mindMapObj);
+
+        // await saveMindMap(mindMapObj);
       }
     },
     [rfInstance]
   );
+
+  const onRestore = useCallback(() => {
+    const restoreFlow = async () => {
+      if (!mindMapData?.mindMap) return;
+  
+      console.log("[MIND MAP]", mindMapData?.mindMap);
+      const flow = mindMapData.mindMap;
+  
+      if (flow) {
+        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+        setNodes(flow.nodes || []);
+        setEdges(flow.edges || []);
+        setViewport({ x, y, zoom });
+      }
+    };
+  
+    restoreFlow();
+  }, [mindMapData?.mindMap, setNodes, setEdges, setViewport]);
+  
+
+  useEffect(() => {
+    if (mindMapData?.mindMap && viewportInitialized) {
+      onRestore();
+    }
+  }, [mindMapData, onRestore]);
+  
 
 
   return (
@@ -75,15 +115,18 @@ export const ActionsBar = (props: MenuBarProps) => {
           className="w-24 h-24 translate-y-8 bg-indigo-500 rounded-md hover:translate-y-5 transition-transform"
         />
 
-        <T.ToggleItem value="generate-mind-map">
+        <T.ToggleItem asChild value="generate-mind-map">
           <GenerateMindMapModal />
         </T.ToggleItem>
 
         <T.ToggleItem value="user">
           <p>{currentUser?.name}</p>
         </T.ToggleItem>
-        <T.ToggleItem value="save-mind-map">
+        <T.ToggleItem asChild value="save-mind-map">
             <SaveMindMapModal onSave={onSave} />
+        </T.ToggleItem>
+        <T.ToggleItem value="restore-mind-map" onClick={onRestore}>
+          Restore
         </T.ToggleItem>
       </T.ToggleGroup>
     </T.Root>

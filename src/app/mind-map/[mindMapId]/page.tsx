@@ -2,7 +2,8 @@
 
 import {
   useState,
-  useCallback, useLayoutEffect
+  useCallback, useLayoutEffect,
+  useEffect
 } from "react";
 import {
   ReactFlow, useNodesState,
@@ -14,7 +15,8 @@ import {
   MarkerType,
   ReactFlowInstance,
   Edge,
-  Node
+  Node,
+  useReactFlow
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Squaree";
@@ -27,6 +29,11 @@ import { ActionsBar } from "@/components/Menubar";
 import { useNodeStore } from "@/store/NodeStore";
 import { ImSpinner8 } from "react-icons/im";
 import { zinc } from "tailwindcss/colors";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { getMindMap } from "@/services/getMindMap";
+import { useAuthContext } from "@/app/context/useAuth";
+import { USERID } from "@/app/home/page";
 
 const elk = new ELK();
 
@@ -90,10 +97,9 @@ const edgesTypes = { default: DefaultEdge };
 const MindMapCanvas = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-  const { isCreatingNode, mindMap, mindMapLoadingRequest } = useNodeStore();
+  const { isCreatingNode, mindMap, mindMapLoadingRequest, setMindMap } = useNodeStore();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
-  
 
   const handleMouseMove = useCallback(
     (event: any) => {
@@ -116,7 +122,6 @@ const MindMapCanvas = () => {
       { direction }: { direction: any },
       initialNodes: any[][] | null = null
     ) => {
-      console.log({ direction });
 
       const opts = { ...elkOptions, "elk.direction": direction };
       const ns = initialNodes === null ? nodes : initialNodes[0];
@@ -129,8 +134,6 @@ const MindMapCanvas = () => {
           setNodes(layoutedNodes);
           // @ts-ignore
           setEdges(layoutedEdges);
-          console.log("Final Node Positions: ", layoutedNodes);
-          console.log("Final Edge Connections: ", layoutedEdges);
         }
       });
     },
@@ -139,9 +142,10 @@ const MindMapCanvas = () => {
 
   useLayoutEffect(() => {
     const nodeTree = convertJsonToTree(mindMap); //to convert json to tree
-    let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
+    let convertedNodes = convertTreeToNodes(nodeTree, false); //to convert tree to nodes
     onLayout({ direction: "DOWN" }, convertedNodes);
   }, [mindMap]);
+
 
   return (
     <ReactFlow
