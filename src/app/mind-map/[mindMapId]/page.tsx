@@ -2,7 +2,8 @@
 
 import {
   useState,
-  useCallback, useLayoutEffect
+  useCallback, useLayoutEffect,
+  useEffect
 } from "react";
 import {
   ReactFlow, useNodesState,
@@ -29,6 +30,7 @@ import { ImSpinner8 } from "react-icons/im";
 import { zinc } from "tailwindcss/colors";
 import { PiArrowLeft } from "react-icons/pi";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 const elk = new ELK();
 
@@ -71,19 +73,24 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
   //Return promises
   return elk
     .layout(graph)
-    .then((layoutedGraph) => ({
-      nodes:
-        layoutedGraph.children &&
-        layoutedGraph.children.map((node) => {
-          return {
-            ...node,
-            // React Flow expects a position property on the node instead of `x` and `y` fields.
-            position: { x: node.x, y: node.y },
-          };
-        }),
-      edges: layoutedGraph.edges,
-    }))
-    .catch(console.error);
+    .then((layoutedGraph) => {
+      return {
+        nodes:
+          layoutedGraph.children &&
+          layoutedGraph.children.map((node) => {
+            return {
+              ...node,
+              // React Flow expects a position property on the node instead of `x` and `y` fields.
+              position: { x: node.x, y: node.y },
+            };
+          }),
+        edges: layoutedGraph.edges,
+      }
+    })
+    .catch((error) => {
+      console.error("Error layouting the graph", error);
+      return null;
+    });
 };
 
 const nodeTypes = { square: Square };
@@ -125,11 +132,12 @@ const MindMapCanvas = () => {
       getLayoutedElements(ns, es, opts).then((layoutedGraph) => {
         if (layoutedGraph) {
           const { nodes: layoutedNodes, edges: layoutedEdges } = layoutedGraph;
-          //add layouted or repositioned nodes and edges to store, so that react flow will render the layouted or repositioned nodes and edges
           // @ts-ignore
           setNodes(layoutedNodes);
           // @ts-ignore
           setEdges(layoutedEdges);
+        } else{
+          toast.error("Error layouting the graph");
         }
       });
     },
@@ -139,9 +147,15 @@ const MindMapCanvas = () => {
   useLayoutEffect(() => {
     if(!mindMapToGenerate) return;
     const nodeTree = convertJsonToTree(mindMapToGenerate); //to convert json to tree
-    let convertedNodes = convertTreeToNodes(nodeTree, false); //to convert tree to nodes
+    let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
     onLayout({ direction: "DOWN" }, convertedNodes);
   }, [mindMapToGenerate]);
+
+  useEffect(() => {
+    if (rfInstance) {
+      rfInstance.fitView();
+    }
+  },[rfInstance]);
 
   return (
     <ReactFlow

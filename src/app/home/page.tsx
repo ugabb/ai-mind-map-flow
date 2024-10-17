@@ -2,15 +2,18 @@
 
 import { CardActions } from "@/components/CardActions";
 import { CardMindMap } from "@/components/CardMindMap";
+import { GenerateMindMapModal } from "@/components/GenerateMindMapModal";
 import { Sidebar } from "@/components/Sidebar";
 import { fetchMindMap } from "@/services/mind-map/fetchMindMaps";
 import { MindMapResponse } from "@/types/mind-map";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { PiPlusCircle, PiShare, PiShareNetwork } from "react-icons/pi";
 
 export const USERID = "66f944142879239540d23bdd"
 
 export default function Home() {
+  const [openGenerateMindMap, setOpenGenerateMindMap] = useState(false);
   
   const {data: mindMaps} = useQuery<MindMapResponse[]>({
     queryKey: ["mindmaps", USERID],
@@ -63,8 +66,15 @@ export default function Home() {
           <h1 className="text-xl font-bold">Mind Maps</h1>
 
           <div className="flex gap-5 items-center w-full">
-            <CardActions icon={PiPlusCircle} text="Create Mind Map" />
+            <CardActions onClick={() => {}} icon={PiPlusCircle} text="Create Mind Map" />
+            <CardActions onClick={() => setOpenGenerateMindMap(true)} icon={PiPlusCircle} text="Generate Mind Map by video" />
             <CardActions icon={PiShareNetwork} text="Share Mind Map" />
+            {openGenerateMindMap && (
+              <GenerateMindMapModal
+                open={openGenerateMindMap}
+                onClose={() => setOpenGenerateMindMap(false)}
+              />
+            )}
           </div>
 
           <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 w-full gap-5">
