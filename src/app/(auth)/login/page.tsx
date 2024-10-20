@@ -38,13 +38,9 @@ export default function Login() {
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormValues) => {
-    // login(data)
-    const response = await credentialsSignIn(data)
-    console.log(response)
-
-    if(response?.ok){
-      toast.success("Login s  uccessful!")
-      router.push("/home")
+    const result = await credentialsSignIn(data);
+    if (result?.success) {
+      router.push("/home"); // Redirect on success
     }
   };
 
