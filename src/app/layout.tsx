@@ -8,6 +8,7 @@ const poppins = Poppins({
   subsets: ["latin"],
 });
 import { CustomQueryClientProvider } from "@/components/CustomQueryClientProvider";
+import AuthContext from "@/components/SessionProvider";
 
 export const metadata: Metadata = {
   title: "Ai Mind Map",
@@ -20,13 +21,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={poppins.className}>
-        <CustomQueryClientProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </CustomQueryClientProvider>
-        <Toaster />
-      </body>
-    </html>
+    <AuthContext>
+      <html lang="en">
+        <body className={poppins.className}>
+          <CustomQueryClientProvider>{children}</CustomQueryClientProvider>
+          <Toaster />
+        </body>
+      </html>
+    </AuthContext>
   );
 }
