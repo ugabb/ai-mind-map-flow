@@ -92,9 +92,10 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
       if (!rfInstance) return;
 
       const mindMapId = mindMapData?.id;
+      const isNewMindMap = mindMapId === "unsaved";
       const mindMapObject = rfInstance.toObject();
 
-      if (mindMapId) {
+      if (!isNewMindMap && mindMapId) {
         await updateMindMapFn.mutateAsync({
           userId: USERID,
           mindMapId,

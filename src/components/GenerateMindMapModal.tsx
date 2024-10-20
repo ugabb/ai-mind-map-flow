@@ -65,15 +65,16 @@ export const GenerateMindMapModal = ({
           headers: {
             "Content-Type": "application/json",
           },
-          responseType: 'blob',
+          responseType: 'blob', 
         }
-      );
+      )
       return new File([response.data], "audio.mp3", { type: "audio/mpeg" });
     },
     onError: (error) => {
       console.error("Error converting video to audio", error);
     },
   });
+
   const handleConvert = async () => {
     if (!video && !url) return;
     if (video) {
