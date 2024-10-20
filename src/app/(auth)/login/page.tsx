@@ -20,7 +20,8 @@ import { ImSpinner8 } from "react-icons/im";
 import { useAuthContext } from "@/app/context/useAuth";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
-import { googleLogin } from "@/lib/authjs/actions";
+import { credentialsSignIn, googleLogin } from "@/lib/authjs/actions";
+import toast from "react-hot-toast";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -34,10 +35,17 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  const { login } = useAuthContext();
+  const router = useRouter();
 
   const onSubmit = async (data: LoginFormValues) => {
-    login(data)
+    // login(data)
+    const response = await credentialsSignIn(data)
+    console.log(response)
+
+    if(response?.ok){
+      toast.success("Login s  uccessful!")
+      router.push("/home")
+    }
   };
 
   return (

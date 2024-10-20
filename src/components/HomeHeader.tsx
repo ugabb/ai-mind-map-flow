@@ -1,5 +1,5 @@
 import { getCurrentUser } from "@/lib/authjs/getCurrentUser";
-import { UserAvatar } from "./User";
+import { UserAvatar } from "./UserAvatar";
 
 export const HomeHeader = async () => {
   const { currentUser } = await getCurrentUser();
