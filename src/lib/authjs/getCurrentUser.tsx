@@ -1,7 +1,8 @@
-import { auth } from './auth';
+import { auth, ExtendedUser } from './auth';
 
 export const getCurrentUser = async () => {
   const session = await auth();
-
-  return { currentUser: session?.user };
+  const currentUser: ExtendedUser | undefined = session?.user;
+  
+  return { currentUser };
 };
