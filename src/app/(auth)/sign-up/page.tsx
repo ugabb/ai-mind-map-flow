@@ -21,6 +21,8 @@ import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
 import { useAuthContext } from "@/app/context/useAuth";
 import { useCallback, useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { googleLogin } from "@/lib/authjs/actions";
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -261,6 +263,9 @@ export default function SignUp() {
                 Click here!
               </Link>
             </div>
+          </div>
+          <div className="flex justify-center items-center">
+            <FcGoogle onClick={googleLogin} className="size-10 cursor-pointer" />
           </div>
         </form>
       </Form>

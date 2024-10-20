@@ -18,6 +18,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
 import { useAuthContext } from "@/app/context/useAuth";
+import { FcGoogle } from "react-icons/fc";
+import { signIn } from "next-auth/react";
+import { googleLogin } from "@/lib/authjs/actions";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -32,8 +35,6 @@ export default function Login() {
   });
 
   const { login } = useAuthContext();
-
-  const router = useRouter();
 
   const onSubmit = async (data: LoginFormValues) => {
     login(data)
@@ -100,6 +101,9 @@ export default function Login() {
                 Click here!
               </Link>
             </div>
+          </div>
+          <div className="flex justify-center items-center">
+            <FcGoogle onClick={googleLogin} className="size-10 cursor-pointer" />
           </div>
         </form>
       </Form>
