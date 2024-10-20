@@ -19,11 +19,9 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
-import { useAuthContext } from "@/app/context/useAuth";
 import { useCallback, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { googleLogin } from "@/lib/authjs/actions";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { registerUser } from "@/services/user/registerUser";
 

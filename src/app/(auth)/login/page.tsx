@@ -17,11 +17,8 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
-import { useAuthContext } from "@/app/context/useAuth";
 import { FcGoogle } from "react-icons/fc";
-import { signIn } from "next-auth/react";
 import { credentialsSignIn, googleLogin } from "@/lib/authjs/actions";
-import toast from "react-hot-toast";
 
 const loginSchema = z.object({
   email: z.string().email(),
