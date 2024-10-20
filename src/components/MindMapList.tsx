@@ -1,22 +1,30 @@
 "use client";
 
-import { USERID } from "@/app/home/page";
 import { CardActions } from "@/components/CardActions";
 import { CardMindMap } from "@/components/CardMindMap";
 import { GenerateMindMapModal } from "@/components/GenerateMindMapModal";
 import { Sidebar } from "@/components/Sidebar";
+import { ExtendedUser } from "@/lib/authjs/auth";
 import { fetchMindMap } from "@/services/mind-map/fetchMindMaps";
 import { MindMapResponse } from "@/types/mind-map";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { PiPlusCircle, PiShareNetwork } from "react-icons/pi";
 
-export const MindMapList = () => {
+interface MindMapListProps {
+  currentUser: ExtendedUser | undefined;
+}
+
+export const MindMapList = (props: MindMapListProps) => {
+  const { currentUser } = props;
   const [openGenerateMindMap, setOpenGenerateMindMap] = useState(false);
 
+  console.log("MindMapList",currentUser);
+
   const { data: mindMaps } = useQuery<MindMapResponse[]>({
-    queryKey: ["mindmaps", USERID],
-    queryFn: () => fetchMindMap(USERID),
+    queryKey: ["mindmaps", currentUser?.id],
+    queryFn: () => fetchMindMap(currentUser?.id as string),
+    enabled: !!currentUser?.id,
   });
   return (
     <div className="flex border-t border-zinc-100">
