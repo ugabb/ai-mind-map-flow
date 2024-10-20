@@ -1,14 +1,14 @@
-
 import { HomeHeader } from "@/components/HomeHeader";
 import { MindMapList } from "@/components/MindMapList";
+import { getCurrentUser } from "@/lib/authjs/getCurrentUser";
 
-export const USERID = "66f944142879239540d23bdd";
+export default async function Home() {
+  const { currentUser } = await getCurrentUser();
 
-export default function Home() {
   return (
     <div className="flex flex-col bg-background">
-      <HomeHeader />
-      <MindMapList />
+      <HomeHeader currentUser={currentUser} />
+      <MindMapList currentUser={currentUser} />
     </div>
   );
 }

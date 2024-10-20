@@ -1,8 +1,13 @@
 import { getCurrentUser } from "@/lib/authjs/getCurrentUser";
 import { UserAvatar } from "./UserAvatar";
+import { ExtendedUser } from "@/lib/authjs/auth";
 
-export const HomeHeader = async () => {
-  const { currentUser } = await getCurrentUser();
+interface HomeHeaderProps {
+  currentUser: ExtendedUser | undefined;
+}
+
+export const HomeHeader = async (props: HomeHeaderProps) => {
+  const { currentUser } = props;
   return (
     <div className="hidden md:flex items-center justify-between gap-5 p-3 w-full">
       <UserAvatar currentUser={currentUser} />
