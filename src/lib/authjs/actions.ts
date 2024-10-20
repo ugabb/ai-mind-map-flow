@@ -4,15 +4,36 @@ import toast from "react-hot-toast";
 
 export const googleLogin = async () => {
     await signIn("google", {
-        callbackUrl: "/home",
+        redirectTo: "/home",
     });
 }
 export const credentialsSignIn = async (data: LoginFormValues) => {
-   const response =  await signIn("credentials", {
+    try {
+      // Attempt to sign in using NextAuth credentials provider
+      const response = await signIn("credentials", {
         email: data.email,
         password: data.password,
         redirect: false,
-   });
+      });
 
-   return response
-}
+      if (response?.error) {
+        if (response.error.includes("CredentialsSignin")) {
+          toast.error("Incorrect email or password. Please try again.");
+        } else {
+          toast.error(`Login failed: ${response.error}`);
+        }
+        return { success: false, message: response.error };
+      }
+  
+      // Success case
+      if (response?.ok) {
+        toast.success("Login successful!");
+        return { success: true };
+      }
+  
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("An unexpected error occurred during login. Please try again.");
+      return { success: false, message: error.message };
+    }
+  };
