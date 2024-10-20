@@ -195,16 +195,14 @@ const MindMapCanvas = () => {
         />
       )}
 
-      {
-        currentMindMap?.mindMap && rfInstance && (
-          <Panel position="top-left" className="flex gap-3 items-center bg-indigo-50 p-3 rounded-lg">
-            <Link href='/home'>
-              <PiArrowLeft className="size-5 text-zinc-900" />
-            </Link>
-            <h1 className=" text-xl font-medium">{currentMindMap?.title || "Untitled"}</h1>
-          </Panel>
-        )
-      }
+
+      <Panel position="top-left" className="flex gap-3 items-center bg-indigo-50 p-3 rounded-lg">
+        <Link href='/home'>
+          <PiArrowLeft className="size-5 text-zinc-900" />
+        </Link>
+        <h1 className=" text-xl font-medium">{currentMindMap?.title || "Untitled"}</h1>
+      </Panel>
+          
       <Background />
       <ActionsBar rfInstance={rfInstance} />
 
