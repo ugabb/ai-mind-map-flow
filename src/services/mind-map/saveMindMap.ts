@@ -16,7 +16,7 @@ export interface SaveMindRequest {
 
 export async function saveMindMap({title, mindMap, userId}: SaveMindRequest): Promise<MindMapResponse> {
     try {
-        const { data } = await axios.post<SaveMindMapResponse>(`${process.env.NEXT_PUBLIC_API_URL}/save-mind-map/66f944142879239540d23bdd`, {
+        const { data } = await axios.post<SaveMindMapResponse>(`${process.env.NEXT_PUBLIC_API_URL}/save-mind-map/${userId}`, {
             title,
             mindMap
         }) // Killua's user id
