@@ -2,7 +2,8 @@
 
 import {
   useState,
-  useCallback, useLayoutEffect
+  useCallback, useLayoutEffect,
+  useEffect
 } from "react";
 import {
   ReactFlow, useNodesState,
@@ -14,7 +15,7 @@ import {
   MarkerType,
   ReactFlowInstance,
   Edge,
-  Node
+  Node, Panel
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Squaree";
@@ -27,6 +28,9 @@ import { ActionsBar } from "@/components/Menubar";
 import { useNodeStore } from "@/store/NodeStore";
 import { ImSpinner8 } from "react-icons/im";
 import { zinc } from "tailwindcss/colors";
+import { PiArrowLeft } from "react-icons/pi";
+import Link from "next/link";
+import toast from "react-hot-toast";
 
 const elk = new ELK();
 
@@ -69,19 +73,24 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
   //Return promises
   return elk
     .layout(graph)
-    .then((layoutedGraph) => ({
-      nodes:
-        layoutedGraph.children &&
-        layoutedGraph.children.map((node) => {
-          return {
-            ...node,
-            // React Flow expects a position property on the node instead of `x` and `y` fields.
-            position: { x: node.x, y: node.y },
-          };
-        }),
-      edges: layoutedGraph.edges,
-    }))
-    .catch(console.error);
+    .then((layoutedGraph) => {
+      return {
+        nodes:
+          layoutedGraph.children &&
+          layoutedGraph.children.map((node) => {
+            return {
+              ...node,
+              // React Flow expects a position property on the node instead of `x` and `y` fields.
+              position: { x: node.x, y: node.y },
+            };
+          }),
+        edges: layoutedGraph.edges,
+      }
+    })
+    .catch((error) => {
+      console.error("Error layouting the graph", error);
+      return null;
+    });
 };
 
 const nodeTypes = { square: Square };
@@ -90,16 +99,16 @@ const edgesTypes = { default: DefaultEdge };
 const MindMapCanvas = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-  const { isCreatingNode, mindMap, mindMapLoadingRequest } = useNodeStore();
+  const { isCreatingNode, mindMapToGenerate, mindMapLoadingRequest, currentMindMap } = useNodeStore();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
-  
 
   const handleMouseMove = useCallback(
     (event: any) => {
+      if (!isCreatingNode) return;
       setMousePosition({ x: event.clientX, y: event.clientY });
     },
-    [setMousePosition]
+    [setMousePosition, isCreatingNode]
   );
 
   const onConnect = useCallback(
@@ -116,7 +125,6 @@ const MindMapCanvas = () => {
       { direction }: { direction: any },
       initialNodes: any[][] | null = null
     ) => {
-      console.log({ direction });
 
       const opts = { ...elkOptions, "elk.direction": direction };
       const ns = initialNodes === null ? nodes : initialNodes[0];
@@ -124,13 +132,12 @@ const MindMapCanvas = () => {
       getLayoutedElements(ns, es, opts).then((layoutedGraph) => {
         if (layoutedGraph) {
           const { nodes: layoutedNodes, edges: layoutedEdges } = layoutedGraph;
-          //add layouted or repositioned nodes and edges to store, so that react flow will render the layouted or repositioned nodes and edges
           // @ts-ignore
           setNodes(layoutedNodes);
           // @ts-ignore
           setEdges(layoutedEdges);
-          console.log("Final Node Positions: ", layoutedNodes);
-          console.log("Final Edge Connections: ", layoutedEdges);
+        } else{
+          toast.error("Error layouting the graph");
         }
       });
     },
@@ -138,10 +145,17 @@ const MindMapCanvas = () => {
   );
 
   useLayoutEffect(() => {
-    const nodeTree = convertJsonToTree(mindMap); //to convert json to tree
+    if(!mindMapToGenerate) return;
+    const nodeTree = convertJsonToTree(mindMapToGenerate); //to convert json to tree
     let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
     onLayout({ direction: "DOWN" }, convertedNodes);
-  }, [mindMap]);
+  }, [mindMapToGenerate]);
+
+  useEffect(() => {
+    if (rfInstance) {
+      rfInstance.fitView();
+    }
+  },[rfInstance]);
 
   return (
     <ReactFlow
@@ -180,6 +194,15 @@ const MindMapCanvas = () => {
           }}
         />
       )}
+
+
+      <Panel position="top-left" className="flex gap-3 items-center bg-indigo-50 p-3 rounded-lg">
+        <Link href='/home'>
+          <PiArrowLeft className="size-5 text-zinc-900" />
+        </Link>
+        <h1 className=" text-xl font-medium">{currentMindMap?.title || "Untitled"}</h1>
+      </Panel>
+          
       <Background />
       <ActionsBar rfInstance={rfInstance} />
 

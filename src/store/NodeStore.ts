@@ -1,10 +1,13 @@
+import { MindMapResponse } from "@/types/mind-map";
 import { Edge, XYPosition } from "@xyflow/react";
 import { create } from "zustand";
 
 export interface NodeState {
     nodes: Node[];
-    mindMap: string;
-    setMindMap: (mindMap: string) => void;
+    mindMapToGenerate: string;
+    setMindMapToGenerate: (mindMap: string) => void;
+    currentMindMap: MindMapResponse | null;
+    setCurrentMindMap: (mindMap: MindMapResponse) => void;
     // currentNodePosition: XYPosition;
     // addNode: (node: Node) => void;
     // updateNodePosition: (nodeId: string, position: XYPosition) => void;
@@ -24,9 +27,13 @@ export interface NodeState {
 export const useNodeStore = create<NodeState>()((set) => ({
     isCreatingNode: false,
     nodes: [],
-    mindMap: "",
-    setMindMap: (mindMap: string) => {
-        set(() => ({ mindMap: JSON.parse(mindMap) }));
+    mindMapToGenerate: "",
+    currentMindMap: null,
+    setMindMapToGenerate: (mindMapToGenerate: string) => {
+        set(() => ({ mindMapToGenerate: JSON.parse(mindMapToGenerate) }));
+    },
+    setCurrentMindMap: (mindMap: MindMapResponse) => {
+        set(() => ({ currentMindMap: mindMap }));
     },
     activeIsCreatingNode() {
         set(() => ({ isCreatingNode: true }));

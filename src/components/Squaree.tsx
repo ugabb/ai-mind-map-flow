@@ -20,7 +20,7 @@ export interface Direction {
 
 const Squaree = (props: NodeProps<DataNode>) => {
     const {id, selected, data, width, height, positionAbsoluteX, positionAbsoluteY, targetPosition, sourcePosition} = props
-    const { getEdge, getEdges, addEdges, setEdges, addNodes, deleteElements} = useReactFlow()
+    const { getEdge, getEdges, addEdges, setEdges, addNodes, deleteElements, updateNodeData, updateNode} = useReactFlow()
     
     const [label, setLabel] = useState((typeof data.label === 'object') ? '' : data.label)
     const [isEditing, setIsEditing] = useState(false)
@@ -285,7 +285,10 @@ const Squaree = (props: NodeProps<DataNode>) => {
                             <input
                                 className={`border-none bg-transparent w-full min-h-full h-fit max-w-[${width}px] focus:outline-none text-center text-white text-wrap break-words resize-none overflow-y-hidden placeholder-zinc-200`}
                                 value={label}
-                                onChange={(e) => setLabel(e.target.value)}
+                                onChange={(e) => {
+                                    setLabel(e.target.value)
+                                    updateNodeData(id, {label: e.target.value})
+                                }}
                                 onBlur={handleInputBlur}
                                 placeholder='Enter text here'
                             />
