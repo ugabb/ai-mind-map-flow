@@ -1,9 +1,11 @@
-import { UserSession } from "./UserSession";
+import { getCurrentUser } from "@/lib/authjs/getCurrentUser";
+import { UserAvatar } from "./User";
 
 export const HomeHeader = async () => {
+  const { currentUser } = await getCurrentUser();
   return (
     <div className="hidden md:flex items-center justify-between gap-5 p-3 w-full">
-      <UserSession />
+      <UserAvatar currentUser={currentUser} />
       <label className="grid cursor-pointer place-items-center">
         <input
           type="checkbox"
