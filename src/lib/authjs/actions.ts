@@ -34,6 +34,6 @@ export const credentialsSignIn = async (data: LoginFormValues) => {
     } catch (error) {
       console.error("Login error:", error);
       toast.error("An unexpected error occurred during login. Please try again.");
-      return { success: false, message: error.message };
+      return { success: false, message: (error as Error).message };
     }
   };

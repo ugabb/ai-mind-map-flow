@@ -26,20 +26,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: { label: "Email", type: "email" },
       },
       authorize: async (credentials) => {
-        console.log(credentials);
         try {
-          const { status, data } = await axios.post(
+          const { data } = await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/user/authenticate`,
             credentials
           );
 
-          if (status === 200) {
-            console.log("Login successful!");
-          }
-
           const user = {
             name: data.user.name,
-            id: data.user._id,
+            id: data.user.id,
             email: data.user.email,
             image: data.user.profilePicture,
             createdAt: new Date(data.user.createdAt),
@@ -48,37 +43,74 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           return user; // Return the custom User object with new fields
         } catch (err) {
-          console.log(err);
-          return null; // Handle the case where the login fails
+          // Check if the error is due to invalid credentials
+          if (axios.isAxiosError(err) && err.response && err.response.status === 400) {
+            console.log("Invalid credentials:", err.response.data.message);
+            throw new Error("Invalid credentials");
+          }
+
+          // Handle other error cases (e.g. network issues, server errors)
+          const error = err as any;
+          console.log("Authentication error:", error.response?.data?.message || error.message);
+          throw new Error("Authentication failed. Please try again later.");
         }
       },
     }),
   ],
   pages: {
     signIn: "/login",
+    signOut: "/login",
     error: "/auth/error",
   },
+  session: { strategy: 'jwt' },
   callbacks: {
-    async redirect({ url, baseUrl }) {
+    async signIn({ user, account }) {
+      if (account?.provider === 'google') {
+        try {
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/user/google-authenticate`,
+            {
+              email: user.email,
+              name: user.name,
+              profilePicture: user.image,
+              googleId: account?.providerAccountId,
+            }
+          );
+
+          const userData = response?.data?.user;
+          user.id = userData?.id
+
+          return response.status === 200;
+        } catch (error) {
+          console.error('Error during Google sign-in:', error);
+          return false;
+        }
+      }
+
+      return true;
+    },
+    redirect({ url, baseUrl }) {
       return url.startsWith(baseUrl) ? url : baseUrl;
     },
     async jwt({ token, user }) {
-      console.log("jwt", token, user);
       if (user) {
         token.id = user.id;
-        token.image = user.image ;
+        token.image = user.image;
         token.createdAt = (user as ExtendedUser).createdAt;
         token.updatedAt = (user as ExtendedUser).updatedAt;
       }
       return token;
     },
     async session({ session, user, token }) {
-      console.log("session", session, "user", user, "token", token);
       session.user.id = token.id as string;
       session.user.image = token.image as string | null;
       session.user.createdAt = new Date(token.createdAt as string);
       session.user.updatedAt = new Date(token.updatedAt as string);
       return session;
     },
+    authorized: async ({ auth }) => {
+      // Logged in users are authenticated, otherwise redirect to login page
+      return !!auth
+    }
   },
 });
