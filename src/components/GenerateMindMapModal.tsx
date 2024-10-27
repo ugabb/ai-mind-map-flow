@@ -72,7 +72,7 @@ export const GenerateMindMapModal = ({
     },
     onError: (error) => {
       console.error("Error converting video to audio", error);
-    },
+    }
   });
 
   const handleConvert = async () => {
@@ -171,7 +171,8 @@ export const GenerateMindMapModal = ({
             onClick={handleConvert}
             disabled={
               (!isUrlValid && uploadType === "YTB_URL") ||
-              (!video && uploadType === "SYSTEM_FILE")
+              (!video && uploadType === "SYSTEM_FILE") || 
+              isPending
             }
           >
             Convert
