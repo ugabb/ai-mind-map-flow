@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 
-const loggedInRoutes = ["/home", '/mind-map'];
+
+const loggedInRoutes = ["/home", '/mind-map' ,'/profile'];
 const loggedOutRoutes = ["/login", "/sign-up"];
 
 

@@ -11,7 +11,7 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel
+  FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
 import { credentialsSignIn, googleLogin } from "@/lib/authjs/actions";
+import { cn } from "@/lib/utils";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -60,7 +61,22 @@ export default function Login() {
               <FormItem>
                 <FormLabel htmlFor={field.name}>E-mail</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="E-mail" type="email" />
+                  <div className="flex flex-col">
+                    <Input
+                      {...field}
+                      placeholder="E-mail"
+                      type="email"
+                      className={cn({
+                        "border-red-500 focus-visible:ring-red-500":
+                          form.formState.errors.password,
+                      })}
+                    />
+                    {form.formState.errors.email && (
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.email?.message}
+                      </p>
+                    )}
+                  </div>
                 </FormControl>
                 <FormDescription>Enter your e-mail</FormDescription>
               </FormItem>
@@ -73,7 +89,22 @@ export default function Login() {
               <FormItem>
                 <FormLabel htmlFor={field.name}>Password</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Password" type="password" />
+                  <div className="flex flex-col gap-1">
+                    <Input
+                      {...field}
+                      placeholder="Password"
+                      type="password"
+                      className={cn({
+                        "border-red-500 focus-visible:ring-red-500":
+                          form.formState.errors.password,
+                      })}
+                    />
+                    {form.formState.errors.password && (
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.password?.message}
+                      </p>
+                    )}
+                  </div>
                 </FormControl>
                 <FormDescription>Enter your password</FormDescription>
               </FormItem>
@@ -104,7 +135,10 @@ export default function Login() {
             </div>
           </div>
           <div className="flex justify-center items-center">
-            <FcGoogle onClick={googleLogin} className="size-10 cursor-pointer" />
+            <FcGoogle
+              onClick={googleLogin}
+              className="size-10 cursor-pointer"
+            />
           </div>
         </form>
       </Form>

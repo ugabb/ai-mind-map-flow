@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 export const googleLogin = async () => {
     await signIn("google", {
         redirectTo: "/home",
+        redirect: true
     });
 }
 export const credentialsSignIn = async (data: LoginFormValues) => {
