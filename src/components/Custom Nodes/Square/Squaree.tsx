@@ -5,7 +5,8 @@ import {
   Edge,
   Node,
   NodeProps,
-  NodeResizer, useReactFlow
+  NodeResizer,
+  useReactFlow,
 } from "@xyflow/react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
@@ -45,13 +46,18 @@ const Squaree = (props: NodeProps<DataNode>) => {
     sourcePosition,
   } = props;
 
+  console.log("Squaree -> props", props);
+
   const {
     getEdge,
     addEdges,
     addNodes,
     deleteElements,
     updateNodeData,
+    getNode,
   } = useReactFlow();
+
+  const [node, setNode] = useState<Node<DataNode> | null>(null);
 
   const [label, setLabel] = useState(
     typeof data.label === "object" ? "" : data.label
@@ -63,7 +69,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
     right: false,
   });
 
-  const { activeIsEditingNode, disableIsEditingNode } =
+  const { isEditingNode, activeIsEditingNode, disableIsEditingNode } =
     useNodeStore();
 
   const editor = useEditor({
@@ -83,6 +89,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
           "h-full w-full block border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3",
       },
     },
+    autofocus: true,
   });
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -95,7 +102,13 @@ const Squaree = (props: NodeProps<DataNode>) => {
     if (editor) {
       editor.commands.focus();
     }
-  }, [selected, activeIsEditingNode]);
+  }, [selected, activeIsEditingNode, editor]);
+
+  useEffect(() => {
+    if (editor) {
+      editor.setEditable(isEditingNode);
+    }
+  }, [isEditingNode, editor]);
 
   const handleInputBlur = () => {
     disableIsEditingNode(); // Exit editing mode in the store
@@ -191,9 +204,19 @@ const Squaree = (props: NodeProps<DataNode>) => {
 
   const handleUpdateNodeColor = useCallback(
     (color: string) => {
-      updateNodeData(id, { color: color });
+      // Ensure color is valid
+      if (!color) return;
+
+      updateNodeData(id, { color });
+      setNode((prevNode) => {
+        if (prevNode) {
+          return { ...prevNode, data: { ...prevNode.data, color } };
+        }
+        return prevNode;
+      });
+      data.color = color;
     },
-    [updateNodeData, id]
+    [id, updateNodeData] // Include updateNodeData in dependencies
   );
 
   useEffect(() => {
@@ -204,12 +227,19 @@ const Squaree = (props: NodeProps<DataNode>) => {
     };
   }, [handleDeleteNode]);
 
+  useEffect(() => {
+    const currentNode = getNode(id) as Node<DataNode>;
+    if (currentNode) {
+      setNode(currentNode);
+    }
+  }, []);
+
   return (
     <div
       className={cn(
         "rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 flex justify-center items-center"
       )}
-      style={{ backgroundColor: data.color || indigo[300] }}
+      style={{ backgroundColor: node?.data?.color || indigo[300] }}
       onClick={handleEnableEditing}
     >
       <NodeResizer
@@ -237,7 +267,7 @@ const Squaree = (props: NodeProps<DataNode>) => {
       <EditorContent
         ref={inputRef}
         editor={editor}
-        value={label}
+        value={node?.data?.label}
         defaultValue={label}
         onBlur={handleInputBlur}
       />

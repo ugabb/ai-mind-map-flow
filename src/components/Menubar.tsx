@@ -38,12 +38,14 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
 
   const params = useParams();
   const {data: session} = useSession();
-  console.log("Menu", session)
 
   const { data: mindMapData } = useQuery({
     queryKey: ["mindmaps", params.mindMapId, session?.user?.id],
     queryFn: () => getMindMap(session?.user?.id as string, params.mindMapId as string),
-    enabled: !!params.mindMapId, // Only run if mindMapId exists,
+    enabled: !!params.mindMapId,
+    refetchInterval: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 
   const saveMindMapFn = useMutation({
@@ -128,7 +130,6 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
 
   useEffect(() => {
     if (mindMapData?.mindMap) {
-      console.log("mindMapData", mindMapData);
       onRestore();
     }
   }, [mindMapData, viewportInitialized, onRestore]);
@@ -144,27 +145,17 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
       <T.Button />
       <T.Separator />
       <T.Link />
-      {mindMapData?.title}
-      <T.ToggleGroup type="single" className="flex items-center gap-5 px-2">
+      <T.ToggleGroup type="single" className="flex items-center justify-between w-full gap-5 px-2">
         <T.ToggleItem
           onClick={activeIsCreatingNode}
           value="create-node"
           className="w-24 h-24 translate-y-8 bg-indigo-500 rounded-md hover:translate-y-5 transition-transform"
         />
-        <T.ToggleItem asChild value="generate-mind-map">
-          <GenerateMindMapModal />
-        </T.ToggleItem>
-        <T.ToggleItem value="user">
-          <p>{session?.user?.name}</p>
-        </T.ToggleItem>
         <T.ToggleItem asChild value="save-mind-map">
           <SaveMindMapModal
             onSave={onSave}
             isPending={saveMindMapFn.isPending || updateMindMapFn.isPending}
           />
-        </T.ToggleItem>
-        <T.ToggleItem value="restore-mind-map" onClick={onRestore}>
-          Restore
         </T.ToggleItem>
       </T.ToggleGroup>
     </T.Root>

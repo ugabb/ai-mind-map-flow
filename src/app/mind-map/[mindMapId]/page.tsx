@@ -1,12 +1,9 @@
 "use client";
 
+import { useState, useCallback, useLayoutEffect, useEffect } from "react";
 import {
-  useState,
-  useCallback, useLayoutEffect,
-  useEffect
-} from "react";
-import {
-  ReactFlow, useNodesState,
+  ReactFlow,
+  useNodesState,
   useEdgesState,
   addEdge,
   Background,
@@ -15,7 +12,10 @@ import {
   MarkerType,
   ReactFlowInstance,
   Edge,
-  Node, Panel
+  Node,
+  Panel,
+  applyEdgeChanges,
+  applyNodeChanges,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Custom Nodes/Square/Squaree";
@@ -85,7 +85,7 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
             };
           }),
         edges: layoutedGraph.edges,
-      }
+      };
     })
     .catch((error) => {
       console.error("Error layouting the graph", error);
@@ -97,12 +97,33 @@ const nodeTypes = { square: Square };
 const edgesTypes = { default: DefaultEdge };
 
 const MindMapCanvas = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-  const { isCreatingNode, mindMapToGenerate, mindMapLoadingRequest, currentMindMap } = useNodeStore();
+  const [nodes, setNodes] = useNodesState<Node>([]);
+  const [edges, setEdges] = useEdgesState<Edge>([]);
+  const {
+    isCreatingNode,
+    mindMapToGenerate,
+    mindMapLoadingRequest,
+    currentMindMap,
+    isEditingNode,
+  } = useNodeStore();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
 
+  const onNodesChange = useCallback(
+    (changes) => {
+      console.log("changes", isEditingNode);
+      if (isEditingNode) return;
+      setNodes((nds) => applyNodeChanges(changes, nds));
+    },
+    [setNodes, isEditingNode]
+  );
+  const onEdgesChange = useCallback(
+    (changes) => {
+      if (isEditingNode) return;
+      setEdges((eds) => applyEdgeChanges(changes, eds));
+    },
+    [setEdges, isEditingNode]
+  );
   const handleMouseMove = useCallback(
     (event: any) => {
       if (!isCreatingNode) return;
@@ -125,7 +146,6 @@ const MindMapCanvas = () => {
       { direction }: { direction: any },
       initialNodes: any[][] | null = null
     ) => {
-
       const opts = { ...elkOptions, "elk.direction": direction };
       const ns = initialNodes === null ? nodes : initialNodes[0];
       const es = initialNodes === null ? edges : initialNodes[1];
@@ -136,7 +156,7 @@ const MindMapCanvas = () => {
           setNodes(layoutedNodes);
           // @ts-ignore
           setEdges(layoutedEdges);
-        } else{
+        } else {
           toast.error("Error layouting the graph");
         }
       });
@@ -145,7 +165,7 @@ const MindMapCanvas = () => {
   );
 
   useLayoutEffect(() => {
-    if(!mindMapToGenerate) return;
+    if (!mindMapToGenerate) return;
     const nodeTree = convertJsonToTree(mindMapToGenerate); //to convert json to tree
     let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
     onLayout({ direction: "DOWN" }, convertedNodes);
@@ -155,7 +175,7 @@ const MindMapCanvas = () => {
     if (rfInstance) {
       rfInstance.fitView();
     }
-  },[rfInstance]);
+  }, [rfInstance]);
 
   return (
     <ReactFlow
@@ -195,14 +215,18 @@ const MindMapCanvas = () => {
         />
       )}
 
-
-      <Panel position="top-left" className="flex gap-3 items-center bg-indigo-50 p-3 rounded-lg">
-        <Link href='/home'>
+      <Panel
+        position="top-left"
+        className="flex gap-3 items-center bg-indigo-50 p-3 rounded-lg"
+      >
+        <Link href="/home">
           <PiArrowLeft className="size-5 text-zinc-900" />
         </Link>
-        <h1 className=" text-xl font-medium">{currentMindMap?.title || "Untitled"}</h1>
+        <h1 className=" text-xl font-medium">
+          {currentMindMap?.title || "Untitled"}
+        </h1>
       </Panel>
-          
+
       <Background />
       <ActionsBar rfInstance={rfInstance} />
 

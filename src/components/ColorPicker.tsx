@@ -4,9 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuLabel, DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
 import {
@@ -53,15 +51,13 @@ export const ColorPicker = (props: ColorPickerProps) => {
         <DropdownMenuContent className="flex flex-col p-2">
           <DropdownMenuLabel>Select a Color</DropdownMenuLabel>
           <div className="flex flex-wrap items-center justify-center gap-1 max-w-40">
-            {/* Adding different colors for the dropdown items */}
             {bgColors.map(({ color, name, value }) => (
               <DropdownMenuItem
                 key={name}
                 className={cn(`h-5 w-5 ${color} rounded-full cursor-pointer`)}
                 onClick={() => handleUpdateNodeColor(value)}
-                aria-label={name} // Adding aria-label for accessibility
+                aria-label={name}
               >
-                {/* Optionally, you can add an icon or checkmark here if needed */}
               </DropdownMenuItem>
             ))}
           </div>
