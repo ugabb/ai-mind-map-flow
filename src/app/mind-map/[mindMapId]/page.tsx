@@ -18,7 +18,7 @@ import {
   Node, Panel
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { Square } from "@/components/Squaree";
+import { Square } from "@/components/Custom Nodes/Square/Squaree";
 import { DefaultEdge } from "@/components/edges/DefaultEdges";
 import convertJsonToTree from "@/utils/convertJsonToTree";
 import convertTreeToNodes from "@/utils/convertTreeToNodes";

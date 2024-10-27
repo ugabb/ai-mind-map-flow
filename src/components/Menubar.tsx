@@ -38,9 +38,10 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
 
   const params = useParams();
   const {data: session} = useSession();
+  console.log("Menu", session)
 
   const { data: mindMapData } = useQuery({
-    queryKey: ["mindmaps", params.mindMapId],
+    queryKey: ["mindmaps", params.mindMapId, session?.user?.id],
     queryFn: () => getMindMap(session?.user?.id as string, params.mindMapId as string),
     enabled: !!params.mindMapId, // Only run if mindMapId exists,
   });
@@ -123,7 +124,7 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
     setNodes(nodes);
     setEdges(edges);
     setViewport(viewport);
-  }, [mindMapData, setNodes, setEdges, setViewport, params.mindMapId]);
+  }, [mindMapData, setNodes, setEdges, setViewport, params.mindMapId, session?.user?.id]);
 
   useEffect(() => {
     if (mindMapData?.mindMap) {
