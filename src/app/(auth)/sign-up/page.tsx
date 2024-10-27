@@ -19,8 +19,11 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
-import { useAuthContext } from "@/app/context/useAuth";
 import { useCallback, useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { googleLogin } from "@/lib/authjs/actions";
+import toast from "react-hot-toast";
+import { registerUser } from "@/services/user/registerUser";
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -40,10 +43,17 @@ export default function SignUp() {
     resolver: zodResolver(signUpSchema),
   });
 
-  const { signUp } = useAuthContext();
+  const router = useRouter();
 
   const onSubmit = async (data: SignUpFormValues) => {
-    signUp(data);
+    const { status, message } = await registerUser(data);
+    if (status === 201) {
+      toast.success("Account created successfully");
+      router.push("/login");
+    } 
+    if(status === 400) {
+      toast.error("Error creating account: " + message);
+    }
   };
 
   const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
@@ -261,6 +271,12 @@ export default function SignUp() {
                 Click here!
               </Link>
             </div>
+          </div>
+          <div className="flex justify-center items-center">
+            <FcGoogle
+              onClick={googleLogin}
+              className="size-10 cursor-pointer"
+            />
           </div>
         </form>
       </Form>
