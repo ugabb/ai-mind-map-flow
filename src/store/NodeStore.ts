@@ -17,6 +17,9 @@ export interface NodeState {
     isCreatingNode: boolean;
     activeIsCreatingNode: () => void;
     disableIsCreatingNode: () => void;
+    isEditingNode: boolean;
+    activeIsEditingNode: () => void;
+    disableIsEditingNode: () => void;
     // nodePosition: (position: XYPosition) => void;
   
     // edges: Edge[];
@@ -40,6 +43,13 @@ export const useNodeStore = create<NodeState>()((set) => ({
     },
     disableIsCreatingNode() {
         set(() => ({ isCreatingNode: false }));
+    },
+    isEditingNode: false,
+    activeIsEditingNode() {
+        set(() => ({ isEditingNode: true }));
+    },
+    disableIsEditingNode() {
+        set(() => ({ isEditingNode: false }));
     },
     mindMapLoadingRequest: false,
     setMindMapLoadingRequest: (isLoading: boolean) => {

@@ -3,30 +3,26 @@
 import {
   Connection,
   Edge,
-  EdgeProps,
-  Handle,
   Node,
   NodeProps,
-  NodeResizer,
-  Position,
-  useReactFlow,
+  NodeResizer, useReactFlow
 } from "@xyflow/react";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
-import {
-  FiArrowDown,
-  FiArrowLeft,
-  FiArrowRight,
-  FiArrowUp,
-} from "react-icons/fi";
-import { GhostSquare } from "../../GhostSquare";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
+import { Placeholder } from "@tiptap/extension-placeholder";
 import { Handles } from "../Handles";
+import { useNodeStore } from "@/store/NodeStore";
+
+import { cn } from "@/lib/utils";
+import { ColorPicker } from "@/components/ColorPicker";
+import { indigo } from "tailwindcss/colors";
 
 export type DataNode = Node<{
   label: string;
   key?: string;
   value?: any;
+  color?: string;
 }>;
 
 export interface Direction {
@@ -48,21 +44,18 @@ const Squaree = (props: NodeProps<DataNode>) => {
     targetPosition,
     sourcePosition,
   } = props;
+
   const {
     getEdge,
-    getEdges,
     addEdges,
-    setEdges,
     addNodes,
     deleteElements,
     updateNodeData,
-    updateNode,
   } = useReactFlow();
 
   const [label, setLabel] = useState(
     typeof data.label === "object" ? "" : data.label
   );
-  const [isEditing, setIsEditing] = useState(false);
   const [isAddingNode, setIsAddingNode] = useState<Direction>({
     top: false,
     bottom: false,
@@ -70,29 +63,42 @@ const Squaree = (props: NodeProps<DataNode>) => {
     right: false,
   });
 
+  const { activeIsEditingNode, disableIsEditingNode } =
+    useNodeStore();
+
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: "Enter text here",
+        showOnlyCurrent: true,
+        showOnlyWhenEditable: true,
+        emptyEditorClass: "bg-zinc-100",
+      }),
+    ],
     content: label,
     editorProps: {
       attributes: {
         class:
-          "h-full w-full border-none cursor-text mx-auto focus:outline-none",
+          "h-full w-full block border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3",
       },
     },
   });
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleEnableEditing = () => {
-    if (!selected) return;
-    setIsEditing(true);
-    if (inputRef.current) {
-      inputRef.current.focus(); // Set focus on the input element when double-clicked
+  const handleEnableEditing = useCallback(() => {
+    if (!selected) return; // Only enable editing if node is selected
+
+    activeIsEditingNode(); // Set editing mode in the store
+
+    if (editor) {
+      editor.commands.focus();
     }
-  };
+  }, [selected, activeIsEditingNode]);
 
   const handleInputBlur = () => {
-    setIsEditing(false);
+    disableIsEditingNode(); // Exit editing mode in the store
   };
 
   const handleNewConnections = (newConnection: Connection) => {
@@ -183,6 +189,13 @@ const Squaree = (props: NodeProps<DataNode>) => {
     [deleteElements, selected, id]
   );
 
+  const handleUpdateNodeColor = useCallback(
+    (color: string) => {
+      updateNodeData(id, { color: color });
+    },
+    [updateNodeData, id]
+  );
+
   useEffect(() => {
     document.addEventListener("keydown", handleDeleteNode);
 
@@ -193,7 +206,10 @@ const Squaree = (props: NodeProps<DataNode>) => {
 
   return (
     <div
-      className="bg-violet-500 rounded-lg min-w-[200px]  w-fit min-h-[200px] h-full p-5 "
+      className={cn(
+        "rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 flex justify-center items-center"
+      )}
+      style={{ backgroundColor: data.color || indigo[300] }}
       onClick={handleEnableEditing}
     >
       <NodeResizer
@@ -214,35 +230,17 @@ const Squaree = (props: NodeProps<DataNode>) => {
         sourcePosition={sourcePosition}
       />
 
-      {/* <div className='flex justify-center items-center h-full w-full text-left text-wrap p-3'>
-                { 
-                (typeof data.label === 'object') ? 
-                Object.entries(data.label).map(([key, value], index) =>(
-                    <div key={index} className='flex flex-col justify-center items-center p-3 w-full h-full'>
-                        <span className="">{key} : {String(value)}</span>
-                    </div>                    
-                )) : (
-                    <div className='flex justify-center items-center h-full w-full p-3 text-wrap '>
-                        {selected ? (
-                            <input
-                                className={`border-none bg-transparent w-full min-h-full h-fit max-w-[${width}px] focus:outline-none text-center text-white text-wrap break-words resize-none overflow-y-hidden placeholder-zinc-200`}
-                                value={label}
-                                onChange={(e) => {
-                                    setLabel(e.target.value)
-                                    updateNodeData(id, {label: e.target.value})
-                                }}
-                                onBlur={handleInputBlur}
-                                placeholder='Enter text here'
-                            />
-                        ) : (
-                            <span className={`text-white w-fit max-w-[${width}px] text-center cursor-text `}>{label}</span>
-                        )}
-                    </div>
-                )
-                }   
-            </div> */}
+      {selected && (
+        <ColorPicker handleUpdateNodeColor={handleUpdateNodeColor} />
+      )}
 
-      <EditorContent editor={editor} defaultValue={label} value={label} />
+      <EditorContent
+        ref={inputRef}
+        editor={editor}
+        value={label}
+        defaultValue={label}
+        onBlur={handleInputBlur}
+      />
     </div>
   );
 };
