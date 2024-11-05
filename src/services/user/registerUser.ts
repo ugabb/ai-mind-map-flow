@@ -6,7 +6,14 @@ interface RegisterUserResponse {
     message?: string;
 }
 
-export async function registerUser(data: SignUpFormValues): Promise<RegisterUserResponse> {
+interface RegisterUserRequest {
+    name: string;
+    email: string;
+    password: string;
+    profilePicture?: string;
+}
+
+export async function registerUser(data: RegisterUserRequest): Promise<RegisterUserResponse> {
     const formData = {
         name: data.name,
         email: data.email,

@@ -22,6 +22,7 @@ import { ImSpinner8 } from "react-icons/im";
 import { useCallback, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { googleLogin } from "@/lib/authjs/actions";
+import { handleUploadProfilePicture } from "@/services/user/uploadProfilePicture";
 import toast from "react-hot-toast";
 import { registerUser } from "@/services/user/registerUser";
 
@@ -30,7 +31,7 @@ const signUpSchema = z.object({
   password: z.string().min(8),
   confirmPassword: z.string().min(8),
   name: z.string(),
-  profilePicture: z.string().optional(),
+  profilePicture: z.instanceof(File).optional(),
 });
 
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
@@ -46,11 +47,21 @@ export default function SignUp() {
   const router = useRouter();
 
   const onSubmit = async (data: SignUpFormValues) => {
-    const { status, message } = await registerUser(data);
+    let profilePictureURL = "";
+    if (data.profilePicture) {
+      profilePictureURL = await handleUploadProfilePicture(data.profilePicture);
+    }
+
+    const { status, message } = await registerUser({
+      email: data.email,
+      password: data.password,
+      name: data.name,
+      ...(profilePictureURL && { profilePicture: profilePictureURL }),
+    });
     if (status === 201) {
       toast.success("Account created successfully");
       router.push("/login");
-    } 
+    }
     if(status === 400) {
       toast.error("Error creating account: " + message);
     }
@@ -59,6 +70,7 @@ export default function SignUp() {
   const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setError(null); // Reset any existing errors
+    form.setValue("profilePicture", undefined);
 
     const files = event.dataTransfer.files;
     if (files.length > 0) {
@@ -66,6 +78,8 @@ export default function SignUp() {
       if (file.type.startsWith("image/")) {
         const objectUrl = URL.createObjectURL(file); // Create a preview URL for the image
         setPreview(objectUrl); // Set preview
+        console.log(file);
+        form.setValue("profilePicture", file); // Set the file in the form
       } else {
         setError("Please drop an image file (e.g., .jpg, .png)"); // Handle non-image files
         setPreview(null); // Clear any previous preview
@@ -79,6 +93,8 @@ export default function SignUp() {
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     setError(null); // Reset any existing errors
+    form.setValue("profilePicture", undefined); // Reset the file in the form
+    console.log(event.target.files);
 
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -86,6 +102,7 @@ export default function SignUp() {
       if (file.type.startsWith("image/")) {
         const objectUrl = URL.createObjectURL(file); // Create a URL for preview
         setPreview(objectUrl); // Set the preview
+        form.setValue("profilePicture", file); // Set the file in the form
       } else {
         setError("Please select an image file (e.g., .jpg, .png)");
         setPreview(null);
@@ -208,7 +225,6 @@ export default function SignUp() {
                     <FormLabel htmlFor={field.name}>Drop your photo</FormLabel>
                     <FormControl className="flex justify-center items-center h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400">
                       <Input
-                        {...field}
                         onDragOver={handleDragOver}
                         onDrop={handleDrop}
                         onChange={handleFileSelect}
@@ -219,6 +235,7 @@ export default function SignUp() {
                           form.formState?.errors?.confirmPassword &&
                           "border border-red-500"
                         } w-full`}
+                        accept="image/*"
                       />
                     </FormControl>
                     {form.formState?.errors?.confirmPassword ? (

@@ -119,7 +119,7 @@ export default function Login() {
               {form.formState.isSubmitting ? (
                 <ImSpinner8 className="size-5 text-indigo-100 animate-spin" />
               ) : (
-                "Sign Up"
+                "Sign In"
               )}
             </Button>
             <div className="space-x-2">
