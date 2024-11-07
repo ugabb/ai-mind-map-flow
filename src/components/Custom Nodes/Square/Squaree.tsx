@@ -1,30 +1,16 @@
 "use client";
 
-import {
-  Connection,
-  Edge,
-  Node,
-  NodeProps,
-  NodeResizer,
-  useReactFlow,
-} from "@xyflow/react";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
-import { StarterKit } from "@tiptap/starter-kit";
-import { Placeholder } from "@tiptap/extension-placeholder";
+import { Node, NodeProps, NodeResizer, ResizeDragEvent, useReactFlow } from "@xyflow/react";
+import { memo, useCallback, useEffect, useState } from "react";
+import { EditorContent } from "@tiptap/react";
 import { Handles } from "../Handles";
-import { useNodeStore } from "@/store/NodeStore";
 
 import { cn } from "@/lib/utils";
-import { ColorPicker } from "@/components/ColorPicker";
+import { Toolbar } from "@/components/Toolbar";
 import { indigo } from "tailwindcss/colors";
-
-export type DataNode = Node<{
-  label: string;
-  key?: string;
-  value?: any;
-  color?: string;
-}>;
+import { DataNode, useNode } from "@/hooks/useNodes";
+import { ExtendedNode } from "@/types/node";
+import { getTextColor } from "@/utils/getTextColor";
 
 export interface Direction {
   top: boolean;
@@ -33,199 +19,80 @@ export interface Direction {
   right: boolean;
 }
 
-const Squaree = (props: NodeProps<DataNode>) => {
+const Squaree = (props: ExtendedNode) => {
   const {
     id,
-    selected,
+    selected = false,
     data,
-    width,
-    height,
+    width = 0,
+    height = 0,
     positionAbsoluteX,
     positionAbsoluteY,
     targetPosition,
     sourcePosition,
   } = props;
 
-  console.log("Squaree -> props", props);
 
-  const {
-    getEdge,
-    addEdges,
-    addNodes,
-    deleteElements,
-    updateNodeData,
-    getNode,
-  } = useReactFlow();
-
-  const [node, setNode] = useState<Node<DataNode> | null>(null);
+  const { deleteElements, updateNodeData, getNode } = useReactFlow();
 
   const [label, setLabel] = useState(
     typeof data.label === "object" ? "" : data.label
   );
-  const [isAddingNode, setIsAddingNode] = useState<Direction>({
-    top: false,
-    bottom: false,
-    left: false,
-    right: false,
+
+  const {
+    handleAddSideNode,
+    handleDeleteNodeByPressEnter,
+    handleEnableEditing,
+    isEditingNode,
+    isAddingNode,
+    node,
+    setIsAddingNode,
+    setNode,
+    editor,
+  } = useNode({
+    id,
+    selected,
+    width,
+    height,
+    positionAbsoluteX,
+    positionAbsoluteY,
+    label: typeof label === "string" ? label : undefined,
   });
 
-  const { isEditingNode, activeIsEditingNode, disableIsEditingNode } =
-    useNodeStore();
-
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: "Enter text here",
-        showOnlyCurrent: true,
-        showOnlyWhenEditable: true,
-        emptyEditorClass: "bg-zinc-100",
-      }),
-    ],
-    content: label,
-    editorProps: {
-      attributes: {
-        class:
-          "h-full w-full block border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3",
-      },
-    },
-    autofocus: true,
-  });
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleEnableEditing = useCallback(() => {
-    if (!selected) return; // Only enable editing if node is selected
-
-    activeIsEditingNode(); // Set editing mode in the store
-
-    if (editor) {
-      editor.commands.focus();
+  const handleDeleteNode = useCallback(() => {
+    if (id) {
+      const nodesToDelete = [{ id }];
+      deleteElements({ nodes: nodesToDelete });
     }
-  }, [selected, activeIsEditingNode, editor]);
-
-  useEffect(() => {
-    if (editor) {
-      editor.setEditable(isEditingNode);
-    }
-  }, [isEditingNode, editor]);
-
-  const handleInputBlur = () => {
-    disableIsEditingNode(); // Exit editing mode in the store
-  };
-
-  const handleNewConnections = (newConnection: Connection) => {
-    const curentEdge = getEdge(id);
-    if (curentEdge) return;
-    const newEdge: Edge = {
-      id: `${id}-${newConnection.target}`,
-      source: newConnection.source,
-      target: newConnection.target,
-      sourceHandle: newConnection.sourceHandle,
-      targetHandle: newConnection.targetHandle,
-      type: "default",
-    };
-    addEdges(newEdge);
-  };
-
-  const handleAddSideNode = (direction: string) => {
-    if (direction === "left" || direction === "right") {
-      if (!width) return;
-      const newNode: Node = {
-        id: crypto.randomUUID(),
-        position: {
-          x:
-            positionAbsoluteX +
-            (direction === "left"
-              ? (-width as number) - 100
-              : (width as number) + 100),
-          y: positionAbsoluteY,
-        },
-        data: { label: "" },
-        type: "square",
-        width: width,
-        height: height,
-        expandParent: true,
-      };
-
-      const newConnection: Connection = {
-        source: id,
-        target: newNode.id,
-        sourceHandle: direction,
-        targetHandle: direction === "left" ? "right" : "left",
-      };
-
-      handleNewConnections(newConnection);
-
-      addNodes(newNode);
-    } else {
-      if (!height) return;
-      const newNode: Node = {
-        id: crypto.randomUUID(),
-        position: {
-          x: positionAbsoluteX,
-          y:
-            positionAbsoluteY +
-            (direction === "top"
-              ? (-height as number) - 100
-              : (height as number) + 100),
-        },
-        data: { label: "" },
-        type: "square",
-        width: width,
-        height: height,
-        expandParent: true,
-      };
-
-      const newConnection: Connection = {
-        source: id,
-        target: newNode.id,
-        sourceHandle: direction,
-        targetHandle: direction === "bottom" ? "top" : "bottom",
-      };
-
-      handleNewConnections(newConnection);
-
-      addNodes(newNode);
-    }
-  };
-
-  const handleDeleteNode = useCallback(
-    (event: KeyboardEvent) => {
-      if (selected) {
-        if (event.key === "Delete" && id) {
-          const nodesToDelete = [{ id }];
-          deleteElements({ nodes: nodesToDelete });
-        }
-      }
-    },
-    [deleteElements, selected, id]
-  );
+  }, [deleteElements, id]);
 
   const handleUpdateNodeColor = useCallback(
     (color: string) => {
       // Ensure color is valid
       if (!color) return;
+      const textColor = getTextColor(color);
+      console.log("Squaree -> textColor", textColor);
 
-      updateNodeData(id, { color });
+      updateNodeData(id, { color, textColor });
       setNode((prevNode) => {
         if (prevNode) {
-          return { ...prevNode, data: { ...prevNode.data, color } };
+          return { ...prevNode, data: { ...prevNode.data, color, textColor } };
         }
         return prevNode;
       });
       data.color = color;
+      data.textColor = textColor;
     },
-    [id, updateNodeData] // Include updateNodeData in dependencies
+    [data, id, updateNodeData] // Include updateNodeData in dependencies
   );
 
   useEffect(() => {
-    document.addEventListener("keydown", handleDeleteNode);
+    document.addEventListener("keydown", handleDeleteNodeByPressEnter);
 
     return () => {
-      document.removeEventListener("keydown", handleDeleteNode);
+      document.removeEventListener("keydown", handleDeleteNodeByPressEnter);
     };
-  }, [handleDeleteNode]);
+  }, [handleDeleteNodeByPressEnter]);
 
   useEffect(() => {
     const currentNode = getNode(id) as Node<DataNode>;
@@ -234,17 +101,24 @@ const Squaree = (props: NodeProps<DataNode>) => {
     }
   }, []);
 
+
   return (
     <div
-      className={cn(
-        "rounded-lg min-w-[200px]  w-full min-h-[200px] h-full p-5 flex justify-center items-center"
-      )}
-      style={{ backgroundColor: node?.data?.color || indigo[300] }}
+      className={cn("rounded-lg p-5 flex justify-center items-center", {
+        "pointer-events-none": isEditingNode,
+      })}
+      style={{
+        backgroundColor: node?.data?.color || indigo[300],
+        color: node?.data?.textColor || '#000000',
+        pointerEvents: isEditingNode ? "none" : "auto",
+        width: width,
+        height: height,
+      }}
       onClick={handleEnableEditing}
     >
       <NodeResizer
-        minHeight={height}
-        minWidth={width}
+        minHeight={300}
+        minWidth={300}
         isVisible={selected ? true : false}
         lineClassName="bg-blue-500"
         handleClassName="w-4 h-4 bg-white border-1 border-blue-500 rounded"
@@ -261,16 +135,14 @@ const Squaree = (props: NodeProps<DataNode>) => {
       />
 
       {selected && (
-        <ColorPicker handleUpdateNodeColor={handleUpdateNodeColor} />
+        <Toolbar
+          handleUpdateNodeColor={handleUpdateNodeColor}
+          selected={selected}
+          handleDeleteNode={handleDeleteNode}
+        />
       )}
 
-      <EditorContent
-        ref={inputRef}
-        editor={editor}
-        value={node?.data?.label}
-        defaultValue={label}
-        onBlur={handleInputBlur}
-      />
+      <EditorContent editor={editor} />
     </div>
   );
 };
