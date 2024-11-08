@@ -2,7 +2,7 @@ import { Direction } from "@/components/Custom Nodes/Square/Squaree";
 import { useNodeStore } from "@/store/NodeStore";
 import { Connection, Edge, Node, useReactFlow } from "@xyflow/react";
 import { useCallback, useState } from "react";
-import { useEditor, type Editor } from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 
@@ -12,6 +12,7 @@ export type DataNode = {
   value?: any;
   color?: string;
   textColor?: string; 
+  fontSize?: number;
 };
 
 interface useNodeProps {
@@ -156,7 +157,7 @@ export const useNode = (props: useNodeProps) => {
     editorProps: {
       attributes: {
         class:
-          "h-full w-full block border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3 truncate z-50",
+          "nodrag h-full w-full block border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3 truncate z-50",
       },
     },
     onBlur: handleInputBlur,

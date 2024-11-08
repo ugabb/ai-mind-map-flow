@@ -1,6 +1,12 @@
 "use client";
 
-import { Node, NodeProps, NodeResizer, ResizeDragEvent, useReactFlow } from "@xyflow/react";
+import {
+  Node,
+  NodeProps,
+  NodeResizer,
+  ResizeDragEvent,
+  useReactFlow,
+} from "@xyflow/react";
 import { memo, useCallback, useEffect, useState } from "react";
 import { EditorContent } from "@tiptap/react";
 import { Handles } from "../Handles";
@@ -11,6 +17,7 @@ import { indigo } from "tailwindcss/colors";
 import { DataNode, useNode } from "@/hooks/useNodes";
 import { ExtendedNode } from "@/types/node";
 import { getTextColor } from "@/utils/getTextColor";
+import { fontSizes } from "@/constants/values";
 
 export interface Direction {
   top: boolean;
@@ -31,7 +38,6 @@ const Squaree = (props: ExtendedNode) => {
     targetPosition,
     sourcePosition,
   } = props;
-
 
   const { deleteElements, updateNodeData, getNode } = useReactFlow();
 
@@ -86,6 +92,19 @@ const Squaree = (props: ExtendedNode) => {
     [data, id, updateNodeData] // Include updateNodeData in dependencies
   );
 
+  const handleUpdateTextSize = useCallback(
+    (size: "sm" | "md" | "lg" | "xl") => {
+      updateNodeData(id, { fontSize: fontSizes[size] });
+      setNode((prevNode) => {
+        if (prevNode) {
+          return { ...prevNode, data: { ...prevNode.data, fontSize: fontSizes[size] } };
+        }
+        return prevNode;
+      });
+    },
+    [id, setNode, updateNodeData]
+  );
+
   useEffect(() => {
     document.addEventListener("keydown", handleDeleteNodeByPressEnter);
 
@@ -101,7 +120,6 @@ const Squaree = (props: ExtendedNode) => {
     }
   }, []);
 
-
   return (
     <div
       className={cn("rounded-lg p-5 flex justify-center items-center", {
@@ -109,10 +127,11 @@ const Squaree = (props: ExtendedNode) => {
       })}
       style={{
         backgroundColor: node?.data?.color || indigo[300],
-        color: node?.data?.textColor || '#000000',
+        color: node?.data?.textColor || "#000000",
         pointerEvents: isEditingNode ? "none" : "auto",
         width: width,
         height: height,
+        fontSize: node?.data?.fontSize || fontSizes.md,
       }}
       onClick={handleEnableEditing}
     >
@@ -139,6 +158,7 @@ const Squaree = (props: ExtendedNode) => {
           handleUpdateNodeColor={handleUpdateNodeColor}
           selected={selected}
           handleDeleteNode={handleDeleteNode}
+          handleUpdateTextSize={handleUpdateTextSize}
         />
       )}
 

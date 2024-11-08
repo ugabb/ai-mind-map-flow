@@ -26,7 +26,8 @@ import {
 } from "tailwindcss/colors";
 import { cn } from "@/lib/utils";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { LuHeading, LuText, LuTrash, LuType } from "react-icons/lu";
+import { LuTrash, LuType } from "react-icons/lu";
+import { fontSizes } from "@/constants/values";
 
 const bgColors = [
   { color: "bg-blue-500", name: "Blue", value: blue[500] },
@@ -42,17 +43,23 @@ const bgColors = [
   { color: "bg-cyan-500", name: "Cyan", value: cyan[500] },
   { color: "bg-lime-500", name: "Lime", value: lime[500] },
   { color: "bg-black", name: "Black", value: black },
-  { color: "bg-white", name: "White", value: white }
+  { color: "bg-white", name: "White", value: white },
 ];
 
 interface ColorPickerProps {
   handleUpdateNodeColor: (color: string) => void;
+  handleUpdateTextSize: (size: "sm" | "md" | "lg" | "xl") => void;
   handleDeleteNode: () => void;
   selected: boolean;
 }
 
 export const Toolbar = (props: ColorPickerProps) => {
-  const { handleUpdateNodeColor, handleDeleteNode, selected } = props;
+  const {
+    handleUpdateNodeColor,
+    handleUpdateTextSize,
+    handleDeleteNode,
+    selected,
+  } = props;
   return (
     <NodeToolbar
       isVisible={selected}
@@ -78,7 +85,6 @@ export const Toolbar = (props: ColorPickerProps) => {
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
-      <LuTrash className="size-5 cursor-pointer" onClick={handleDeleteNode} />
 
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center">
@@ -86,19 +92,27 @@ export const Toolbar = (props: ColorPickerProps) => {
           <ChevronDownIcon className="size-3 text-white" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="flex flex-col p-2">
-          <DropdownMenuLabel>Select a Color</DropdownMenuLabel>
-          <div className="flex flex-wrap items-center justify-center gap-1 max-w-40">
-            {bgColors.map(({ color, name, value }) => (
+          <DropdownMenuLabel className="text-center">
+            Font size
+          </DropdownMenuLabel>
+          <div className="flex flex-col items-center justify-center gap-1 max-w-40">
+            {Object.keys(fontSizes).map((size) => (
               <DropdownMenuItem
-                key={name}
-                className={cn(`h-5 w-5 ${color} rounded-full cursor-pointer`)}
-                onClick={() => handleUpdateNodeColor(value)}
-                aria-label={name}
-              ></DropdownMenuItem>
+                key={size}
+                className="cursor-pointer"
+                onClick={() =>
+                  handleUpdateTextSize(size as "sm" | "md" | "lg" | "xl")
+                }
+                aria-label={size}
+              >
+                {size}
+              </DropdownMenuItem>
             ))}
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <LuTrash className="size-5 cursor-pointer" onClick={handleDeleteNode} />
     </NodeToolbar>
   );
 };
