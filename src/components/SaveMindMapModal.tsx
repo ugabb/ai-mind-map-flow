@@ -7,6 +7,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useRef } from "react";
@@ -21,12 +29,20 @@ interface SaveMindMapModalProps {
 export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
   const { onSave, isPending } = props;
   const titleRef = useRef<HTMLInputElement>(null);
-  
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-          <LuSave className="w-24 h-24 translate-y-8 rounded-md hover:translate-y-5 transition-transform cursor-pointer" />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <LuSave className="w-24 h-24 translate-y-8 rounded-md hover:translate-y-5 transition-transform cursor-pointer" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Save Mind Map</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

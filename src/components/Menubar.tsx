@@ -13,6 +13,7 @@ import {
 } from "@/services/mind-map/updateMindMap";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
+import Export from "./Export";
 
 interface MenuBarProps {
   rfInstance: ReactFlowInstance | null;
@@ -165,6 +166,9 @@ export const _Menubar = ({ rfInstance }: MenuBarProps) => {
           value="create-node"
           className="w-24 h-24 translate-y-8 bg-indigo-500 rounded-md hover:translate-y-5 transition-transform"
         />
+        <T.ToggleItem value="export">
+          <Export />
+        </T.ToggleItem>
         <T.ToggleItem asChild value="save-mind-map">
           <SaveMindMapModal
             onSave={onSave}
