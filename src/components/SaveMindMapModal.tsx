@@ -33,12 +33,12 @@ export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <TooltipProvider>
+        <TooltipProvider delayDuration={200}>
           <Tooltip>
             <TooltipTrigger>
               <LuSave className="w-24 h-24 translate-y-8 rounded-md hover:translate-y-5 transition-transform cursor-pointer" />
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent className="bg-indigo-500">
               <p>Save Mind Map</p>
             </TooltipContent>
           </Tooltip>

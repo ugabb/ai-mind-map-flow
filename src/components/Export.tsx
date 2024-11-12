@@ -70,7 +70,7 @@ function Export() {
             className="size-24 translate-y-4 hover:translate-y-1 transition-transform cursor-pointer"
           />
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent className="bg-indigo-500">
           <p>Download Mind Map</p>
         </TooltipContent>
       </Tooltip>

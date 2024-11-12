@@ -16,6 +16,8 @@ import {
   Panel,
   applyEdgeChanges,
   applyNodeChanges,
+  NodeChange,
+  EdgeChange,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Custom Nodes/Square/Squaree";
@@ -24,7 +26,7 @@ import convertJsonToTree from "@/utils/convertJsonToTree";
 import convertTreeToNodes from "@/utils/convertTreeToNodes";
 
 import ELK from "elkjs/lib/elk.bundled.js";
-import { ActionsBar } from "@/components/Menubar";
+import { Menubar } from "@/components/Menubar";
 import { useNodeStore } from "@/store/NodeStore";
 import { ImSpinner8 } from "react-icons/im";
 import { zinc } from "tailwindcss/colors";
@@ -64,8 +66,8 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
       targetPosition: "top",
       sourcePosition: "bottom",
       //Hardcode a width and height for node so that elk can use it when layouting.
-      width: 200,
-      height: 200,
+      width: 300,
+      height: 300,
     })),
     edges: edges,
   };
@@ -104,25 +106,21 @@ const MindMapCanvas = () => {
     mindMapToGenerate,
     mindMapLoadingRequest,
     currentMindMap,
-    isEditingNode,
   } = useNodeStore();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
 
   const onNodesChange = useCallback(
-    (changes) => {
-      console.log("changes", isEditingNode);
-      if (isEditingNode) return;
+    (changes: NodeChange<Node>[]) => {
       setNodes((nds) => applyNodeChanges(changes, nds));
     },
-    [setNodes, isEditingNode]
+    [setNodes]
   );
   const onEdgesChange = useCallback(
-    (changes) => {
-      if (isEditingNode) return;
+    (changes: EdgeChange<Edge>[]) => {
       setEdges((eds) => applyEdgeChanges(changes, eds));
     },
-    [setEdges, isEditingNode]
+    [setEdges]
   );
   const handleMouseMove = useCallback(
     (event: any) => {
@@ -161,7 +159,7 @@ const MindMapCanvas = () => {
         }
       });
     },
-    [nodes, edges, setNodes, setEdges] //So that the useCallback will rememoize the nodes and edges variable if it values changed.
+    [nodes, edges]
   );
 
   useLayoutEffect(() => {
@@ -222,13 +220,13 @@ const MindMapCanvas = () => {
         <Link href="/home">
           <PiArrowLeft className="size-5 text-zinc-900" />
         </Link>
-        <h1 className=" text-xl font-medium">
-          {currentMindMap?.title || "Untitled"}
+        <h1 className="text-xl font-medium">
+          {currentMindMap?.title ? currentMindMap?.title : "Untitled"}
         </h1>
       </Panel>
 
       <Background />
-      <ActionsBar rfInstance={rfInstance} />
+      <Menubar rfInstance={rfInstance} />
 
       {mindMapLoadingRequest && (
         <div className="fixed inset-0 flex items-center justify-center z-[999] bg-black/20">
