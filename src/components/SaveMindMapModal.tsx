@@ -7,13 +7,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useRef } from "react";
 import { LuSave } from "react-icons/lu";
-import { useMutation } from "@tanstack/react-query";
 import { ImSpinner8 } from "react-icons/im";
-import toast from "react-hot-toast";
 
 interface SaveMindMapModalProps {
   onSave: (title: string) => Promise<void>;
@@ -23,12 +29,20 @@ interface SaveMindMapModalProps {
 export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
   const { onSave, isPending } = props;
   const titleRef = useRef<HTMLInputElement>(null);
-  
 
   return (
     <Dialog>
-      <DialogTrigger className="hover:bg-indigo-200 p-2 rounded-xl">
-          <LuSave />
+      <DialogTrigger asChild>
+        <TooltipProvider delayDuration={200}>
+          <Tooltip>
+            <TooltipTrigger>
+              <LuSave className="w-24 h-24 translate-y-8 rounded-md hover:translate-y-5 transition-transform cursor-pointer" />
+            </TooltipTrigger>
+            <TooltipContent className="bg-indigo-500">
+              <p>Save Mind Map</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

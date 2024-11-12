@@ -1,11 +1,10 @@
 import * as T from "@radix-ui/react-toolbar";
 import { Node, ReactFlowInstance, useReactFlow } from "@xyflow/react";
-import { useCallback, useEffect } from "react";
-import { GenerateMindMapModal } from "./GenerateMindMapModal";
+import { memo, useCallback, useEffect } from "react";
 import { useNodeStore } from "@/store/NodeStore";
 import { saveMindMap, SaveMindRequest } from "@/services/mind-map/saveMindMap";
 import { SaveMindMapModal } from "./SaveMindMapModal";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMindMap } from "@/services/mind-map/getMindMap";
 import { useParams } from "next/navigation";
 import {
@@ -14,12 +13,13 @@ import {
 } from "@/services/mind-map/updateMindMap";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
+import Export from "./Export";
 
 interface MenuBarProps {
   rfInstance: ReactFlowInstance | null;
 }
 
-export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
+export const _Menubar = ({ rfInstance }: MenuBarProps) => {
   const {
     addNodes,
     screenToFlowPosition,
@@ -37,26 +37,41 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
   } = useNodeStore();
 
   const params = useParams();
-  const {data: session} = useSession();
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
 
-  const { data: mindMapData } = useQuery({
-    queryKey: ["mindmaps", params.mindMapId],
-    queryFn: () => getMindMap(session?.user?.id as string, params.mindMapId as string),
-    enabled: !!params.mindMapId, // Only run if mindMapId exists,
+  const { data: mindMapData, isPending } = useQuery({
+    queryKey: ["mindmaps", params.mindMapId, session?.user?.id],
+    queryFn: () =>
+      getMindMap(session?.user?.id as string, params.mindMapId as string),
+    enabled: !!params.mindMapId,
+    refetchInterval: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 
   const saveMindMapFn = useMutation({
     mutationKey: ["save-mindMap", session?.user?.id],
     mutationFn: (data: SaveMindRequest) => saveMindMap(data),
     onError: () => toast.error("Error while saving Mind Map"),
-    onSuccess: () => toast.success("Mind Map saved successfully"),
+    onSuccess: () => {
+      toast.success("Mind Map saved successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["mindmaps", params.mindMapId, session?.user?.id],
+      });
+    },
   });
 
   const updateMindMapFn = useMutation({
     mutationKey: ["update-mindMap", session?.user?.id, params.mindMapId],
     mutationFn: (data: UpdateMindMapRequest) => updateMindMap(data),
     onError: () => toast.error("Error while updating Mind Map"),
-    onSuccess: () => toast.success("Mind Map updated successfully"),
+    onSuccess: () => {
+      toast.success("Mind Map updated successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["mindmaps", params.mindMapId, session?.user?.id],
+      });
+    },
   });
 
   const handleClickToCreate = useCallback(
@@ -69,22 +84,22 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
         position: nodePosition,
         data: { label: "" },
         type: "square",
-        width: 200,
-        height: 200,
+        width: 300,
+        height: 300,
         selected: true,
       };
 
       addNodes(node);
       disableIsCreatingNode();
     },
-    [isCreatingNode, screenToFlowPosition, addNodes, disableIsCreatingNode]
+    [screenToFlowPosition, addNodes, disableIsCreatingNode]
   );
 
   useEffect(() => {
     if (!isCreatingNode) return;
     document.addEventListener("click", handleClickToCreate);
     return () => document.removeEventListener("click", handleClickToCreate);
-  }, [handleClickToCreate]);
+  }, [handleClickToCreate, isCreatingNode]);
 
   const onSave = useCallback(
     async (title: string) => {
@@ -123,11 +138,10 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
     setNodes(nodes);
     setEdges(edges);
     setViewport(viewport);
-  }, [mindMapData, setNodes, setEdges, setViewport, params.mindMapId]);
+  }, [mindMapData, setNodes, setEdges, setViewport]);
 
   useEffect(() => {
     if (mindMapData?.mindMap) {
-      console.log("mindMapData", mindMapData);
       onRestore();
     }
   }, [mindMapData, viewportInitialized, onRestore]);
@@ -143,18 +157,17 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
       <T.Button />
       <T.Separator />
       <T.Link />
-      {mindMapData?.title}
-      <T.ToggleGroup type="single" className="flex items-center gap-5 px-2">
+      <T.ToggleGroup
+        type="single"
+        className="flex items-center justify-between w-full gap-5 px-2"
+      >
         <T.ToggleItem
           onClick={activeIsCreatingNode}
           value="create-node"
           className="w-24 h-24 translate-y-8 bg-indigo-500 rounded-md hover:translate-y-5 transition-transform"
         />
-        <T.ToggleItem asChild value="generate-mind-map">
-          <GenerateMindMapModal />
-        </T.ToggleItem>
-        <T.ToggleItem value="user">
-          <p>{session?.user?.name}</p>
+        <T.ToggleItem value="export">
+          <Export />
         </T.ToggleItem>
         <T.ToggleItem asChild value="save-mind-map">
           <SaveMindMapModal
@@ -162,10 +175,9 @@ export const ActionsBar = ({ rfInstance }: MenuBarProps) => {
             isPending={saveMindMapFn.isPending || updateMindMapFn.isPending}
           />
         </T.ToggleItem>
-        <T.ToggleItem value="restore-mind-map" onClick={onRestore}>
-          Restore
-        </T.ToggleItem>
       </T.ToggleGroup>
     </T.Root>
   );
 };
+
+export const Menubar = memo(_Menubar);

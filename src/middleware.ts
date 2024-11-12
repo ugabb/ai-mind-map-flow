@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 const loggedInRoutes = ["/home", '/mind-map' ,'/profile'];
 const loggedOutRoutes = ["/login", "/sign-up"];
 
+const BASE_URL = process.env.NEXT_PUBLIC_URL;
 
 export default async function AuthMiddleware(
   req: NextRequest
@@ -28,12 +29,12 @@ export default async function AuthMiddleware(
       !token &&
       loggedInRoutes.some((path) => req.nextUrl.pathname.startsWith(path))
     ) {
-      return NextResponse.redirect("http://localhost:3000/login");
+      return NextResponse.redirect(BASE_URL + "/login");
     } else if (
       token &&
       loggedOutRoutes.some((path) => req.nextUrl.pathname.startsWith(path))
     ) {
-      return NextResponse.redirect("http://localhost:3000/dashboard");
+      return NextResponse.redirect(BASE_URL + "/home");
     }
   }
 

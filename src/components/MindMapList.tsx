@@ -25,6 +25,9 @@ export const MindMapList = (props: MindMapListProps) => {
     queryKey: ["mindmaps", currentUser?.id],
     queryFn: () => fetchMindMap(currentUser?.id as string),
     enabled: !!currentUser?.id,
+    refetchInterval: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
   return (
     <div className="flex border-t border-zinc-100">
