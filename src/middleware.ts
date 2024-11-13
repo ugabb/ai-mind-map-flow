@@ -29,12 +29,12 @@ export default async function AuthMiddleware(
       !token &&
       loggedInRoutes.some((path) => req.nextUrl.pathname.startsWith(path))
     ) {
-      return NextResponse.redirect(BASE_URL + "/login");
+      return NextResponse.redirect("/login");
     } else if (
       token &&
       loggedOutRoutes.some((path) => req.nextUrl.pathname.startsWith(path))
     ) {
-      return NextResponse.redirect(BASE_URL + "/home");
+      return NextResponse.redirect("/home");
     }
   }
 
