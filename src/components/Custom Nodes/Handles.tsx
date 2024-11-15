@@ -10,6 +10,7 @@ interface HandleProps {
   height: number | string;
   targetPosition: Position | undefined;
   sourcePosition: Position | undefined;
+  color?: string;
 }
 
 export const Handles = (props: HandleProps) => {
@@ -21,7 +22,9 @@ export const Handles = (props: HandleProps) => {
     height,
     targetPosition,
     sourcePosition,
+    color
   } = props;
+
   return (
     <>
       {isAddingNode.top ? (
@@ -41,7 +44,7 @@ export const Handles = (props: HandleProps) => {
       ) : (
         <Handle
           id="top"
-          type="target"
+          type="source"
           position={Position.Top}
           className={`-top-6 w-3 h-3 bg-blue-500`}
           onMouseOver={() =>
@@ -58,6 +61,7 @@ export const Handles = (props: HandleProps) => {
           width={width as number}
           height={height as number}
           direction="top"
+          color={color}
         />
       )}
 
@@ -95,6 +99,7 @@ export const Handles = (props: HandleProps) => {
           width={width as number}
           height={height as number}
           direction="bottom"
+          color={color}
         />
       )}
 
@@ -136,6 +141,7 @@ export const Handles = (props: HandleProps) => {
           width={width as number}
           height={height as number}
           direction="right"
+          color={color}
         />
       )}
 
@@ -173,6 +179,7 @@ export const Handles = (props: HandleProps) => {
           width={width as number}
           height={height as number}
           direction="left"
+          color={color}
         />
       )}
     </>
