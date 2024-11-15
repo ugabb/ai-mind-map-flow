@@ -1,6 +1,7 @@
 import { Handle, Position } from "@xyflow/react";
 import { Direction } from "./Square/Squaree";
 import { GhostSquare } from "../GhostSquare";
+import { memo } from "react";
 
 interface HandleProps {
   isAddingNode: Direction;
@@ -13,7 +14,7 @@ interface HandleProps {
   color?: string;
 }
 
-export const Handles = (props: HandleProps) => {
+export const _Handles = (props: HandleProps) => {
   const {
     handleAddSideNode,
     isAddingNode,
@@ -185,3 +186,5 @@ export const Handles = (props: HandleProps) => {
     </>
   );
 };
+
+export const Handles = memo(_Handles);
