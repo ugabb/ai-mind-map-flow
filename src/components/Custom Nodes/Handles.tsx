@@ -45,7 +45,7 @@ export const _Handles = (props: HandleProps) => {
       ) : (
         <Handle
           id="top"
-          type="source"
+          type="target"
           position={Position.Top}
           className={`-top-6 w-3 h-3 bg-blue-500`}
           onMouseOver={() =>
