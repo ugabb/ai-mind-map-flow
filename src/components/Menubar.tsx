@@ -172,6 +172,7 @@ export const _Menubar = ({ rfInstance }: MenuBarProps) => {
           <SaveMindMapModal
             onSave={onSave}
             isPending={saveMindMapFn.isPending || updateMindMapFn.isPending}
+            title={mindMapData?.title}
           />
       </T.ToggleGroup>
     </T.Root>
