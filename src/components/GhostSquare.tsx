@@ -1,13 +1,15 @@
 import { memo, useMemo } from "react";
+import { indigo } from "tailwindcss/colors";
 
 interface GhostSquareProps {
   width: number;
   height: number;
   direction?: string;
+  color?: string;
 }
 
 const GhostSquare_ = (props: GhostSquareProps) => {
-  const { width, height, direction } = props;
+  const { width, height, direction, color } = props;
   const distance = useMemo(() => {
     const DISTANCE = 100;
     if (direction === "left" || direction === "right") {
@@ -20,14 +22,6 @@ const GhostSquare_ = (props: GhostSquareProps) => {
   console.log(width, height, distance);
   return (
     <div
-      className={`
-            bg-indigo-500/20 
-            rounded  
-            min-w-[${width ? width : 200}px] 
-            min-h-[${height ? height : 200}px]
-            w-[${width}px]
-            h-[${height}px]
-        `}
       style={{
         position: "absolute",
         ...(direction === "right" && { right: `-${distance}px` }),
@@ -36,6 +30,13 @@ const GhostSquare_ = (props: GhostSquareProps) => {
         ...(direction === "bottom" && { bottom: `-${distance}px` }),
         pointerEvents: "none", // Allow clicks to pass through
         zIndex: 1, // Ensure it's above the background
+        backgroundColor: color || indigo[300],
+        opacity: 0.5,
+        minWidth: width ? width : 200,
+        minHeight: height ? height : 200,
+        width: width,
+        height: height,
+        borderRadius: '0.25rem',
       }}
     />
   );

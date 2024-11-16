@@ -18,6 +18,7 @@ import {
   applyNodeChanges,
   NodeChange,
   EdgeChange,
+  MiniMap,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Custom Nodes/Square/Squaree";
@@ -107,7 +108,9 @@ const MindMapCanvas = () => {
     mindMapLoadingRequest,
     currentMindMap,
   } = useNodeStore();
+
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
 
   const onNodesChange = useCallback(
@@ -127,7 +130,7 @@ const MindMapCanvas = () => {
       if (!isCreatingNode) return;
       setMousePosition({ x: event.clientX, y: event.clientY });
     },
-    [setMousePosition, isCreatingNode]
+    [isCreatingNode]
   );
 
   const onConnect = useCallback(
@@ -174,6 +177,7 @@ const MindMapCanvas = () => {
       rfInstance.fitView();
     }
   }, [rfInstance]);
+
 
   return (
     <ReactFlow
@@ -226,6 +230,7 @@ const MindMapCanvas = () => {
       </Panel>
 
       <Background />
+      <MiniMap />
       <Menubar rfInstance={rfInstance} />
 
       {mindMapLoadingRequest && (

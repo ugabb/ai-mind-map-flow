@@ -19,7 +19,7 @@ export async function saveMindMap({title, mindMap, userId}: SaveMindRequest): Pr
         const { data } = await axios.post<SaveMindMapResponse>(`${process.env.NEXT_PUBLIC_API_URL}/save-mind-map/${userId}`, {
             title,
             mindMap
-        }) // Killua's user id
+        })
 
         return data.data
     } catch (error) {
