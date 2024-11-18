@@ -10,7 +10,7 @@ import { MindMapResponse } from "@/types/mind-map";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { PiPlusCircle, PiShareNetwork } from "react-icons/pi";
+import { PiMonitorArrowUp, PiPlusCircle, PiShareNetwork } from "react-icons/pi";
 
 interface MindMapListProps {
   currentUser: ExtendedUser | undefined;
@@ -43,7 +43,7 @@ export const MindMapList = (props: MindMapListProps) => {
           />
           <CardActions
             onClick={() => setOpenGenerateMindMap(true)}
-            icon={PiPlusCircle}
+            icon={PiMonitorArrowUp}
             text="Generate Mind Map by video"
           />
           {/* <CardActions icon={PiShareNetwork} text="Share Mind Map" /> */}

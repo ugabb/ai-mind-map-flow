@@ -27,6 +27,7 @@ import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
+import { PiPaperPlaneTilt } from "react-icons/pi";
 
 interface GenerateMindMapModalProps {
   open?: boolean;
@@ -55,7 +56,11 @@ export const GenerateMindMapModal = ({
 
   const router = useRouter();
 
-  const { mutateAsync: downloadYtbVideoFn, isPending } = useMutation<File, unknown, string>({
+  const { mutateAsync: downloadYtbVideoFn, isPending } = useMutation<
+    File,
+    unknown,
+    string
+  >({
     mutationKey: ["downloadYtbVideo"],
     mutationFn: async (url: string) => {
       const response = await axios.post(
@@ -65,14 +70,14 @@ export const GenerateMindMapModal = ({
           headers: {
             "Content-Type": "application/json",
           },
-          responseType: 'blob', 
+          responseType: "blob",
         }
-      )
+      );
       return new File([response.data], "audio.mp3", { type: "audio/mpeg" });
     },
     onError: (error) => {
       console.error("Error converting video to audio", error);
-    }
+    },
   });
 
   const handleConvert = async () => {
@@ -113,7 +118,6 @@ export const GenerateMindMapModal = ({
   };
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogTrigger>Generate Mind Map</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Generate Mind Map</DialogTitle>
@@ -171,11 +175,17 @@ export const GenerateMindMapModal = ({
             onClick={handleConvert}
             disabled={
               (!isUrlValid && uploadType === "YTB_URL") ||
-              (!video && uploadType === "SYSTEM_FILE") || 
+              (!video && uploadType === "SYSTEM_FILE") ||
               isPending
             }
+            variant="outline"
+            className="flex gap-1"
           >
-            Convert
+            {!isPending && (
+              <>
+                Send <PiPaperPlaneTilt className="size-5 text-indigo-500" />
+              </>
+            )}
             {isPending && <ImSpinner8 className="animate-spin ml-2" />}
           </Button>
 
