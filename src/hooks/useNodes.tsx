@@ -16,13 +16,14 @@ export type DataNode = {
 };
 
 interface useNodeProps {
-  id?: string;
+  id: string;
   selected: boolean;
   width: number;
   height: number;
   positionAbsoluteX: number;
   positionAbsoluteY: number;
   label?: string;
+  color?: string;
 }
 
 export const useNode = (props: useNodeProps) => {
@@ -34,6 +35,7 @@ export const useNode = (props: useNodeProps) => {
     positionAbsoluteX,
     positionAbsoluteY,
     label,
+    color
   } = props;
   const [node, setNode] = useState<Node<DataNode> | null>(null);
 
@@ -55,9 +57,6 @@ export const useNode = (props: useNodeProps) => {
 
   const handleNewConnections = useCallback(
     (newConnection: Connection) => {
-      if (!id) return;
-      const curentEdge = getEdge(id);
-      if (curentEdge) return;
       const newEdge: Edge = {
         id: `${id}-${newConnection.target}`,
         source: newConnection.source,
@@ -68,7 +67,7 @@ export const useNode = (props: useNodeProps) => {
       };
       addEdges(newEdge);
     },
-    [addEdges, getEdge, id]
+    [addEdges, id]
   );
 
   const handleAddSideNode = useCallback((direction: string) => {
@@ -84,7 +83,7 @@ export const useNode = (props: useNodeProps) => {
               : (width as number) + 100),
           y: positionAbsoluteY,
         },
-        data: { label: "" },
+        data: { label: "", color },
         type: "square",
         width: width,
         height: height,
@@ -98,9 +97,9 @@ export const useNode = (props: useNodeProps) => {
         targetHandle: direction === "left" ? "right" : "left",
       };
 
+      addNodes(newNode);
       handleNewConnections(newConnection);
 
-      addNodes(newNode);
     } else {
       if (!height) return;
       const newNode: Node = {
@@ -113,25 +112,24 @@ export const useNode = (props: useNodeProps) => {
               ? (-height as number) - 100
               : (height as number) + 100),
         },
-        data: { label: "" },
+        data: { label: "", color },
         type: "square",
         width: width,
         height: height,
         expandParent: true,
       };
-
       const newConnection: Connection = {
-        source: id!,
+        source: id,
         target: newNode.id,
         sourceHandle: direction,
         targetHandle: direction === "bottom" ? "top" : "bottom",
       };
 
-      handleNewConnections(newConnection);
-
+      
       addNodes(newNode);
+      handleNewConnections(newConnection);
     }
-  }, [addNodes, handleNewConnections, height, id, positionAbsoluteX, positionAbsoluteY, width]);
+  }, [addNodes, color, handleNewConnections, height, id, positionAbsoluteX, positionAbsoluteY, width]);
 
   const handleDeleteNodeByPressEnter = useCallback(
     (event: KeyboardEvent) => {

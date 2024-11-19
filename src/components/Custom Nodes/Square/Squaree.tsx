@@ -63,6 +63,7 @@ const Squaree = (props: ExtendedNode) => {
     positionAbsoluteX,
     positionAbsoluteY,
     label: typeof label === "string" ? label : undefined,
+    color: data.color,
   });
 
   const handleDeleteNode = useCallback(() => {
@@ -151,6 +152,7 @@ const Squaree = (props: ExtendedNode) => {
         height={height ?? 0}
         targetPosition={targetPosition}
         sourcePosition={sourcePosition}
+        color={node?.data?.color || indigo[300]}
       />
 
       {selected && (

@@ -8,8 +8,9 @@ import { ExtendedUser } from "@/lib/authjs/auth";
 import { fetchMindMap } from "@/services/mind-map/fetchMindMaps";
 import { MindMapResponse } from "@/types/mind-map";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { PiPlusCircle, PiShareNetwork } from "react-icons/pi";
+import { PiMonitorArrowUp, PiPlusCircle, PiShareNetwork } from "react-icons/pi";
 
 interface MindMapListProps {
   currentUser: ExtendedUser | undefined;
@@ -18,8 +19,7 @@ interface MindMapListProps {
 export const MindMapList = (props: MindMapListProps) => {
   const { currentUser } = props;
   const [openGenerateMindMap, setOpenGenerateMindMap] = useState(false);
-
-  console.log("MindMapList",currentUser);
+  const router = useRouter();
 
   const { data: mindMaps } = useQuery<MindMapResponse[]>({
     queryKey: ["mindmaps", currentUser?.id],
@@ -37,16 +37,16 @@ export const MindMapList = (props: MindMapListProps) => {
 
         <div className="flex gap-5 items-center w-full">
           <CardActions
-            onClick={() => {}}
+            onClick={() => router.push("/mind-map/unsaved")}
             icon={PiPlusCircle}
             text="Create Mind Map"
           />
           <CardActions
             onClick={() => setOpenGenerateMindMap(true)}
-            icon={PiPlusCircle}
+            icon={PiMonitorArrowUp}
             text="Generate Mind Map by video"
           />
-          <CardActions icon={PiShareNetwork} text="Share Mind Map" />
+          {/* <CardActions icon={PiShareNetwork} text="Share Mind Map" /> */}
           {openGenerateMindMap && (
             <GenerateMindMapModal
               open={openGenerateMindMap}
@@ -55,7 +55,7 @@ export const MindMapList = (props: MindMapListProps) => {
           )}
         </div>
 
-        <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-4 w-full gap-5">
+        <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-5 w-full gap-5">
           {mindMaps &&
             mindMaps.map((mindMap, index) => (
               <CardMindMap key={mindMap.id} mindMap={mindMap} />

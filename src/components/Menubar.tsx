@@ -153,7 +153,7 @@ export const _Menubar = ({ rfInstance }: MenuBarProps) => {
   }, [mindMapData, setCurrentMindMap]);
 
   return (
-    <T.Root className="flex items-center w-full h-20 max-w-[720px] rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
+    <T.Root className="flex items-center w-full h-20 max-w-[425px] rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
       <T.Button />
       <T.Separator />
       <T.Link />
@@ -169,12 +169,11 @@ export const _Menubar = ({ rfInstance }: MenuBarProps) => {
         <T.ToggleItem value="export">
           <Export />
         </T.ToggleItem>
-        <T.ToggleItem asChild value="save-mind-map">
           <SaveMindMapModal
             onSave={onSave}
             isPending={saveMindMapFn.isPending || updateMindMapFn.isPending}
+            title={mindMapData?.title}
           />
-        </T.ToggleItem>
       </T.ToggleGroup>
     </T.Root>
   );

@@ -28,6 +28,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { LuTrash, LuType } from "react-icons/lu";
 import { fontSizes } from "@/constants/values";
+import { memo } from "react";
 
 const bgColors = [
   { color: "bg-blue-500", name: "Blue", value: blue[500] },
@@ -53,7 +54,7 @@ interface ColorPickerProps {
   selected: boolean;
 }
 
-export const Toolbar = (props: ColorPickerProps) => {
+export const _Toolbar = (props: ColorPickerProps) => {
   const {
     handleUpdateNodeColor,
     handleUpdateTextSize,
@@ -64,6 +65,7 @@ export const Toolbar = (props: ColorPickerProps) => {
     <NodeToolbar
       isVisible={selected}
       position={Position.Top}
+      offset={50}
       className="flex items-center gap-3 bg-zinc-800 text-white text-xs px-5 py-2 rounded-lg"
     >
       <DropdownMenu>
@@ -116,3 +118,5 @@ export const Toolbar = (props: ColorPickerProps) => {
     </NodeToolbar>
   );
 };
+
+export const Toolbar = memo(_Toolbar);

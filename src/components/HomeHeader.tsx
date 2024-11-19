@@ -1,52 +1,31 @@
-import { getCurrentUser } from "@/lib/authjs/getCurrentUser";
 import { UserAvatar } from "./UserAvatar";
 import { ExtendedUser } from "@/lib/authjs/auth";
+import Link from "next/link";
+import { FaGithub } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
 
 interface HomeHeaderProps {
   currentUser: ExtendedUser | undefined;
 }
 
-export const HomeHeader = async (props: HomeHeaderProps) => {
+const linkSocials = {
+  github: 'https://github.com/ugabb/ai-mind-map-flow',
+  linkedin: 'https://www.linkedin.com/in/ugab/',
+}
+
+export const HomeHeader = (props: HomeHeaderProps) => {
   const { currentUser } = props;
   return (
-    <div className="hidden md:flex items-center justify-between gap-5 p-3 w-full">
+    <div className="hidden md:flex items-center justify-between gap-5 p-3 w-full h-16 overflow-hidden">
       <UserAvatar currentUser={currentUser} />
-      <label className="grid cursor-pointer place-items-center">
-        <input
-          type="checkbox"
-          value="synthwave"
-          className="toggle theme-controller bg-primary col-span-2 col-start-1 row-start-1 border-input"
-        />
-        <svg
-          className="stroke-base-100 fill-base-100 col-start-1 row-start-1"
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="12" r="5" />
-          <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
-        </svg>
-        <svg
-          className="stroke-base-100 fill-base-100 col-start-2 row-start-1"
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </label>
+      <div className="flex items-center gap-3">
+        <Link href={linkSocials.github} target="_blank">
+          <FaGithub className="size-14 text-indigo-500 cursor-pointer translate-y-8 hover:-translate-y-0 ease-in-out duration-200" />
+        </Link>
+        <Link href={linkSocials.linkedin} target="_blank">
+          <FaLinkedin className="size-14 text-indigo-500 cursor-pointer translate-y-8 hover:-translate-y-0 ease-in-out duration-200" />
+        </Link>
+      </div>
     </div>
   );
 };

@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.jsonVisNode__label{
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 200px;;
-    display: flex;
-    flex-wrap: wrap;
-    color: #fff;
-    padding: 1rem;
-    border-radius: 10px;
-    background-color: var(--bg-node);
-  }
-
 @layer base {
   :root {
         --background: 0 0% 100%;

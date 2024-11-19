@@ -1,6 +1,7 @@
 import { Handle, Position } from "@xyflow/react";
 import { Direction } from "./Square/Squaree";
 import { GhostSquare } from "../GhostSquare";
+import { memo } from "react";
 
 interface HandleProps {
   isAddingNode: Direction;
@@ -10,9 +11,10 @@ interface HandleProps {
   height: number | string;
   targetPosition: Position | undefined;
   sourcePosition: Position | undefined;
+  color?: string;
 }
 
-export const Handles = (props: HandleProps) => {
+export const _Handles = (props: HandleProps) => {
   const {
     handleAddSideNode,
     isAddingNode,
@@ -21,7 +23,9 @@ export const Handles = (props: HandleProps) => {
     height,
     targetPosition,
     sourcePosition,
+    color
   } = props;
+
   return (
     <>
       {isAddingNode.top ? (
@@ -58,6 +62,7 @@ export const Handles = (props: HandleProps) => {
           width={width as number}
           height={height as number}
           direction="top"
+          color={color}
         />
       )}
 
@@ -95,6 +100,7 @@ export const Handles = (props: HandleProps) => {
           width={width as number}
           height={height as number}
           direction="bottom"
+          color={color}
         />
       )}
 
@@ -136,6 +142,7 @@ export const Handles = (props: HandleProps) => {
           width={width as number}
           height={height as number}
           direction="right"
+          color={color}
         />
       )}
 
@@ -173,8 +180,11 @@ export const Handles = (props: HandleProps) => {
           width={width as number}
           height={height as number}
           direction="left"
+          color={color}
         />
       )}
     </>
   );
 };
+
+export const Handles = memo(_Handles);
