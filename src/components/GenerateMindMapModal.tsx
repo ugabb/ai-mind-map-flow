@@ -28,6 +28,7 @@ import { ImSpinner8 } from "react-icons/im";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { PiPaperPlaneTilt } from "react-icons/pi";
+import { api } from "@/services/axios";
 
 interface GenerateMindMapModalProps {
   open?: boolean;
@@ -63,7 +64,7 @@ export const GenerateMindMapModal = ({
   >({
     mutationKey: ["downloadYtbVideo"],
     mutationFn: async (url: string) => {
-      const response = await axios.post(
+      const response = await api.post(
         `${process.env.NEXT_PUBLIC_API_URL}/convert-to-audio`,
         { url },
         {

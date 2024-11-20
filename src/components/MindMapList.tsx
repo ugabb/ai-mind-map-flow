@@ -4,16 +4,16 @@ import { CardActions } from "@/components/CardActions";
 import { CardMindMap } from "@/components/CardMindMap";
 import { GenerateMindMapModal } from "@/components/GenerateMindMapModal";
 import { Sidebar } from "@/components/Sidebar";
-import { ExtendedUser } from "@/lib/authjs/auth";
 import { fetchMindMap } from "@/services/mind-map/fetchMindMaps";
 import { MindMapResponse } from "@/types/mind-map";
 import { useQuery } from "@tanstack/react-query";
+import { User } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { PiMonitorArrowUp, PiPlusCircle, PiShareNetwork } from "react-icons/pi";
 
 interface MindMapListProps {
-  currentUser: ExtendedUser | undefined;
+  currentUser: User | undefined;
 }
 
 export const MindMapList = (props: MindMapListProps) => {

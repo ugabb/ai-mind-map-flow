@@ -1,5 +1,5 @@
 import { Edge, Node, ReactFlowJsonObject } from "@xyflow/react";
-import axios from "axios";
+import { api } from "../axios";
 
 export interface MindMapResponse {
     id: string;
@@ -19,7 +19,7 @@ export interface UpdateMindMapRequest {
 
 export async function updateMindMap({userId, mindMapId, title, mindMap}: UpdateMindMapRequest): Promise<MindMapResponse[]> {
     try {
-        const { data, status } = await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/update-mind-map/${mindMapId}/userId/${userId}`, {
+        const { data, status } = await api.patch(`/update-mind-map/${mindMapId}/userId/${userId}`, {
             ...(title && { title }),
             mindMap
         });

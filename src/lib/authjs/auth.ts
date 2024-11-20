@@ -2,19 +2,9 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import axios from "axios";
+import * as jwt from "jsonwebtoken"
+import { cookies } from "next/headers";
 
-// Extending the NextAuth User interface
-export type ExtendedUser = DefaultSession['user'] & {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-declare module "next-auth" {
-  interface Session {
-    user: ExtendedUser
-  }
-}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -41,7 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             updatedAt: new Date(data.user.updatedAt),
           };
 
-          return user; // Return the custom User object with new fields
+          return user; 
         } catch (err) {
           // Check if the error is due to invalid credentials
           if (axios.isAxiosError(err) && err.response && err.response.status === 400) {
@@ -61,7 +51,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
     error: "/error",
   },
+  secret: process.env.AUTH_SECRET,
   session: { strategy: 'jwt' },
+  jwt: {
+    encode: async ({ secret, token, maxAge }) => {
+      const jwtClaims = {
+        id: token?.id,
+        sub: token?.id ? token.id.toString() : token?.email || "",
+        name: token?.name,
+        email: token?.email,
+        image: token?.image,
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + (maxAge || 60 * 60 * 24 * 7), // 7 days
+        aud: 'urn:next-auth',
+        iss: 'urn:next-auth',
+      };
+      const encodedToken = jwt.sign(jwtClaims, secret as string);
+      return encodedToken;
+    },
+    decode: async ({ secret, token }) => {
+      try {
+        const decodedToken = jwt.verify(token as string, secret as string) as jwt.JwtPayload;
+        return {
+          ...decodedToken,
+          id: decodedToken.id,
+          name: decodedToken.name,
+          email: decodedToken.email,
+          image: decodedToken.image,
+        };
+      } catch (error) {
+        console.error("Token decode error:", error);
+        return null;
+      }
+    }
+  },
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === 'google') {
@@ -88,15 +111,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return true;
     },
-    redirect({ url, baseUrl }) {
-      return url.startsWith(baseUrl) ? url : baseUrl;
-    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.image = user.image;
-        token.createdAt = (user as ExtendedUser).createdAt;
-        token.updatedAt = (user as ExtendedUser).updatedAt;
+        token.createdAt = user.createdAt;
+        token.updatedAt = user.updatedAt;
       }
       return token;
     },
@@ -105,6 +125,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.image = token.image as string | null;
       session.user.createdAt = new Date(token.createdAt as string);
       session.user.updatedAt = new Date(token.updatedAt as string);
+      session.user.token = cookies().get('authjs.session-token') as { name: string, value: string };
       return session;
     }
   },

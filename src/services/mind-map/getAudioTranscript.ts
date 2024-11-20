@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { api } from '../axios';
 
 interface GetAudioTranscriptResponse{
     transcription: string,
@@ -13,13 +14,12 @@ export async function getAudioTranscript(audio: File): Promise<GetAudioTranscrip
         const formData = new FormData()
         formData.append("file", audio)
         console.log(formData, audio)
-        const { data, status,  } = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/transcribe`,
+        const { data, status,  } = await api.post(
+            `/transcribe`,
             formData, // Pass formData directly as the second argument
             {
                 headers: {
                     'Content-Type': 'multipart/form-data', // Axios will handle the boundary automatically
-                    'Authorization': `Bearer ${localStorage.getItem('ai.mind.map.token')}`
                 },
             }
         );

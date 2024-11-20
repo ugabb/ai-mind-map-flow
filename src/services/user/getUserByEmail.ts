@@ -1,10 +1,10 @@
-import axios from "axios";
+import { api } from "../axios";
 
 
 export async function getUserByEmail(email: string) {
     try {
-        const { data } = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/user/${email}`
+        const { data } = await api.get(
+            `/user/${email}`
         );
         return data;
     } catch (err) {

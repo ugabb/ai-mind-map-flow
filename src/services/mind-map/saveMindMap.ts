@@ -1,6 +1,6 @@
 import { MindMapResponse } from "@/types/mind-map";
 import { Edge, Node, ReactFlowJsonObject } from "@xyflow/react";
-import axios from "axios";
+import { api } from "../axios";
 
 export interface SaveMindMapResponse {
     message: string;
@@ -16,7 +16,7 @@ export interface SaveMindRequest {
 
 export async function saveMindMap({title, mindMap, userId}: SaveMindRequest): Promise<MindMapResponse> {
     try {
-        const { data } = await axios.post<SaveMindMapResponse>(`${process.env.NEXT_PUBLIC_API_URL}/save-mind-map/${userId}`, {
+        const { data } = await api.post<SaveMindMapResponse>(`/save-mind-map/${userId}`, {
             title,
             mindMap
         })

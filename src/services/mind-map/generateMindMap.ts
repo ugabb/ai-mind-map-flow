@@ -1,13 +1,9 @@
-import axios from 'axios';
-import { headers } from 'next/headers';
+import { api } from '../axios';
 
 export async function generateMindMap(transcription: string) {
     try {
-        const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/mindmap`, {
-            transcription,
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('ai.mind.map.token')}`
-            }
+        const { data } = await api.post(`/mindmap`, {
+            transcription
         })
 
         return data.mindMap
