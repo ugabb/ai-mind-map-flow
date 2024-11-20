@@ -2,7 +2,6 @@
 
 import { nameAbreviation } from "@/utils/nameAbreviation";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { ExtendedUser } from "@/lib/authjs/auth";
 import { Skeleton } from "./ui/skeleton";
 
 import {
@@ -15,9 +14,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PiSignOut } from "react-icons/pi";
 import { signOut } from "next-auth/react";
+import { User } from "next-auth";
 
 interface UserProps {
-  currentUser: ExtendedUser | undefined;
+  currentUser: User | undefined;
 }
 
 export const UserAvatar = (props: UserProps) => {

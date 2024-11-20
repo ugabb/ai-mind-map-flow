@@ -1,11 +1,11 @@
+import { User } from "next-auth";
 import { UserAvatar } from "./UserAvatar";
-import { ExtendedUser } from "@/lib/authjs/auth";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 
 interface HomeHeaderProps {
-  currentUser: ExtendedUser | undefined;
+  currentUser: User | undefined;
 }
 
 const linkSocials = {

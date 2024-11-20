@@ -1,6 +1,6 @@
 
 import { MindMap } from "@/types/mind-map";
-import axios from "axios";
+import { api } from "../axios";
 
 export interface MindMapResponse {
     id: string;
@@ -13,7 +13,7 @@ export interface MindMapResponse {
 
 export async function getMindMap(userId: string, mindMapId: string): Promise<MindMapResponse | null> {
     try {
-        const { data, status } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/mindmap/${mindMapId}/userId/${userId}`);
+        const { data, status } = await api.get(`${process.env.NEXT_PUBLIC_API_URL}/mindmap/${mindMapId}/userId/${userId}`);
 
         if (status === 200) {
             return data;
