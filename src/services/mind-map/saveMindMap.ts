@@ -16,7 +16,7 @@ export interface SaveMindRequest {
 
 export async function saveMindMap({title, mindMap, userId}: SaveMindRequest): Promise<MindMapResponse> {
     try {
-        const { data } = await api.post<SaveMindMapResponse>(`${process.env.NEXT_PUBLIC_API_URL}/save-mind-map/${userId}`, {
+        const { data } = await api.post<SaveMindMapResponse>(`/save-mind-map/${userId}`, {
             title,
             mindMap
         })
