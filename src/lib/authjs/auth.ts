@@ -4,7 +4,10 @@ import Credentials from "next-auth/providers/credentials";
 import axios from "axios";
 import * as jwt from "jsonwebtoken"
 import { cookies } from "next/headers";
+import { cookieValues } from "@/services/axios";
 
+const isProduction = process.env.NODE_ENV === "production";
+const productionCookieToken = '__Secure-' + cookieValues.token;
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -31,7 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             updatedAt: new Date(data.user.updatedAt),
           };
 
-          return user; 
+          return user;
         } catch (err) {
           // Check if the error is due to invalid credentials
           if (axios.isAxiosError(err) && err.response && err.response.status === 400) {
@@ -50,6 +53,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/login",
     error: "/error",
+  },
+  cookies: {
+    sessionToken: {
+      name: isProduction ? productionCookieToken : cookieValues.token,
+      options: {
+        httpOnly: true,
+        secure: isProduction,
+        path: '/',
+        sameSite: 'lax',
+      },
+    },
   },
   secret: process.env.AUTH_SECRET,
   session: { strategy: 'jwt' },
@@ -125,7 +139,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.image = token.image as string | null;
       session.user.createdAt = new Date(token.createdAt as string);
       session.user.updatedAt = new Date(token.updatedAt as string);
-      session.user.token = cookies().get('authjs.session-token') as { name: string, value: string };
+      session.user.token = cookies().get(isProduction ? productionCookieToken : cookieValues.token) as { name: string, value: string };
       return session;
     }
   },
