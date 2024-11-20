@@ -19,7 +19,7 @@ interface MenuBarProps {
   rfInstance: ReactFlowInstance | null;
 }
 
-export const _Menubar = ({ rfInstance }: MenuBarProps) => {
+export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
   const {
     addNodes,
     screenToFlowPosition,
@@ -174,4 +174,4 @@ export const _Menubar = ({ rfInstance }: MenuBarProps) => {
   );
 };
 
-export const Menubar = memo(_Menubar);
+export const Menubar = memo(Menubar_);
