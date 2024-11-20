@@ -13,7 +13,7 @@ export interface MindMap {
 export interface MindMapResponse {
     id: string;
     title: string;
-    mindMap: ReactFlowJsonObject<Node, Edge>;
+    mindMap: ReactFlowJsonObject<Node, Edge> | string;
     createdAt: string;
     updatedAt: string;
     userId: string;

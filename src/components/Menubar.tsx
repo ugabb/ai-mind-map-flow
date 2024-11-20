@@ -34,6 +34,7 @@ export const _Menubar = ({ rfInstance }: MenuBarProps) => {
     disableIsCreatingNode,
     isCreatingNode,
     setCurrentMindMap,
+    setMindMapToGenerate
   } = useNodeStore();
 
   const params = useParams();
@@ -106,25 +107,18 @@ export const _Menubar = ({ rfInstance }: MenuBarProps) => {
       if (!rfInstance) return;
 
       const mindMapId = mindMapData?.id;
-      const isNewMindMap = mindMapId === "unsaved";
       const mindMapObject = rfInstance.toObject();
 
-      if (!isNewMindMap && mindMapId) {
+      if (mindMapId) {
         await updateMindMapFn.mutateAsync({
           userId: session?.user?.id as string,
           mindMapId,
           title,
           mindMap: mindMapObject,
         });
-      } else {
-        await saveMindMapFn.mutateAsync({
-          userId: session?.user?.id as string,
-          title,
-          mindMap: mindMapObject,
-        });
-      }
+      } 
     },
-    [rfInstance, mindMapData?.id, updateMindMapFn, saveMindMapFn]
+    [rfInstance, mindMapData?.id, updateMindMapFn, session?.user?.id]
   );
 
   const onRestore = useCallback(() => {
@@ -138,7 +132,10 @@ export const _Menubar = ({ rfInstance }: MenuBarProps) => {
     setNodes(nodes);
     setEdges(edges);
     setViewport(viewport);
-  }, [mindMapData, setNodes, setEdges, setViewport]);
+    if (typeof mindMapData.mindMap === "string") {
+      setMindMapToGenerate(mindMapData.mindMap);
+    }
+  }, [mindMapData]);
 
   useEffect(() => {
     if (mindMapData?.mindMap) {
@@ -166,9 +163,7 @@ export const _Menubar = ({ rfInstance }: MenuBarProps) => {
           value="create-node"
           className="w-24 h-24 translate-y-8 bg-indigo-500 rounded-md hover:translate-y-5 transition-transform"
         />
-        <T.ToggleItem value="export">
           <Export />
-        </T.ToggleItem>
           <SaveMindMapModal
             onSave={onSave}
             isPending={saveMindMapFn.isPending || updateMindMapFn.isPending}
