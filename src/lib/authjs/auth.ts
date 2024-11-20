@@ -4,10 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import axios from "axios";
 import * as jwt from "jsonwebtoken"
 import { cookies } from "next/headers";
-import { cookieValues } from "@/services/axios";
+import { cookieValues, isProduction, productionCookieToken } from "@/services/axios";
 
-const isProduction = process.env.NODE_ENV === "production";
-const productionCookieToken = '__Secure-' + cookieValues.token;
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [

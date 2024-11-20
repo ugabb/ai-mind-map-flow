@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { cookies } from "next/headers";
+import { cookieValues, isProduction, productionCookieToken } from "./services/axios";
 
 
 const loggedInRoutes = ["/home", '/mind-map' ,'/profile'];
@@ -21,8 +22,8 @@ export default async function AuthMiddleware(
     const myCookie = cookies();
 
     let token: string | null = null;
-    if (myCookie.get("authjs.session-token")) {
-      token = myCookie.get("authjs.session-token")!.value;
+    if (myCookie.get(isProduction ? productionCookieToken : cookieValues.token)) {
+      token = myCookie.get(isProduction ? productionCookieToken : cookieValues.token)!.value;
     }
 
     if (
