@@ -4,7 +4,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -24,34 +23,41 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
-import { ImSpinner8 } from "react-icons/im";
-import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
-import { PiPaperPlaneTilt } from "react-icons/pi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/services/axios";
+import { ImSpinner8 } from "react-icons/im";
+import {
+  PiPaperPlaneTilt
+} from "react-icons/pi";
+import toast from "react-hot-toast";
+import { saveMindMap, SaveMindRequest } from "@/services/mind-map/saveMindMap";
+import { User } from "next-auth";
 
 interface GenerateMindMapModalProps {
   open?: boolean;
   onClose?: () => void;
+  currentUser: User | undefined;
 }
 
 export const GenerateMindMapModal = ({
   open,
   onClose,
+  currentUser,
 }: GenerateMindMapModalProps) => {
-  const [convertedAudio, setConvertedAudio] = useState<File | null>(null);
   const [video, setVideo] = useState<File | null>(null);
   const [url, setUrl] = useState<string>("");
   const [isUrlValid, setIsUrlValid] = useState<boolean>(false);
   const [uploadType, setUploadType] = useState<"YTB_URL" | "SYSTEM_FILE">(
     "YTB_URL"
   );
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { setMindMapToGenerate, setMindMapLoadingRequest } = useNodeStore();
 
   const ffmpeg = useRef<FFmpeg>(new FFmpeg());
 
-  const { convertVideoToAudio, progress } = useConvertVideoToAudio(
+  const { convertVideoToAudio, progress, loadingFFMPEG } = useConvertVideoToAudio(
     ffmpeg.current
   );
 
@@ -81,31 +87,80 @@ export const GenerateMindMapModal = ({
     },
   });
 
-  const handleConvert = async () => {
-    if (!video && !url) return;
-    if (video) {
-      const convertedAudio = await convertVideoToAudio(video);
-      setConvertedAudio(convertedAudio);
-    }
+  const queryClient = useQueryClient();
 
-    if (url) {
-      const file = await downloadYtbVideoFn(url);
-      console.log("data", file);
-      setConvertedAudio(file);
+  const { mutateAsync: saveMindMapFn } = useMutation({
+    mutationKey: ["save-mindMap"],
+    mutationFn: (data: SaveMindRequest) => saveMindMap(data),
+    onError: () => toast.error("Error while saving Mind Map"),
+    onSuccess: () => {
+      toast.success("Mind Map saved successfully");
+    },
+  });
+
+  const handleConvert = async (): Promise<File | null | undefined> => {
+    try {
+      if (uploadType === "SYSTEM_FILE" && video) {
+        // if (video.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+        //   setError(`File size exceeds ${MAX_FILE_SIZE_MB}MB.`);
+        //   return;
+        // }
+        return await convertVideoToAudio(video);
+      }
+
+      if (uploadType === "YTB_URL" && url) {
+        return await downloadYtbVideoFn(url);
+      }
+    } catch (e) {
+      console.error("Error during conversion:", e);
+      setError("An error occurred while processing the video.");
     }
   };
 
   const handleGenerateMindMap = async () => {
-    if (!convertedAudio) return;
     setMindMapLoadingRequest(true);
+    setError(null);
+    setIsLoading(true);
 
-    const { transcription, status } = await getAudioTranscript(convertedAudio);
-    if (status !== 200) return;
-    const mindMap = await generateMindMap(transcription);
+    const file = await handleConvert();
+    if (!file) {
+      setMindMapLoadingRequest(false);
+      return;
+    }
 
-    setMindMapToGenerate(mindMap);
-    setMindMapLoadingRequest(false);
-    router.push(`/mind-map/unsaved`);
+    try {
+      const { transcription, status } = await getAudioTranscript(file);
+      if (status !== 200) {
+        setError("Failed to transcribe audio.");
+        setMindMapLoadingRequest(false);
+        return;
+      }
+
+      const mindMapJSON = await generateMindMap(transcription);
+
+      // save mind map
+      const mindmap = await saveMindMapFn({
+        title: "Untitled",
+        mindMap: mindMapJSON,
+        userId: currentUser?.id as string,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["mindmaps", currentUser?.id],
+      });
+
+      if(mindmap){
+        setMindMapToGenerate(mindMapJSON);
+        setMindMapLoadingRequest(false);
+        router.push(`/mind-map/${mindmap.id}`);
+      }
+    } catch (e) {
+      console.error("Error generating mind map:", e);
+      setError("An error occurred while generating the mind map.");
+      setMindMapLoadingRequest(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleUrlChange = (url: string) => {
@@ -172,31 +227,32 @@ export const GenerateMindMapModal = ({
               )}
             </div>
           )}
-          <Button
-            onClick={handleConvert}
-            disabled={
-              (!isUrlValid && uploadType === "YTB_URL") ||
-              (!video && uploadType === "SYSTEM_FILE") ||
-              isPending
-            }
-            variant="outline"
-            className="flex gap-1"
-          >
-            {!isPending && (
-              <>
-                Send <PiPaperPlaneTilt className="size-5 text-indigo-500" />
-              </>
-            )}
-            {isPending && <ImSpinner8 className="animate-spin ml-2" />}
-          </Button>
 
           {progress > 0 && (
             <Progress value={progress} max={100} className="h-3" />
           )}
+
+          {error && <p className="text-red-500 text-sm">{error}</p>}
         </div>
-        {convertedAudio && (
-          <Button onClick={handleGenerateMindMap}>Generate Mind Map</Button>
-        )}
+
+        <Button
+          onClick={handleGenerateMindMap}
+          disabled={
+            (!isUrlValid && uploadType === "YTB_URL") ||
+            (!video && uploadType === "SYSTEM_FILE") ||
+            isPending ||
+            loadingFFMPEG
+          }
+          className="bg-indigo-500 w-fit mx-auto"
+        >
+          {isLoading && <ImSpinner8 className="animate-spin size-5" />}
+          {!isLoading && (
+            <>
+              Generate Mind Map
+              <PiPaperPlaneTilt className="ml-2 text-white size-5" />
+            </>
+          )}
+        </Button>
       </DialogContent>
     </Dialog>
   );

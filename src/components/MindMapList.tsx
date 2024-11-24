@@ -51,6 +51,7 @@ export const MindMapList = (props: MindMapListProps) => {
             <GenerateMindMapModal
               open={openGenerateMindMap}
               onClose={() => setOpenGenerateMindMap(false)}
+              currentUser={currentUser}
             />
           )}
         </div>

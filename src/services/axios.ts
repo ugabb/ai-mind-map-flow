@@ -2,9 +2,13 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { getSession } from "next-auth/react";
 
+
 export const cookieValues = {
-    token: "authjs.session-token",
+    token: "authjs.session-token"
 } as const
+
+export const isProduction = process.env.NODE_ENV === "production";
+export const productionCookieToken = '__Secure-' + cookieValues.token;
 
 export type CookieKeyType = keyof typeof cookieValues;
 export type CookieValuesType = typeof cookieValues[CookieKeyType];

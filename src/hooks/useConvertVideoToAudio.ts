@@ -5,6 +5,7 @@ import {toast} from "react-hot-toast";
 
 export const useConvertVideoToAudio = (ffmpeg: FFmpeg) => {
   const [progress, setProgress] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const load = async () => {
     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd'
@@ -23,6 +24,7 @@ export const useConvertVideoToAudio = (ffmpeg: FFmpeg) => {
   
 
   async function convertVideoToAudio(video: File): Promise<File | null> {
+    setLoading(true);
     try {
       if (!video) {
         toast.error("No video file selected");
@@ -68,6 +70,8 @@ export const useConvertVideoToAudio = (ffmpeg: FFmpeg) => {
       console.error("Conversion error:", error);
       toast.error("Error converting video to audio.");
       return null;
+    }finally{
+      setLoading(false);
     }
   }
   
@@ -75,6 +79,7 @@ export const useConvertVideoToAudio = (ffmpeg: FFmpeg) => {
   return {
     convertVideoToAudio,
     progress,
-    load
+    load,
+    loadingFFMPEG: loading
   };
 };

@@ -54,7 +54,7 @@ interface ColorPickerProps {
   selected: boolean;
 }
 
-export const _Toolbar = (props: ColorPickerProps) => {
+export const Toolbar_ = (props: ColorPickerProps) => {
   const {
     handleUpdateNodeColor,
     handleUpdateTextSize,
@@ -119,4 +119,4 @@ export const _Toolbar = (props: ColorPickerProps) => {
   );
 };
 
-export const Toolbar = memo(_Toolbar);
+export const Toolbar = memo(Toolbar_);

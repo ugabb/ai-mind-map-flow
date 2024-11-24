@@ -14,7 +14,7 @@ interface HandleProps {
   color?: string;
 }
 
-export const _Handles = (props: HandleProps) => {
+export const Handles_ = (props: HandleProps) => {
   const {
     handleAddSideNode,
     isAddingNode,
@@ -187,4 +187,4 @@ export const _Handles = (props: HandleProps) => {
   );
 };
 
-export const Handles = memo(_Handles);
+export const Handles = memo(Handles_);
