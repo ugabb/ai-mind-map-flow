@@ -11,6 +11,7 @@ import { User } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { PiMonitorArrowUp, PiPlusCircle, PiShareNetwork } from "react-icons/pi";
+import { CardMindMapSkeleton } from "./CardMindMapSkeleton";
 
 interface MindMapListProps {
   currentUser: User | undefined;
@@ -21,7 +22,7 @@ export const MindMapList = (props: MindMapListProps) => {
   const [openGenerateMindMap, setOpenGenerateMindMap] = useState(false);
   const router = useRouter();
 
-  const { data: mindMaps } = useQuery<MindMapResponse[]>({
+  const { data: mindMaps, isLoading: isLoadingMindMaps } = useQuery<MindMapResponse[]>({
     queryKey: ["mindmaps", currentUser?.id],
     queryFn: () => fetchMindMap(currentUser?.id as string),
     enabled: !!currentUser?.id,
@@ -57,11 +58,14 @@ export const MindMapList = (props: MindMapListProps) => {
         </div>
 
         <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-5 w-full gap-5">
-          {mindMaps &&
-            mindMaps.map((mindMap, index) => (
-              <CardMindMap key={mindMap.id} mindMap={mindMap} />
-            ))}
-        </div>
+      {isLoadingMindMaps
+        ? Array.from({ length: 10 }).map((_, index) => (
+            <CardMindMapSkeleton key={index} />
+          ))
+        : mindMaps?.map((mindMap) => (
+            <CardMindMap key={mindMap.id} mindMap={mindMap} />
+          ))}
+    </div>
       </div>
     </div>
   );
