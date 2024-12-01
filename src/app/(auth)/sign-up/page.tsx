@@ -230,7 +230,6 @@ export default function SignUp() {
                         onChange={handleFileSelect}
                         placeholder="drop your profile photo"
                         type="file"
-                        disabled
                         className={`${
                           form.formState?.errors?.confirmPassword &&
                           "border border-red-500"

@@ -6,7 +6,7 @@ import { saveMindMap, SaveMindRequest } from "@/services/mind-map/saveMindMap";
 import { SaveMindMapModal } from "./SaveMindMapModal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMindMap } from "@/services/mind-map/getMindMap";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import {
   updateMindMap,
   UpdateMindMapRequest,
@@ -102,6 +102,8 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
     return () => document.removeEventListener("click", handleClickToCreate);
   }, [handleClickToCreate, isCreatingNode]);
 
+  const pathname = usePathname();
+
   const onSave = useCallback(
     async (title: string) => {
       if (!rfInstance) return;
@@ -117,10 +119,19 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
           mindMap: mindMapObject,
         });
       } 
-    },
-    [rfInstance, mindMapData?.id, updateMindMapFn, session?.user?.id]
-  );
 
+      if(pathname.includes('/unsaved')) {
+        console.log(`unsaved`, mindMapObject)
+        await saveMindMapFn.mutateAsync({
+          userId: session?.user?.id as string,
+          title,
+          mindMap: mindMapObject,
+        });
+      }
+    },
+    [rfInstance, mindMapData?.id, updateMindMapFn, session?.user?.id, pathname]
+  );
+  
   const onRestore = useCallback(() => {
     if (!mindMapData?.mindMap) return;
 

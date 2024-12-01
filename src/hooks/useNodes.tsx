@@ -23,6 +23,7 @@ interface useNodeProps {
   positionAbsoluteX: number;
   positionAbsoluteY: number;
   label?: string;
+  updateNodeData: (id: string, data: DataNode) => void;
   color?: string;
 }
 
@@ -35,6 +36,7 @@ export const useNode = (props: useNodeProps) => {
     positionAbsoluteX,
     positionAbsoluteY,
     label,
+    updateNodeData,
     color
   } = props;
   const [node, setNode] = useState<Node<DataNode> | null>(null);
@@ -155,10 +157,16 @@ export const useNode = (props: useNodeProps) => {
     editorProps: {
       attributes: {
         class:
-          "nodrag h-full w-full block border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3 truncate z-50",
+          "nodrag h-full w-full  border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3 truncate z-50 hover:bg-zinc-200/50 rounded-lg",
       },
     },
     onBlur: handleInputBlur,
+    onUpdate: ({ editor }) => {
+      if (!editor) return;
+      console.log("editor", editor.getHTML());
+      const content = editor.getHTML();
+      updateNodeData(id, { label: content });
+    },
     immediatelyRender: false,
   });
 
