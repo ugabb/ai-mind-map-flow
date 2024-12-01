@@ -16,7 +16,7 @@ const linkSocials = {
 export const HomeHeader = (props: HomeHeaderProps) => {
   const { currentUser } = props;
   return (
-    <div className="hidden md:flex items-center justify-between gap-5 p-3 w-full h-16 overflow-hidden">
+    <div className="hidden md:flex items-center justify-between gap-5 p-3 w-full min-h-16 overflow-hidden">
       <UserAvatar currentUser={currentUser} />
       <div className="flex items-center gap-3">
         <Link href={linkSocials.github} target="_blank">
