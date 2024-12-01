@@ -36,7 +36,7 @@ export default async function AuthMiddleware(
       token &&
       loggedOutRoutes.some((path) => req.nextUrl.pathname.startsWith(path))
     ) {
-      const homeUrl = new URL('/login', req.url)
+      const homeUrl = new URL('/home', req.url)
       return NextResponse.redirect(homeUrl);
     }
   }

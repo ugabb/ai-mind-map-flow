@@ -63,6 +63,7 @@ const Squaree = (props: ExtendedNode) => {
     positionAbsoluteX,
     positionAbsoluteY,
     label: typeof label === "string" ? label : undefined,
+    updateNodeData,
     color: data.color,
   });
 
@@ -78,7 +79,6 @@ const Squaree = (props: ExtendedNode) => {
       // Ensure color is valid
       if (!color) return;
       const textColor = getTextColor(color);
-      console.log("Squaree -> textColor", textColor);
 
       updateNodeData(id, { color, textColor });
       setNode((prevNode) => {
