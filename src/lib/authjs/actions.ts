@@ -14,7 +14,8 @@ export const credentialsSignIn = async (data: LoginFormValues) => {
       const response = await signIn("credentials", {
         email: data.email,
         password: data.password,
-        redirect: false,
+        redirect: true,
+        redirectTo: "/home",
       });
 
       if (response?.error) {
@@ -29,6 +30,7 @@ export const credentialsSignIn = async (data: LoginFormValues) => {
       // Success case
       if (response?.ok) {
         toast.success("Login successful!");
+        
         return { success: true };
       }
   
