@@ -18,7 +18,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       authorize: async (credentials) => {
         try {
-          const { data } = await axios.post(
+          const { data, status } = await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/user/authenticate`,
             credentials
           );
@@ -55,10 +55,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   cookies: {
     sessionToken: {
-      name: isProduction ? productionCookieToken : cookieValues.token,
+      name: cookieValues.token,
       options: {
         httpOnly: true,
-        secure: isProduction,
         path: '/',
         sameSite: 'lax',
       },
@@ -138,7 +137,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.image = token.image as string | null;
       session.user.createdAt = new Date(token.createdAt as string);
       session.user.updatedAt = new Date(token.updatedAt as string);
-      session.user.token = cookies().get(isProduction ? productionCookieToken : cookieValues.token) as { name: string, value: string };
+      session.user.token = cookies().get(cookieValues.token) as { name: string, value: string };
       return session;
     }
   },
