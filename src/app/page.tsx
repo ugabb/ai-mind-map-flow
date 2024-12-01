@@ -1,10 +1,9 @@
-
+import LandingPageHome from '@/components/LandingPageHome'
 export default function Home() {
- 
 
   return (
-    <main className="h-screen w-screen">
-      <h1>AI Mind Map</h1>
-    </main>
-  );
+    <div>
+      <LandingPageHome />
+    </div>
+  )
 }

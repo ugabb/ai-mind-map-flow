@@ -4,42 +4,19 @@ import { cookies } from "next/headers";
 import { cookieValues, isProduction, productionCookieToken } from "./services/axios";
 
 
-const loggedInRoutes = ["/home", '/mind-map' ,'/profile'];
-const loggedOutRoutes = ["/login", "/sign-up"];
 
-const BASE_URL = process.env.NEXT_PUBLIC_URL;
+export function middleware(request: NextRequest) {
+  const myCookie = cookies();
 
-export default async function AuthMiddleware(
-  req: NextRequest
-): Promise<NextResponse> {
-  if (
-    !loggedInRoutes.some((path) =>
-      req.nextUrl.pathname.startsWith(path)) &&
-    !loggedOutRoutes.some((path) => req.nextUrl.pathname.startsWith(path))
-  ) {
-    return NextResponse.next();
-  } else {
-    const myCookie = cookies();
-
-    let token: string | null = null;
-    if (myCookie.get(isProduction ? productionCookieToken : cookieValues.token)) {
-      token = myCookie.get(isProduction ? productionCookieToken : cookieValues.token)!.value;
-    }
-
-    if (
-      !token &&
-      loggedInRoutes.some((path) => req.nextUrl.pathname.startsWith(path))
-    ) {
-      const loginUrl = new URL('/login', req.url)
-      return NextResponse.redirect(loginUrl);
-    } else if (
-      token &&
-      loggedOutRoutes.some((path) => req.nextUrl.pathname.startsWith(path))
-    ) {
-      const homeUrl = new URL('/home', req.url)
-      return NextResponse.redirect(homeUrl);
-    }
+  let token: string | null = null;
+  if (myCookie.get(isProduction ? productionCookieToken : cookieValues.token)) {
+    token = myCookie.get(isProduction ? productionCookieToken : cookieValues.token)!.value;
   }
-
+  if (!token) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
   return NextResponse.next();
 }
+export const config = {
+  matcher: ['/home', '/mind-map/:path*', '/profile'],
+};
