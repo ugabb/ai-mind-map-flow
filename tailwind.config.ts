@@ -10,6 +10,19 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		keyframes:{
+			slide: {
+				'0%, 100%': {
+					transform: 'translateY(0)'
+				},
+				'33%': {
+					transform: 'translateY(-100%)'
+				},
+				'66%': {
+					transform: 'translateY(-200%)'
+				}
+			},
+		},
   		backgroundImage: {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
   			'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
@@ -63,6 +76,7 @@ const config: Config = {
   		}
   	}
   },
+
   plugins: [require("tailwindcss-animate"), require('daisyui')],
   important: true,
 };
