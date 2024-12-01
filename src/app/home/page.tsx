@@ -6,7 +6,7 @@ export default async function Home() {
   const { currentUser } = await getCurrentUser();
 
   return (
-    <div className="flex flex-col bg-background lg:min-h-screen min-h-full">
+    <div className="flex flex-col bg-background min-h-screen h-full">
       <HomeHeader currentUser={currentUser} />
       <MindMapList currentUser={currentUser} />
     </div>

@@ -8,8 +8,9 @@ interface HomeHeaderProps {
   currentUser: User | undefined;
 }
 
-const linkSocials = {
+export const linkSocials = {
   github: 'https://github.com/ugabb/ai-mind-map-flow',
+  githubProfile: 'https://github.com/ugabb',
   linkedin: 'https://www.linkedin.com/in/ugab/',
 }
 
