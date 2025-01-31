@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI Mind Map | AI-Powered Mind Map Generator
 
-## Getting Started
+## What is it?
+This project is an AI-powered system designed to generate mind maps from educational video lectures. It leverages OpenAI's natural language processing (NLP) models and prompt engineering techniques to extract and organize key concepts, improving study efficiency.
 
-First, run the development server:
+## Why was it created?
+Students often struggle with information overload, especially in fields like medicine, where large amounts of content must be assimilated quickly. Studies indicate that this cognitive burden is a major stress factor. By automating the creation of structured mind maps, this tool aims to enhance learning and retention.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Who is it for?
+This project is intended for students, educators, and lifelong learners who need an efficient way to summarize and visualize educational content. Medical students, in particular, may find it beneficial given their intensive coursework.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where is it used?
+It can be used in academic institutions, online learning platforms, and self-study environments. The tool can be integrated into e-learning applications or used as a standalone study aid.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## When should it be used?
+This system is ideal for use when:
+- Reviewing complex subjects from video lectures.
+- Structuring study materials before exams.
+- Organizing large volumes of information in an easily digestible format.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## How does it work?
+1. The user uploads a video lecture.
+2. The system transcribes the content using speech-to-text technology.
+3. NLP models analyze the transcription to identify key concepts.
+4. A structured mind map is generated, highlighting core ideas and relationships.
+5. The user can export or refine the generated mind map for further use.
