@@ -26,3 +26,44 @@ This system is ideal for use when:
 3. NLP models analyze the transcription to identify key concepts.
 4. A structured mind map is generated, highlighting core ideas and relationships.
 5. The user can export or refine the generated mind map for further use.
+
+
+The following technologies were used to build this project:
+
+**Front-End Technologies:**
+*   **HTML** -  ` <HTML5> `
+    *   The fundamental building block for most websites, defining the structure and content displayed in web browsers.
+*   **CSS** -  `<CSS3>`
+    *   Used to style web pages, ensuring the site's aesthetics and interactivity.
+*  **Tailwind CSS** - `<tailwindcss>`
+    *   A utility-first CSS framework allowing styles to be built directly in HTML using utility classes.
+*   **JavaScript** - `<javascript>`
+    *   A lightweight, interpreted, object-based language primarily used as a scripting language for web pages.
+*   **TypeScript** - `<typescript>`
+    *   A strongly typed superset of JavaScript that adds additional syntax for closer integration with code editors and early error detection.
+*   **Next.js** - `<nextjs>`
+     *  A framework for React that allows for more efficient app development, including server-side rendering.
+*   **React Flow** - `<react>`
+    *   An open-source library that facilitates the creation of interactive node-based UIs and diagrams.
+
+**Back-End Technologies:**
+*   **Node.js** - `<nodedotjs>`
+    *   A free, open-source, cross-platform JavaScript runtime environment that allows developers to build various applications.
+*   **Fastify** -  `<fastify>`
+     * A web framework for Node.js that is optimized for high performance and provides support for plugins and an intuitive routing system.
+*   **MongoDB** - `<mongodb>`
+    *   A NoSQL document database that stores data in a flexible, JSON-like format.
+*   **Prisma** - `<prisma>`
+    *   An ORM (Object-Relational Mapper) that simplifies database interactions with its client, migration, and studio layers.
+*   **TypeScript** - `<typescript>`
+    *   As in the frontend, also used in the backend for improved tooling.
+*   **Whisper** - `<openai>`
+    *   An automatic speech recognition (ASR) system trained by OpenAI for multilingual transcription.
+*   **ChatGPT** - `<openai>`
+     * A language model by OpenAI, used for summarizing transcribed content and formatting data into JSON.
+
+**Development Tools:**
+*   **Visual Studio Code** - `<vscode>`
+    *   A source code editor with features for code completion, debugging, and customization.
+*   **Postman** - `<postman>`
+    *   An API platform used for building and utilizing APIs, optimizing collaboration in the API lifecycle.
