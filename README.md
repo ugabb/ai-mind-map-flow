@@ -1,5 +1,7 @@
 # AI Mind Map | AI-Powered Mind Map Generator
 
+![landing-page](image.png)
+
 ## What is it?
 This project is an AI-powered system designed to generate mind maps from educational video lectures. It leverages OpenAI's natural language processing (NLP) models and prompt engineering techniques to extract and organize key concepts, improving study efficiency.
 
