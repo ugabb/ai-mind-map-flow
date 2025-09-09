@@ -26,12 +26,11 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/services/axios";
 import { ImSpinner8 } from "react-icons/im";
-import {
-  PiPaperPlaneTilt
-} from "react-icons/pi";
+import { PiPaperPlaneTilt } from "react-icons/pi";
 import toast from "react-hot-toast";
 import { saveMindMap, SaveMindRequest } from "@/services/mind-map/saveMindMap";
 import { User } from "next-auth";
+import { useGetTranscriptionYouTube } from "@/services/hooks/use-get-transcription-youtube";
 
 interface GenerateMindMapModalProps {
   open?: boolean;
@@ -57,9 +56,8 @@ export const GenerateMindMapModal = ({
 
   const ffmpeg = useRef<FFmpeg>(new FFmpeg());
 
-  const { convertVideoToAudio, progress, loadingFFMPEG } = useConvertVideoToAudio(
-    ffmpeg.current
-  );
+  const { convertVideoToAudio, progress, loadingFFMPEG } =
+    useConvertVideoToAudio(ffmpeg.current);
 
   const router = useRouter();
 
@@ -109,7 +107,11 @@ export const GenerateMindMapModal = ({
       }
 
       if (uploadType === "YTB_URL" && url) {
-        return await downloadYtbVideoFn(url);
+        // will not download anymore
+        // here will call the backend to get the transcription directly
+        toast.error("Downloading from Youtube is not supported anymore.");
+        return null;
+        // return await downloadYtbVideoFn(url);
       }
     } catch (e) {
       console.error("Error during conversion:", e);
@@ -117,27 +119,58 @@ export const GenerateMindMapModal = ({
     }
   };
 
+  const {
+    data: transcriptionResponse,
+    isLoading: isLoadingTranscription,
+    error: transcriptionError,
+  } = useGetTranscriptionYouTube({
+    url,
+  });
+
+  console.debug("transcriptionResponse:", transcriptionResponse);
+
   const handleGenerateMindMap = async () => {
     setMindMapLoadingRequest(true);
     setError(null);
     setIsLoading(true);
 
-    const file = await handleConvert();
-    if (!file) {
-      setMindMapLoadingRequest(false);
-      return;
-    }
-
     try {
-      const { transcription, status } = await getAudioTranscript(file);
-      if (status !== 200) {
-        setError("Failed to transcribe audio.");
+      // Check if transcription is still loading
+      if (isLoadingTranscription) {
+        setError("Transcription is still loading. Please wait...");
         setMindMapLoadingRequest(false);
+        setIsLoading(false);
+        return;
+      }
+
+      // Check for transcription errors
+      if (transcriptionError) {
+        setError(
+          "Failed to get transcription from YouTube. Please check the URL and try again."
+        );
+        setMindMapLoadingRequest(false);
+        setIsLoading(false);
+        return;
+      }
+
+      const transcription = transcriptionResponse?.transcriptionRaw || "";
+      console.debug("Transcription:", transcription);
+      if (!transcription) {
+        setError("Transcription is not available or empty.");
+        setMindMapLoadingRequest(false);
+        setIsLoading(false);
         return;
       }
 
       const mindMapJSON = await generateMindMap(transcription);
+      console.debug("mindMapJSON:", mindMapJSON);
 
+      if (!mindMapJSON) {
+        setError("Failed to generate mind map from transcription.");
+        setMindMapLoadingRequest(false);
+        setIsLoading(false);
+        return;
+      }
       // save mind map
       const mindmap = await saveMindMapFn({
         title: "Untitled",
@@ -145,11 +178,13 @@ export const GenerateMindMapModal = ({
         userId: currentUser?.id as string,
       });
 
+      console.debug("Saved mindmap:", mindmap);
+
       queryClient.invalidateQueries({
         queryKey: ["mindmaps", currentUser?.id],
       });
 
-      if(mindmap){
+      if (mindmap) {
         setMindMapToGenerate(mindMapJSON);
         setMindMapLoadingRequest(false);
         router.push(`/mind-map/${mindmap.id}`);
@@ -169,8 +204,12 @@ export const GenerateMindMapModal = ({
   };
 
   const validateUrl = (url: string) => {
+    if (!url || typeof url !== "string" || url.trim() === "") {
+      setIsUrlValid(false);
+      return;
+    }
     const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
-    setIsUrlValid(youtubeRegex.test(url));
+    setIsUrlValid(youtubeRegex.test(url.trim()));
   };
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -232,6 +271,19 @@ export const GenerateMindMapModal = ({
             <Progress value={progress} max={100} className="h-3" />
           )}
 
+          {uploadType === "YTB_URL" && isUrlValid && isLoadingTranscription && (
+            <div className="flex items-center gap-2 text-blue-600">
+              <ImSpinner8 className="animate-spin size-4" />
+              <p className="text-sm">Loading transcription...</p>
+            </div>
+          )}
+
+          {uploadType === "YTB_URL" && transcriptionError && (
+            <p className="text-red-500 text-sm">
+              Failed to load transcription. Please check the YouTube URL.
+            </p>
+          )}
+
           {error && <p className="text-red-500 text-sm">{error}</p>}
         </div>
 
@@ -241,14 +293,21 @@ export const GenerateMindMapModal = ({
             (!isUrlValid && uploadType === "YTB_URL") ||
             (!video && uploadType === "SYSTEM_FILE") ||
             isPending ||
-            loadingFFMPEG
+            loadingFFMPEG ||
+            isLoadingTranscription ||
+            (uploadType === "YTB_URL" &&
+              !transcriptionResponse?.transcriptionRaw)
           }
           className="bg-indigo-500 w-fit mx-auto"
         >
-          {isLoading && <ImSpinner8 className="animate-spin size-5" />}
-          {!isLoading && (
+          {(isLoading || isLoadingTranscription) && (
+            <ImSpinner8 className="animate-spin size-5" />
+          )}
+          {!(isLoading || isLoadingTranscription) && (
             <>
-              Generate Mind Map
+              {isLoadingTranscription
+                ? "Loading Transcription..."
+                : "Generate Mind Map"}
               <PiPaperPlaneTilt className="ml-2 text-white size-5" />
             </>
           )}

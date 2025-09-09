@@ -18,7 +18,7 @@ import { linkSocials } from "./HomeHeader";
 const navigation = [
   { name: "Log In", href: "/login" },
   { name: "Sign Up", href: "/sign-up" },
-  { name: "Github", href: linkSocials.github},
+  { name: "Github", href: linkSocials.github },
   { name: "Linkedin", href: linkSocials.linkedin },
 ];
 
@@ -52,7 +52,7 @@ export default function LandingPageHome() {
             </Link>
           </div>
           <div className="flex lg:hidden">
-            <Sheet key='bottom'>
+            <Sheet key="bottom">
               <SheetTrigger asChild>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
@@ -101,7 +101,10 @@ export default function LandingPageHome() {
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link href="#" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+              <Link
+                href="/login"
+                className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+              >
                 Log in <span aria-hidden="true">&rarr;</span>
               </Link>
             </motion.div>
@@ -212,11 +215,11 @@ export default function LandingPageHome() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Image 
-            src="/assets/canvas.png" 
-            height={600} 
-            width={1000} 
-            alt="Canvas preview" 
+          <Image
+            src="/assets/canvas.png"
+            height={600}
+            width={1000}
+            alt="Canvas preview"
             className="rounded-xl shadow-lg w-full h-auto"
           />
         </motion.div>
@@ -233,9 +236,23 @@ export default function LandingPageHome() {
         </motion.h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { number: "1", title: "Upload Video", description: "Upload a video to the AI Mind Map platform. Youtube URL or File" },
-            { number: "2", title: "Generate Mind Map", description: "AI Mind Map will generate a mind map from the video." },
-            { number: "3", title: "Study", description: "Study the mind map generated from the video." },
+            {
+              number: "1",
+              title: "Upload Video",
+              description:
+                "Upload a video to the AI Mind Map platform. Youtube URL or File",
+            },
+            {
+              number: "2",
+              title: "Generate Mind Map",
+              description:
+                "AI Mind Map will generate a mind map from the video.",
+            },
+            {
+              number: "3",
+              title: "Study",
+              description: "Study the mind map generated from the video.",
+            },
           ].map((step, index) => (
             <motion.div
               key={step.number}
@@ -244,8 +261,12 @@ export default function LandingPageHome() {
               transition={{ duration: 0.5, delay: index * 0.2 }}
               className="flex flex-col items-center text-center"
             >
-              <div className="text-5xl md:text-6xl font-bold text-indigo-500 mb-4">{step.number}</div>
-              <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2">{step.title}</h3>
+              <div className="text-5xl md:text-6xl font-bold text-indigo-500 mb-4">
+                {step.number}
+              </div>
+              <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2">
+                {step.title}
+              </h3>
               <p className="text-gray-600">{step.description}</p>
             </motion.div>
           ))}
@@ -269,7 +290,9 @@ export default function LandingPageHome() {
                   height={40}
                   className="mr-2"
                 />
-                <span className="text-xl font-semibold text-zinc-50">AI Mind Map</span>
+                <span className="text-xl font-semibold text-zinc-50">
+                  AI Mind Map
+                </span>
               </Link>
             </motion.div>
             <motion.nav
@@ -287,8 +310,16 @@ export default function LandingPageHome() {
                   <Link
                     href={item.href}
                     className="text-base text-zinc-50 hover:text-zinc-200 flex items-center"
-                    target={item.name === "Github" || item.name === "Linkedin" ? "_blank" : undefined}
-                    rel={item.name === "Github" || item.name === "Linkedin" ? "noopener noreferrer" : undefined}
+                    target={
+                      item.name === "Github" || item.name === "Linkedin"
+                        ? "_blank"
+                        : undefined
+                    }
+                    rel={
+                      item.name === "Github" || item.name === "Linkedin"
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
                   >
                     {item.name === "Github" ? (
                       <FaGithub className="inline-block mr-1" />
@@ -307,7 +338,16 @@ export default function LandingPageHome() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mt-8 border-t border-indigo-500 pt-8 text-center"
           >
-            <p className="text-base text-gray-400 undeline">&copy; 2024 AI Mind Map. All rights reserved. <Link href={linkSocials.githubProfile} target="_blank" className="text-indigo-500 underline underline-offset-2 font-bold">Gabriel Barros</Link></p>
+            <p className="text-base text-gray-400 undeline">
+              &copy; 2024 AI Mind Map. All rights reserved.{" "}
+              <Link
+                href={linkSocials.githubProfile}
+                target="_blank"
+                className="text-indigo-500 underline underline-offset-2 font-bold"
+              >
+                Gabriel Barros
+              </Link>
+            </p>
           </motion.div>
         </div>
       </footer>
