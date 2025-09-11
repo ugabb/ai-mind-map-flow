@@ -178,7 +178,6 @@ const MindMapCanvas = () => {
     }
   }, [rfInstance]);
 
-
   return (
     <ReactFlow
       nodes={nodes}
@@ -203,6 +202,9 @@ const MindMapCanvas = () => {
       fitViewOptions={{ padding: 2 }}
       className="h-screen w-screen"
       onMouseMove={handleMouseMove}
+      panOnDrag={false}
+      panOnScroll
+      selectionOnDrag
     >
       {isCreatingNode && (
         <div
