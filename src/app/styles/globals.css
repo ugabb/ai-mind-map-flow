@@ -62,6 +62,230 @@
   text-shadow: 1px 1px 10px rgb(0, 0, 0, 0.25);
 }
 
+/* Prevent dragging on interactive elements inside nodes */
+.nodrag {
+  pointer-events: all !important;
+}
+
+/* TipTap editor styles for React Flow nodes */
+.ProseMirror {
+  outline: none !important;
+  border: none !important;
+  background: transparent !important;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  padding: 8px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.ProseMirror[contenteditable="false"] {
+  pointer-events: none !important;
+  cursor: inherit !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ProseMirror[contenteditable="true"] {
+  pointer-events: all !important;
+  cursor: text !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+}
+
+.ProseMirror[contenteditable="true"] > * {
+  flex-shrink: 0;
+}
+
+.ProseMirror[contenteditable="true"] > p:only-child:empty::before {
+  content: '';
+  display: inline-block;
+}
+
+.ProseMirror p {
+  margin: 0.2em 0 !important;
+  line-height: 1.4 !important;
+}
+
+.ProseMirror br {
+  content: "";
+  display: block;
+  margin: 0.2em 0;
+}
+
+/* Ensure content flows naturally when editing */
+.ProseMirror[contenteditable="true"] p:first-child {
+  margin-top: 0 !important;
+}
+
+.ProseMirror[contenteditable="true"] p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.ProseMirror strong {
+  font-weight: bold;
+}
+
+.ProseMirror em {
+  font-style: italic;
+}
+
+.ProseMirror s {
+  text-decoration: line-through;
+}
+
+/* Placeholder styles */
+.ProseMirror .is-editor-empty:first-child::before {
+  color: #9ca3af !important;
+  font-style: italic !important;
+  content: attr(data-placeholder) !important;
+  pointer-events: none !important;
+  text-align: center !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+/* Ensure the placeholder is visible when editor is focused but empty */
+.ProseMirror:focus .is-editor-empty:first-child::before {
+  color: #9ca3af !important;
+  opacity: 0.7 !important;
+}
+
+/* Heading styles for TipTap editor in nodes */
+.ProseMirror h1 {
+  font-size: 1.5em !important;
+  font-weight: bold !important;
+  margin: 0.2em 0 !important;
+  line-height: 1.2 !important;
+}
+
+.ProseMirror h2 {
+  font-size: 1.3em !important;
+  font-weight: bold !important;
+  margin: 0.2em 0 !important;
+  line-height: 1.2 !important;
+}
+
+.ProseMirror h3 {
+  font-size: 1.1em !important;
+  font-weight: bold !important;
+  margin: 0.2em 0 !important;
+  line-height: 1.2 !important;
+}
+
+/* Heading styles for fallback display (when not editing) */
+.prose-mirror-content h1 {
+  font-size: 1.5em !important;
+  font-weight: bold !important;
+  margin: 0.2em 0 !important;
+  line-height: 1.2 !important;
+}
+
+.prose-mirror-content h2 {
+  font-size: 1.3em !important;
+  font-weight: bold !important;
+  margin: 0.2em 0 !important;
+  line-height: 1.2 !important;
+}
+
+.prose-mirror-content h3 {
+  font-size: 1.1em !important;
+  font-weight: bold !important;
+  margin: 0.2em 0 !important;
+  line-height: 1.2 !important;
+}
+
+.prose-mirror-content p {
+  margin: 0.2em 0 !important;
+  line-height: 1.4 !important;
+}
+
+.prose-mirror-content strong {
+  font-weight: bold !important;
+}
+
+.prose-mirror-content em {
+  font-style: italic !important;
+}
+
+.prose-mirror-content s {
+  text-decoration: line-through !important;
+}
+
+/* Lists and bullet points */
+.ProseMirror ul, .prose-mirror-content ul {
+  list-style-type: disc !important;
+  margin-left: 1.5em !important;
+  margin: 0.5em 0 !important;
+  padding-left: 1.5em !important;
+  text-align: left !important;
+}
+
+.ProseMirror ol, .prose-mirror-content ol {
+  list-style-type: decimal !important;
+  margin-left: 1.5em !important;
+  margin: 0.5em 0 !important;
+  padding-left: 1.5em !important;
+  text-align: left !important;
+}
+
+.ProseMirror li, .prose-mirror-content li {
+  margin: 0.2em 0 !important;
+  text-align: left !important;
+}
+
+/* Code blocks and inline code */
+.ProseMirror code, .prose-mirror-content code {
+  background-color: #f3f4f6 !important;
+  color: #1f2937 !important;
+  padding: 0.125rem 0.25rem !important;
+  border-radius: 0.25rem !important;
+  font-family: 'Courier New', monospace !important;
+  font-size: 0.875em !important;
+}
+
+.ProseMirror pre, .prose-mirror-content pre {
+  background-color: #f3f4f6 !important;
+  color: #1f2937 !important;
+  padding: 1rem !important;
+  border-radius: 0.5rem !important;
+  margin: 0.5em 0 !important;
+  overflow-x: auto !important;
+  text-align: left !important;
+}
+
+.ProseMirror pre code, .prose-mirror-content pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Blockquotes */
+.ProseMirror blockquote, .prose-mirror-content blockquote {
+  border-left: 4px solid #d1d5db !important;
+  margin: 0.5em 0 !important;
+  padding-left: 1rem !important;
+  color: #6b7280 !important;
+  font-style: italic !important;
+  text-align: left !important;
+}
+
+/* Horizontal rule */
+.ProseMirror hr, .prose-mirror-content hr {
+  border: none !important;
+  border-top: 2px solid #e5e7eb !important;
+  margin: 1em 0 !important;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -69,4 +293,47 @@
   body {
     @apply bg-background text-foreground;
     }
+}
+
+/* Helper class for content measurement */
+.content-measure {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  box-sizing: border-box !important;
+}
+
+.content-measure h1 {
+  font-size: 1.5em !important;
+  font-weight: bold !important;
+  margin: 0.2em 0 !important;
+  line-height: 1.2 !important;
+}
+
+.content-measure h2 {
+  font-size: 1.3em !important;
+  font-weight: bold !important;
+  margin: 0.2em 0 !important;
+  line-height: 1.2 !important;
+}
+
+.content-measure h3 {
+  font-size: 1.1em !important;
+  font-weight: bold !important;
+  margin: 0.2em 0 !important;
+  line-height: 1.2 !important;
+}
+
+.content-measure p {
+  margin: 0.2em 0 !important;
+  line-height: 1.4 !important;
+}
+
+.content-measure ul, .content-measure ol {
+  margin: 0.5em 0 !important;
+  padding-left: 1.5em !important;
+}
+
+.content-measure li {
+  margin: 0.2em 0 !important;
 }
