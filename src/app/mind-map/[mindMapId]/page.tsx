@@ -34,6 +34,8 @@ import { zinc } from "tailwindcss/colors";
 import { PiArrowLeft } from "react-icons/pi";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import DialogCustomMindMap from "@/components/DialogCustomMindMap";
 
 const elk = new ELK();
 
@@ -115,6 +117,7 @@ const MindMapCanvas = () => {
 
   const onNodesChange = useCallback(
     (changes: NodeChange<Node>[]) => {
+      // console.log("onNodesChange", changes);
       setNodes((nds) => applyNodeChanges(changes, nds));
     },
     [setNodes]
@@ -167,6 +170,7 @@ const MindMapCanvas = () => {
 
   useLayoutEffect(() => {
     if (!mindMapToGenerate) return;
+    console.log("mindMapToGenerate", mindMapToGenerate);
     const nodeTree = convertJsonToTree(mindMapToGenerate); //to convert json to tree
     let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
     onLayout({ direction: "DOWN" }, convertedNodes);
@@ -229,6 +233,10 @@ const MindMapCanvas = () => {
         <h1 className="text-xl font-medium">
           {currentMindMap?.title ? currentMindMap?.title : "Untitled"}
         </h1>
+      </Panel>
+
+      <Panel position="top-right" className="bg-indigo-50 p-3 rounded-lg">
+        <DialogCustomMindMap />
       </Panel>
 
       <Background />
