@@ -23,8 +23,7 @@ import {
 import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Custom Nodes/Square/Squaree";
 import { DefaultEdge } from "@/components/edges/DefaultEdges";
-import convertJsonToTree from "@/utils/convertJsonToTree";
-import convertTreeToNodes from "@/utils/convertTreeToNodes";
+import convertJsonToReactFlow from "@/utils/convertJsonToReactFlow";
 
 import ELK from "elkjs/lib/elk.bundled.js";
 import { Menubar } from "@/components/Menubar";
@@ -117,7 +116,7 @@ const MindMapCanvas = () => {
 
   const onNodesChange = useCallback(
     (changes: NodeChange<Node>[]) => {
-      // console.log("onNodesChange", changes);
+      console.log("onNodesChange", rfInstance?.toObject());
       setNodes((nds) => applyNodeChanges(changes, nds));
     },
     [setNodes]
@@ -171,9 +170,21 @@ const MindMapCanvas = () => {
   useLayoutEffect(() => {
     if (!mindMapToGenerate) return;
     console.log("mindMapToGenerate", mindMapToGenerate);
-    const nodeTree = convertJsonToTree(mindMapToGenerate); //to convert json to tree
-    let convertedNodes = convertTreeToNodes(nodeTree, true); //to convert tree to nodes
-    onLayout({ direction: "DOWN" }, convertedNodes);
+
+    // Parse the JSON string if it's a string
+    let jsonData = mindMapToGenerate;
+    if (typeof mindMapToGenerate === "string") {
+      try {
+        jsonData = JSON.parse(mindMapToGenerate);
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        return;
+      }
+    }
+
+    // Convert JSON directly to React Flow format
+    const [convertedNodes, convertedEdges] = convertJsonToReactFlow(jsonData);
+    onLayout({ direction: "DOWN" }, [convertedNodes, convertedEdges]);
   }, [mindMapToGenerate]);
 
   useEffect(() => {
