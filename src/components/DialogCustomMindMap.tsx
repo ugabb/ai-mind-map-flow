@@ -50,7 +50,7 @@ function DialogCustomMindMap() {
         <div className="space-y-4">
           <div>
             <h2 className="text-lg font-semibold">Custom Mind Map Data</h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Enter your mind map data in JSON format
             </p>
           </div>

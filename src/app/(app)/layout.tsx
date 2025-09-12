@@ -12,11 +12,11 @@ export default async function AppLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-svh w-full bg-background">
+      <div className="flex h-svh w-full bg-background">
         <AppSidebar currentUser={currentUser} />
-        <SidebarInset>
+        <SidebarInset className="flex flex-col">
           <Header />
-          <div className="p-3 md:p-6">{children}</div>
+          <div className="flex-1 p-3 md:p-6 overflow-hidden">{children}</div>
         </SidebarInset>
       </div>
     </SidebarProvider>

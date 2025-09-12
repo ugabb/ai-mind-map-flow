@@ -272,19 +272,19 @@ export const GenerateMindMapModal = ({
           )}
 
           {uploadType === "YTB_URL" && isUrlValid && isLoadingTranscription && (
-            <div className="flex items-center gap-2 text-blue-600">
+            <div className="flex items-center gap-2 text-primary">
               <ImSpinner8 className="animate-spin size-4" />
               <p className="text-sm">Loading transcription...</p>
             </div>
           )}
 
           {uploadType === "YTB_URL" && transcriptionError && (
-            <p className="text-red-500 text-sm">
+            <p className="text-destructive text-sm">
               Failed to load transcription. Please check the YouTube URL.
             </p>
           )}
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && <p className="text-destructive text-sm">{error}</p>}
         </div>
 
         <Button
@@ -298,7 +298,7 @@ export const GenerateMindMapModal = ({
             (uploadType === "YTB_URL" &&
               !transcriptionResponse?.transcriptionRaw)
           }
-          className="bg-indigo-500 w-fit mx-auto"
+          className="bg-primary w-fit mx-auto"
         >
           {(isLoading || isLoadingTranscription) && (
             <ImSpinner8 className="animate-spin size-5" />

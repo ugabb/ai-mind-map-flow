@@ -39,7 +39,7 @@ export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
             <TooltipTrigger>
               <LuSave className="w-24 h-24 translate-y-8 rounded-md hover:translate-y-5 transition-transform cursor-pointer" />
             </TooltipTrigger>
-            <TooltipContent className="bg-indigo-500">
+            <TooltipContent className="bg-primary">
               <p>Save Mind Map</p>
             </TooltipContent>
           </DialogTrigger>
@@ -49,15 +49,19 @@ export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
         <DialogHeader>
           <DialogTitle>Save Mind Map</DialogTitle>
         </DialogHeader>
-        <Input placeholder="Title" ref={titleRef} defaultValue={title ? title : ''} />
+        <Input
+          placeholder="Title"
+          ref={titleRef}
+          defaultValue={title ? title : ""}
+        />
         <Button
           onClick={() => {
             onSave(titleRef.current ? titleRef.current.value : "");
           }}
-          className="bg-indigo-500 hover:bg-indigo-600"
+          className="bg-primary hover:bg-primary/90"
         >
           {isPending ? (
-            <ImSpinner8 className="w-5 h-5 text-indigo-500 animate-spin z-50" />
+            <ImSpinner8 className="w-5 h-5 text-primary-foreground animate-spin z-50" />
           ) : (
             "Save"
           )}

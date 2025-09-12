@@ -32,7 +32,7 @@ export const MindMapList = (props: MindMapListProps) => {
     refetchOnReconnect: false,
   });
   return (
-    <div className="flex border-t border-zinc-100">
+    <div className="flex border-t border-border">
       <div className="flex flex-col px-10 py-5 gap-10 w-full">
         <h1 className="text-xl font-bold">Mind Maps</h1>
 

@@ -66,12 +66,12 @@ export const Toolbar_ = (props: ColorPickerProps) => {
       isVisible={selected}
       position={Position.Top}
       offset={50}
-      className="flex items-center gap-3 bg-zinc-800 text-white text-xs px-5 py-2 rounded-lg"
+      className="flex items-center gap-3 bg-muted-foreground text-muted text-xs px-5 py-2 rounded-lg"
     >
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center">
-          <span className="h-5 w-5 bg-blue-500 rounded-full"></span>
-          <ChevronDownIcon className="size-3 text-white" />
+          <span className="h-5 w-5 bg-primary rounded-full"></span>
+          <ChevronDownIcon className="size-3 text-muted" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="flex flex-col p-2">
           <DropdownMenuLabel>Select a Color</DropdownMenuLabel>
@@ -91,7 +91,7 @@ export const Toolbar_ = (props: ColorPickerProps) => {
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center">
           <LuType className="size-5 cursor-pointer" />
-          <ChevronDownIcon className="size-3 text-white" />
+          <ChevronDownIcon className="size-3 text-muted" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="flex flex-col p-2">
           <DropdownMenuLabel className="text-center">

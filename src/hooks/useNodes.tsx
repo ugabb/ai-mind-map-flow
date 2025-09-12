@@ -11,7 +11,7 @@ export type DataNode = {
   key?: string;
   value?: any;
   color?: string;
-  textColor?: string; 
+  textColor?: string;
   fontSize?: number;
 };
 
@@ -37,7 +37,7 @@ export const useNode = (props: useNodeProps) => {
     positionAbsoluteY,
     label,
     updateNodeData,
-    color
+    color,
   } = props;
   const [node, setNode] = useState<Node<DataNode> | null>(null);
 
@@ -72,66 +72,76 @@ export const useNode = (props: useNodeProps) => {
     [addEdges, id]
   );
 
-  const handleAddSideNode = useCallback((direction: string) => {
-    if (direction === "left" || direction === "right") {
-      if (!width) return;
-      const newNode: Node = {
-        id: crypto.randomUUID(),
-        position: {
-          x:
-            positionAbsoluteX +
-            (direction === "left"
-              ? (-width as number) - 100
-              : (width as number) + 100),
-          y: positionAbsoluteY,
-        },
-        data: { label: "", color },
-        type: "square",
-        width: width,
-        height: height,
-        expandParent: true,
-      };
+  const handleAddSideNode = useCallback(
+    (direction: string) => {
+      if (direction === "left" || direction === "right") {
+        if (!width) return;
+        const newNode: Node = {
+          id: crypto.randomUUID(),
+          position: {
+            x:
+              positionAbsoluteX +
+              (direction === "left"
+                ? (-width as number) - 100
+                : (width as number) + 100),
+            y: positionAbsoluteY,
+          },
+          data: { label: "", color },
+          type: "square",
+          width: width,
+          height: height,
+          expandParent: true,
+        };
 
-      const newConnection: Connection = {
-        source: id!,
-        target: newNode.id,
-        sourceHandle: direction,
-        targetHandle: direction === "left" ? "right" : "left",
-      };
+        const newConnection: Connection = {
+          source: id!,
+          target: newNode.id,
+          sourceHandle: direction,
+          targetHandle: direction === "left" ? "right" : "left",
+        };
 
-      addNodes(newNode);
-      handleNewConnections(newConnection);
+        addNodes(newNode);
+        handleNewConnections(newConnection);
+      } else {
+        if (!height) return;
+        const newNode: Node = {
+          id: crypto.randomUUID(),
+          position: {
+            x: positionAbsoluteX,
+            y:
+              positionAbsoluteY +
+              (direction === "top"
+                ? (-height as number) - 100
+                : (height as number) + 100),
+          },
+          data: { label: "", color },
+          type: "square",
+          width: width,
+          height: height,
+          expandParent: true,
+        };
+        const newConnection: Connection = {
+          source: id,
+          target: newNode.id,
+          sourceHandle: direction,
+          targetHandle: direction === "bottom" ? "top" : "bottom",
+        };
 
-    } else {
-      if (!height) return;
-      const newNode: Node = {
-        id: crypto.randomUUID(),
-        position: {
-          x: positionAbsoluteX,
-          y:
-            positionAbsoluteY +
-            (direction === "top"
-              ? (-height as number) - 100
-              : (height as number) + 100),
-        },
-        data: { label: "", color },
-        type: "square",
-        width: width,
-        height: height,
-        expandParent: true,
-      };
-      const newConnection: Connection = {
-        source: id,
-        target: newNode.id,
-        sourceHandle: direction,
-        targetHandle: direction === "bottom" ? "top" : "bottom",
-      };
-
-      
-      addNodes(newNode);
-      handleNewConnections(newConnection);
-    }
-  }, [addNodes, color, handleNewConnections, height, id, positionAbsoluteX, positionAbsoluteY, width]);
+        addNodes(newNode);
+        handleNewConnections(newConnection);
+      }
+    },
+    [
+      addNodes,
+      color,
+      handleNewConnections,
+      height,
+      id,
+      positionAbsoluteX,
+      positionAbsoluteY,
+      width,
+    ]
+  );
 
   const handleDeleteNodeByPressEnter = useCallback(
     (event: KeyboardEvent) => {
@@ -150,14 +160,14 @@ export const useNode = (props: useNodeProps) => {
       StarterKit,
       Placeholder.configure({
         placeholder: "Enter text here",
-        emptyEditorClass: "bg-zinc-100",
+        emptyEditorClass: "bg-muted",
       }),
     ],
     content: label,
     editorProps: {
       attributes: {
         class:
-          "nodrag h-full w-full  border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3 truncate z-50 hover:bg-zinc-200/50 rounded-lg",
+          "nodrag h-full w-full  border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3 truncate z-50 hover:bg-muted/50 rounded-lg",
       },
     },
     onBlur: handleInputBlur,

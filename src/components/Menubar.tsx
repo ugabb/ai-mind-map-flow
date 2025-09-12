@@ -34,7 +34,7 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
     disableIsCreatingNode,
     isCreatingNode,
     setCurrentMindMap,
-    setMindMapToGenerate
+    setMindMapToGenerate,
   } = useNodeStore();
 
   const params = useParams();
@@ -118,10 +118,10 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
           title,
           mindMap: mindMapObject,
         });
-      } 
+      }
 
-      if(pathname.includes('/unsaved')) {
-        console.log(`unsaved`, mindMapObject)
+      if (pathname.includes("/unsaved")) {
+        console.log(`unsaved`, mindMapObject);
         await saveMindMapFn.mutateAsync({
           userId: session?.user?.id as string,
           title,
@@ -131,7 +131,7 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
     },
     [rfInstance, mindMapData?.id, updateMindMapFn, session?.user?.id, pathname]
   );
-  
+
   const onRestore = useCallback(() => {
     if (!mindMapData?.mindMap) return;
 
@@ -161,7 +161,7 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
   }, [mindMapData, setCurrentMindMap]);
 
   return (
-    <T.Root className="flex items-center w-full h-20 max-w-[425px] rounded-lg border border-zinc-200 z-50 bg-white fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
+    <T.Root className="flex items-center w-full h-20 max-w-[425px] rounded-lg border border-border z-50 bg-background fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
       <T.Button />
       <T.Separator />
       <T.Link />
@@ -172,14 +172,14 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
         <T.ToggleItem
           onClick={activeIsCreatingNode}
           value="create-node"
-          className="w-24 h-24 translate-y-8 bg-indigo-500 rounded-md hover:translate-y-5 transition-transform"
+          className="w-24 h-24 translate-y-8 bg-primary rounded-md hover:translate-y-5 transition-transform"
         />
-          <Export />
-          <SaveMindMapModal
-            onSave={onSave}
-            isPending={saveMindMapFn.isPending || updateMindMapFn.isPending}
-            title={mindMapData?.title}
-          />
+        <Export />
+        <SaveMindMapModal
+          onSave={onSave}
+          isPending={saveMindMapFn.isPending || updateMindMapFn.isPending}
+          title={mindMapData?.title}
+        />
       </T.ToggleGroup>
     </T.Root>
   );

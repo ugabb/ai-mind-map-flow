@@ -62,7 +62,7 @@ export default function SignUp() {
       toast.success("Account created successfully");
       router.push("/login");
     }
-    if(status === 400) {
+    if (status === 400) {
       toast.error("Error creating account: " + message);
     }
   };
@@ -118,7 +118,9 @@ export default function SignUp() {
     <div className="px-5 py-20 min-w-[533px]">
       <div className="mb-5">
         <h1 className="text-3xl font-bold">Sign Up</h1>
-        <p className="text-base text-zinc-600">Welcome! Enter your e-mail</p>
+        <p className="text-base text-muted-foreground">
+          Welcome! Enter your e-mail
+        </p>
       </div>
 
       <Form {...form}>
@@ -254,7 +256,7 @@ export default function SignUp() {
                     />
                     <button
                       onClick={handleRemove}
-                      className="absolute w-5 h-5 top-0 right-0 p-2 bg-red-600 text-white rounded-full flex items-center justify-center"
+                      className="absolute w-5 h-5 top-0 right-0 p-2 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center"
                     >
                       &times;
                     </button>
@@ -267,22 +269,22 @@ export default function SignUp() {
           <div className="flex flex-col gap-1 justify-center items-center w-full">
             <Button
               type="submit"
-              className="flex gap-2 items-center bg-indigo-500 text-zinc-200 font-semibold hover:bg-indigo-600 w-full"
+              className="flex gap-2 items-center bg-primary text-primary-foreground font-semibold hover:bg-primary/90 w-full"
               disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting ? (
-                <ImSpinner8 className="size-5 text-indigo-100 animate-spin" />
+                <ImSpinner8 className="size-5 text-primary-foreground animate-spin" />
               ) : (
                 "Sign Up"
               )}
             </Button>
             <div className="space-x-2">
-              <span className="text-sm text-zinc-600">
+              <span className="text-sm text-muted-foreground">
                 Already have an account?
               </span>
               <Link
                 href={"/login"}
-                className="text-sm text-indigo-500 hover:underline transition-all"
+                className="text-sm text-primary hover:underline transition-all"
               >
                 Click here!
               </Link>

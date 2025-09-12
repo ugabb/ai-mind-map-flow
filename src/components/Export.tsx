@@ -1,19 +1,18 @@
 import {
-    useReactFlow,
-    getNodesBounds,
-    getViewportForBounds
+  useReactFlow,
+  getNodesBounds,
+  getViewportForBounds,
 } from "@xyflow/react";
 import { toPng } from "html-to-image";
 import { zinc } from "tailwindcss/colors";
 import { PiArrowDown } from "react-icons/pi";
 
 import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
-  
 
 function downloadImage(dataUrl: string) {
   const a = document.createElement("a");
@@ -70,7 +69,7 @@ function Export() {
             className="size-24 translate-y-4 hover:translate-y-1 transition-transform cursor-pointer"
           />
         </TooltipTrigger>
-        <TooltipContent className="bg-indigo-500">
+        <TooltipContent className="bg-primary">
           <p>Download Mind Map</p>
         </TooltipContent>
       </Tooltip>

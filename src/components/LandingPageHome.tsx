@@ -57,7 +57,7 @@ export default function LandingPageHome() {
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  className="text-gray-700"
+                  className="text-muted-foreground"
                 >
                   <FaBars aria-hidden="true" className="size-6" />
                   <span className="sr-only">Open menu</span>
@@ -72,7 +72,7 @@ export default function LandingPageHome() {
                         <Link
                           key={item.name}
                           href={item.href}
-                          className="text-base font-medium text-gray-900 hover:text-indigo-600"
+                          className="text-base font-medium text-foreground hover:text-primary"
                         >
                           {item.name}
                         </Link>
@@ -92,7 +92,7 @@ export default function LandingPageHome() {
               >
                 <Link
                   href={item.href}
-                  className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+                  className="text-sm font-semibold text-foreground hover:text-primary"
                 >
                   {item.name}
                 </Link>
@@ -103,7 +103,7 @@ export default function LandingPageHome() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 href="/login"
-                className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+                className="text-sm font-semibold text-foreground hover:text-primary"
               >
                 Log in <span aria-hidden="true">&rarr;</span>
               </Link>
@@ -131,10 +131,10 @@ export default function LandingPageHome() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative rounded-full px-3 py-1 text-sm text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+              className="relative rounded-full px-3 py-1 text-sm text-muted-foreground ring-1 ring-foreground/10 hover:ring-foreground/20"
             >
               Discover the power of AI Mind Map.{" "}
-              <Link href="/login" className="font-semibold text-indigo-600">
+              <Link href="/login" className="font-semibold text-primary">
                 <span className="absolute inset-0" aria-hidden="true" />
                 Explore <span aria-hidden="true">&rarr;</span>
               </Link>
@@ -145,7 +145,7 @@ export default function LandingPageHome() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="text-balance text-4xl font-semibold tracking-tight text-indigo-500 sm:text-6xl md:text-7xl"
+              className="text-balance text-4xl font-semibold tracking-tight text-primary sm:text-6xl md:text-7xl"
             >
               AI Mind Map
             </motion.h1>
@@ -166,7 +166,7 @@ export default function LandingPageHome() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.8 }}
-              className="mt-6 text-lg font-medium text-gray-500 sm:text-xl max-w-xl"
+              className="mt-6 text-lg font-medium text-muted-foreground sm:text-xl max-w-xl"
             >
               Generate a mind map from your videos. AI Mind Map is a tool that
               helps you study by generating hierarchical mind map content.
@@ -179,7 +179,7 @@ export default function LandingPageHome() {
             >
               <Link
                 href="/login"
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 Get started
               </Link>
@@ -187,7 +187,7 @@ export default function LandingPageHome() {
                 href={linkSocials.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-sm font-semibold text-gray-900 hover:text-indigo-600"
+                className="flex items-center gap-1 text-sm font-semibold text-foreground hover:text-primary"
               >
                 Github <span aria-hidden="true">→</span>
                 <FaGithub className="size-5" />
@@ -225,12 +225,12 @@ export default function LandingPageHome() {
         </motion.div>
       </section>
 
-      <section className="bg-indigo-100 py-16 px-6 md:px-12 lg:px-24">
+      <section className="bg-primary/10 py-16 px-6 md:px-12 lg:px-24">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-3xl md:text-4xl text-gray-800 font-semibold text-center mb-12"
+          className="text-3xl md:text-4xl text-foreground font-semibold text-center mb-12"
         >
           How it Works
         </motion.h2>
@@ -261,13 +261,13 @@ export default function LandingPageHome() {
               transition={{ duration: 0.5, delay: index * 0.2 }}
               className="flex flex-col items-center text-center"
             >
-              <div className="text-5xl md:text-6xl font-bold text-indigo-500 mb-4">
+              <div className="text-5xl md:text-6xl font-bold text-primary mb-4">
                 {step.number}
               </div>
-              <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2">
+              <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-2">
                 {step.title}
               </h3>
-              <p className="text-gray-600">{step.description}</p>
+              <p className="text-muted-foreground">{step.description}</p>
             </motion.div>
           ))}
         </div>
@@ -290,7 +290,7 @@ export default function LandingPageHome() {
                   height={40}
                   className="mr-2"
                 />
-                <span className="text-xl font-semibold text-zinc-50">
+                <span className="text-xl font-semibold text-primary-foreground">
                   AI Mind Map
                 </span>
               </Link>
@@ -309,7 +309,7 @@ export default function LandingPageHome() {
                 >
                   <Link
                     href={item.href}
-                    className="text-base text-zinc-50 hover:text-zinc-200 flex items-center"
+                    className="text-base text-primary-foreground hover:text-primary-foreground/80 flex items-center"
                     target={
                       item.name === "Github" || item.name === "Linkedin"
                         ? "_blank"
@@ -336,14 +336,14 @@ export default function LandingPageHome() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-8 border-t border-indigo-500 pt-8 text-center"
+            className="mt-8 border-t border-primary pt-8 text-center"
           >
-            <p className="text-base text-gray-400 undeline">
+            <p className="text-base text-muted-foreground undeline">
               &copy; 2024 AI Mind Map. All rights reserved.{" "}
               <Link
                 href={linkSocials.githubProfile}
                 target="_blank"
-                className="text-indigo-500 underline underline-offset-2 font-bold"
+                className="text-primary underline underline-offset-2 font-bold"
               >
                 Gabriel Barros
               </Link>

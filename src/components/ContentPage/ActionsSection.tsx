@@ -24,17 +24,11 @@ import "@xyflow/react/dist/style.css";
 import { Square } from "@/components/Custom Nodes/Square/Squaree";
 import { DefaultEdge } from "@/components/edges/DefaultEdges";
 import convertJsonToReactFlow from "@/utils/convertJsonToReactFlow";
-
 import ELK from "elkjs/lib/elk.bundled.js";
-import { Menubar } from "@/components/Menubar";
 import { useNodeStore } from "@/store/NodeStore";
 import { ImSpinner8 } from "react-icons/im";
-import { zinc } from "tailwindcss/colors";
-import { PiArrowLeft } from "react-icons/pi";
-import Link from "next/link";
 import toast from "react-hot-toast";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import DialogCustomMindMap from "@/components/DialogCustomMindMap";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const elk = new ELK();
 
@@ -100,7 +94,7 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
 const nodeTypes = { square: Square };
 const edgesTypes = { default: DefaultEdge };
 
-const MindMapCanvas = () => {
+export function ActionsSection() {
   const [nodes, setNodes] = useNodesState<Node>([]);
   const [edges, setEdges] = useEdgesState<Edge>([]);
   const {
@@ -111,7 +105,6 @@ const MindMapCanvas = () => {
   } = useNodeStore();
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
 
   const onNodesChange = useCallback(
@@ -121,12 +114,14 @@ const MindMapCanvas = () => {
     },
     [setNodes]
   );
+
   const onEdgesChange = useCallback(
     (changes: EdgeChange<Edge>[]) => {
       setEdges((eds) => applyEdgeChanges(changes, eds));
     },
     [setEdges]
   );
+
   const handleMouseMove = useCallback(
     (event: any) => {
       if (!isCreatingNode) return;
@@ -194,73 +189,77 @@ const MindMapCanvas = () => {
   }, [rfInstance]);
 
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgesTypes}
-      defaultEdgeOptions={{
-        type: "default",
-        markerEnd: {
-          type: MarkerType.Arrow,
-          width: 25,
-          height: 25,
-          color: zinc[400],
-        },
-      }}
-      onInit={setRfInstance}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      connectionMode={ConnectionMode.Loose}
-      fitView
-      fitViewOptions={{ padding: 2 }}
-      className="h-screen w-screen"
-      onMouseMove={handleMouseMove}
-      panOnDrag={false}
-      panOnScroll
-      selectionOnDrag
-    >
-      {isCreatingNode && (
-        <div
-          className="bg-primary/20 rounded  min-w-[200px] min-h-[200px]"
-          style={{
-            position: "absolute",
-            left: mousePosition?.x - 8,
-            top: mousePosition?.y - 8,
-            pointerEvents: "none", // Allow clicks to pass through
-            zIndex: 1, // Ensure it's above the background
-          }}
-        />
-      )}
+    <div className="h-full px-2">
+      <Tabs defaultValue="mindmap" className="h-full flex flex-col">
+        <TabsList className="flex gap-2 w-full">
+          <TabsTrigger className="w-full" value="mindmap">
+            Mind Map
+          </TabsTrigger>
+          <TabsTrigger className="w-full" value="chat">
+            Chat
+          </TabsTrigger>
+          <TabsTrigger className="w-full" value="flashcard">
+            Flashcard
+          </TabsTrigger>
+          <TabsTrigger className="w-full" value="summary">
+            Summary
+          </TabsTrigger>
+        </TabsList>
 
-      <Panel
-        position="top-left"
-        className="flex gap-3 items-center bg-primary/10 p-3 rounded-lg"
-      >
-        <Link href="/home">
-          <PiArrowLeft className="size-5 text-foreground" />
-        </Link>
-        <h1 className="text-xl font-medium">
-          {currentMindMap?.title ? currentMindMap?.title : "Untitled"}
-        </h1>
-      </Panel>
+        <TabsContent value="mindmap" className="flex-1 m-0">
+          <div className="h-full border rounded-lg overflow-hidden">
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgesTypes}
+              defaultEdgeOptions={{
+                type: "default",
+                markerEnd: {
+                  type: MarkerType.Arrow,
+                  width: 25,
+                  height: 25,
+                  color: "hsl(var(--muted-foreground))",
+                },
+              }}
+              onInit={setRfInstance}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              connectionMode={ConnectionMode.Loose}
+              fitView
+              fitViewOptions={{ padding: 2 }}
+              className="h-full w-full"
+              onMouseMove={handleMouseMove}
+              panOnDrag={false}
+              panOnScroll
+              selectionOnDrag
+            >
+              {isCreatingNode && (
+                <div
+                  className="bg-primary/20 rounded min-w-[200px] min-h-[200px]"
+                  style={{
+                    position: "absolute",
+                    left: mousePosition?.x - 8,
+                    top: mousePosition?.y - 8,
+                    pointerEvents: "none", // Allow clicks to pass through
+                    zIndex: 1, // Ensure it's above the background
+                  }}
+                />
+              )}
 
-      <Panel position="top-right" className="bg-primary/10 p-3 rounded-lg">
-        <DialogCustomMindMap />
-      </Panel>
+              <Background />
+              <MiniMap />
 
-      <Background />
-      <MiniMap />
-      <Menubar rfInstance={rfInstance} />
-
-      {mindMapLoadingRequest && (
-        <div className="fixed inset-0 flex items-center justify-center z-[999] bg-background/80">
-          <ImSpinner8 className="w-10 h-10 text-primary animate-spin z-50" />
-        </div>
-      )}
-    </ReactFlow>
+              {mindMapLoadingRequest && (
+                <div className="fixed inset-0 flex items-center justify-center z-[999] bg-background/80">
+                  <ImSpinner8 className="w-10 h-10 text-primary animate-spin z-50" />
+                </div>
+              )}
+            </ReactFlow>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
-};
-
-export default MindMapCanvas;
+}

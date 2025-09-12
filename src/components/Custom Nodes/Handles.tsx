@@ -23,7 +23,7 @@ export const Handles_ = (props: HandleProps) => {
     height,
     targetPosition,
     sourcePosition,
-    color
+    color,
   } = props;
 
   return (
@@ -33,7 +33,7 @@ export const Handles_ = (props: HandleProps) => {
           id="top"
           type="target"
           position={Position.Top}
-          className={`-top-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-up.svg')] bg-no-repeat bg-center`}
+          className={`-top-6 size-10 bg-primary flex justify-center items-center bg-[url('/icons/arrow-up.svg')] bg-no-repeat bg-center`}
           onMouseOver={() =>
             setIsAddingNode((prev) => ({ ...prev, top: true }))
           }
@@ -47,7 +47,7 @@ export const Handles_ = (props: HandleProps) => {
           id="top"
           type="target"
           position={Position.Top}
-          className={`-top-6 w-3 h-3 bg-blue-500`}
+          className={`-top-6 w-3 h-3 bg-primary`}
           onMouseOver={() =>
             setIsAddingNode((prev) => ({ ...prev, top: true }))
           }
@@ -71,7 +71,7 @@ export const Handles_ = (props: HandleProps) => {
           id="bottom"
           type="source"
           position={Position.Bottom}
-          className={`-bottom-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-down.svg')] bg-no-repeat bg-center`}
+          className={`-bottom-6 size-10 bg-primary flex justify-center items-center bg-[url('/icons/arrow-down.svg')] bg-no-repeat bg-center`}
           onMouseOver={() =>
             setIsAddingNode((prev) => ({ ...prev, bottom: true }))
           }
@@ -85,7 +85,7 @@ export const Handles_ = (props: HandleProps) => {
           id="bottom"
           type="source"
           position={Position.Bottom}
-          className={`-bottom-6 w-3 h-3 bg-blue-500  `}
+          className={`-bottom-6 w-3 h-3 bg-primary  `}
           onMouseOver={() =>
             setIsAddingNode((prev) => ({ ...prev, bottom: true }))
           }
@@ -109,7 +109,7 @@ export const Handles_ = (props: HandleProps) => {
           id="right"
           type="source"
           position={Position.Right}
-          className={`-right-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-right.svg')] bg-no-repeat bg-center`}
+          className={`-right-6 size-10 bg-primary flex justify-center items-center bg-[url('/icons/arrow-right.svg')] bg-no-repeat bg-center`}
           onMouseOver={() =>
             setIsAddingNode((prev) => ({ ...prev, right: true }))
           }
@@ -123,7 +123,7 @@ export const Handles_ = (props: HandleProps) => {
           id="right"
           type="source"
           position={Position.Right}
-          className={`-right-6 w-3 h-3 bg-blue-500 ${
+          className={`-right-6 w-3 h-3 bg-primary ${
             (targetPosition === Position.Right ||
               sourcePosition === Position.Right) &&
             "bg-transparent"
@@ -151,7 +151,7 @@ export const Handles_ = (props: HandleProps) => {
           id="left"
           type="source"
           position={Position.Left}
-          className={`-left-6 size-10 bg-blue-500 flex justify-center items-center bg-[url('/icons/arrow-left.svg')] bg-no-repeat bg-center`}
+          className={`-left-6 size-10 bg-primary flex justify-center items-center bg-[url('/icons/arrow-left.svg')] bg-no-repeat bg-center`}
           onMouseOver={() =>
             setIsAddingNode((prev) => ({ ...prev, left: true }))
           }
@@ -165,7 +165,7 @@ export const Handles_ = (props: HandleProps) => {
           id="left"
           type="source"
           position={Position.Left}
-          className={`-left-6 w-3 h-3 bg-blue-500 `}
+          className={`-left-6 w-3 h-3 bg-primary `}
           onMouseOver={() =>
             setIsAddingNode((prev) => ({ ...prev, left: true }))
           }
