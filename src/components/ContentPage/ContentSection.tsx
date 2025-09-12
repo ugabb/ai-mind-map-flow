@@ -41,7 +41,7 @@ export function ContentSection() {
         <h3 className="text-lg font-semibold mb-3 text-foreground">
           Transcription
         </h3>
-        <ScrollArea className="h-full max-h-[400px]">
+        <ScrollArea className="h-full">
           <div className="text-muted-foreground leading-relaxed space-y-2">
             <TranscriptBox>
               <p>

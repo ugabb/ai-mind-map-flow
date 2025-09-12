@@ -15,6 +15,7 @@ import {
 import { PiSignOut } from "react-icons/pi";
 import { signOut } from "next-auth/react";
 import { User } from "next-auth";
+import { Button } from "./ui/button";
 
 interface UserProps {
   currentUser: User | undefined;
@@ -27,13 +28,14 @@ export const UserAvatar = (props: UserProps) => {
     return (
       <div className="flex items-center gap-5">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Avatar className="w-10 h-10 rounded-full cursor-pointer object-cover">
+          <DropdownMenuTrigger className="flex gap-2 items-center">
+            <Avatar className="w-8 h-8 rounded-full cursor-pointer object-cover">
               <AvatarImage src={currentUser?.image || ""} alt="user" />
               <AvatarFallback className="font-semibold">
                 {nameAbreviation(currentUser?.name as string)}
               </AvatarFallback>
             </Avatar>
+            <h1>{currentUser?.name}</h1>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>{currentUser?.name}</DropdownMenuLabel>
@@ -52,8 +54,6 @@ export const UserAvatar = (props: UserProps) => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        <h1>{currentUser?.name}</h1>
       </div>
     );
   return (

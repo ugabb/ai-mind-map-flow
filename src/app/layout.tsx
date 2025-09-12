@@ -9,6 +9,7 @@ const poppins = Poppins({
 });
 import { CustomQueryClientProvider } from "@/components/CustomQueryClientProvider";
 import AuthContext from "@/components/SessionProvider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Ai Mind Map",
@@ -22,10 +23,17 @@ export default function RootLayout({
 }>) {
   return (
     <AuthContext>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={poppins.className}>
-          <CustomQueryClientProvider>{children}</CustomQueryClientProvider>
-          <Toaster />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <CustomQueryClientProvider>{children}</CustomQueryClientProvider>
+            <Toaster />
+          </ThemeProvider>
         </body>
       </html>
     </AuthContext>
