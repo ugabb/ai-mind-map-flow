@@ -29,6 +29,7 @@ import { useNodeStore } from "@/store/NodeStore";
 import { ImSpinner8 } from "react-icons/im";
 import toast from "react-hot-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FlashCardTab } from "./FlashCard/FlashCard";
 
 const elk = new ELK();
 
@@ -258,6 +259,9 @@ export function ActionsSection() {
               )}
             </ReactFlow>
           </div>
+        </TabsContent>
+        <TabsContent value="flashcard" className="flex-1 m-0">
+          <FlashCardTab />
         </TabsContent>
       </Tabs>
     </div>
