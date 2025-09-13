@@ -1,0 +1,439 @@
+[
+  {
+    "_id": "cfc-c5f66fa1-1db9-487d-a917-d77cbeb32544",
+    "question": "What moment is the author chasing in life?",
+    "answer": "the moment where I know what I have to",
+    "hint": "A moment of certainty about action.",
+    "explanation": "The author states they live their life chasing that moment of knowing what they have to do.",
+    "source": 0.04,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-8c3e33a2-a08b-473f-a4c3-f7c3e2ca016a",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.054000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.203138+00:00",
+      "2": "2025-09-13T00:23:42.203138+00:00",
+      "3": "2025-09-13T00:30:42.203138+00:00",
+      "4": "2025-09-17T00:15:42.203138+00:00"
+    }
+  },
+  {
+    "_id": "cfc-1f892f07-e09c-44ff-8317-dcf66d77e538",
+    "question": "What does the speaker say is rarer than a moment of focus?",
+    "answer": "Few things in his life are rarer than a moment of focus",
+    "hint": "Rarity comparison",
+    "explanation": "He states that few things in life are rarer than a moment of focus.",
+    "source": 29.24,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-bc31304e-6be3-4010-95a1-7f371767d0a1",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.056000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.203339+00:00",
+      "2": "2025-09-13T00:23:42.203339+00:00",
+      "3": "2025-09-13T00:30:42.203339+00:00",
+      "4": "2025-09-17T00:15:42.203339+00:00"
+    }
+  },
+  {
+    "_id": "cfc-b3455171-36b8-4225-a63b-4e88ea97ec2a",
+    "question": "What does the speaker say about his ability to stay still?",
+    "answer": "He can't stay still for a second",
+    "hint": "Restlessness",
+    "explanation": "He describes himself as unable to stay still for even a moment.",
+    "source": 29.24,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-bc31304e-6be3-4010-95a1-7f371767d0a1",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.056000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.203432+00:00",
+      "2": "2025-09-13T00:23:42.203432+00:00",
+      "3": "2025-09-13T00:30:42.203432+00:00",
+      "4": "2025-09-17T00:15:42.203432+00:00"
+    }
+  },
+  {
+    "_id": "cfc-d1888c04-d0ed-43a7-9c56-92e2e62a76e9",
+    "question": "How does the author describe the feeling of being in that moment?",
+    "answer": "The best feeling in the world.",
+    "hint": "An intense, positive emotional sense.",
+    "explanation": "The author explicitly calls this experience the best feeling in the world.",
+    "source": 0.04,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-8c3e33a2-a08b-473f-a4c3-f7c3e2ca016a",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.054000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.203529+00:00",
+      "2": "2025-09-13T00:23:42.203529+00:00",
+      "3": "2025-09-13T00:30:42.203529+00:00",
+      "4": "2025-09-17T00:15:42.203529+00:00"
+    }
+  },
+  {
+    "_id": "cfc-614dc5e4-fa87-4f25-94b7-b7af80e04d60",
+    "question": "How does the speaker describe a moment of focus in terms of its significance?",
+    "answer": "Sacred and almost spiritual",
+    "hint": "Special and holy-like nature",
+    "explanation": "For him, a moment of focus is sacred and nearly spiritual.",
+    "source": 29.24,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-bc31304e-6be3-4010-95a1-7f371767d0a1",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.055000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.203613+00:00",
+      "2": "2025-09-13T00:23:42.203613+00:00",
+      "3": "2025-09-13T00:30:42.203613+00:00",
+      "4": "2025-09-17T00:15:42.203613+00:00"
+    }
+  },
+  {
+    "_id": "cfc-c3c811a9-9ca3-4afb-baa4-fd487fa3f583",
+    "question": "In a bubble of focus, what basic action are you able to perform?",
+    "answer": "Execute what you thought about / act on your plan.",
+    "hint": "Turn thoughts into action.",
+    "explanation": "The description emphasizes moving from thought to action while maintaining intense concentration.",
+    "source": 0.04,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-8c3e33a2-a08b-473f-a4c3-f7c3e2ca016a",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.053000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.203697+00:00",
+      "2": "2025-09-13T00:23:42.203697+00:00",
+      "3": "2025-09-13T00:30:42.203697+00:00",
+      "4": "2025-09-17T00:15:42.203697+00:00"
+    }
+  },
+  {
+    "_id": "cfc-fe9e1b38-5836-4f02-811e-7b7265e738be",
+    "question": "How often does the speaker experience long moments of focus (more than half an hour) in a day?",
+    "answer": "Usually once a day; at most twice a day if very lucky",
+    "hint": "Frequency per day",
+    "explanation": "He notes long focus moments happen once daily, and at most twice daily when very lucky.",
+    "source": 29.24,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-bc31304e-6be3-4010-95a1-7f371767d0a1",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.055000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.203777+00:00",
+      "2": "2025-09-13T00:23:42.203777+00:00",
+      "3": "2025-09-13T00:30:42.203777+00:00",
+      "4": "2025-09-17T00:15:42.203777+00:00"
+    }
+  },
+  {
+    "_id": "cfc-5e608a54-3366-4d89-b617-d04e698cf4ec",
+    "question": "What condition does the speaker claim to have?",
+    "answer": "ADHD",
+    "hint": "Attention-related neurodevelopmental condition",
+    "explanation": "He states, 'I'm ADHD, I'm the stereotypical ADHD guy.'",
+    "source": 29.24,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-bc31304e-6be3-4010-95a1-7f371767d0a1",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.055000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.203866+00:00",
+      "2": "2025-09-13T00:23:42.203866+00:00",
+      "3": "2025-09-13T00:30:42.203866+00:00",
+      "4": "2025-09-17T00:15:42.203866+00:00"
+    }
+  },
+  {
+    "_id": "cfc-e7372032-bd25-4495-98b6-56b484399fbe",
+    "question": "What emotion does the speaker report feeling while trying to focus?",
+    "answer": "Guilty",
+    "hint": "A common feeling when failing to focus",
+    "explanation": "He says he catches himself feeling guilty, like 'I can't do it, I can't get there.'",
+    "source": 29.24,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-bc31304e-6be3-4010-95a1-7f371767d0a1",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.056000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.203948+00:00",
+      "2": "2025-09-13T00:23:42.203948+00:00",
+      "3": "2025-09-13T00:30:42.203948+00:00",
+      "4": "2025-09-17T00:15:42.203948+00:00"
+    }
+  },
+  {
+    "_id": "cfc-31d70f50-6073-4797-9915-ca3df0eb695d",
+    "question": "What happens to the external world while you're in that focused state?",
+    "answer": "The whole world disappears.",
+    "hint": "Outside distractions fade away.",
+    "explanation": "The passage states that in focus, the surroundings seem to vanish, highlighting immersion.",
+    "source": 0.04,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-8c3e33a2-a08b-473f-a4c3-f7c3e2ca016a",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.054000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.204028+00:00",
+      "2": "2025-09-13T00:23:42.204028+00:00",
+      "3": "2025-09-13T00:30:42.204028+00:00",
+      "4": "2025-09-17T00:15:42.204028+00:00"
+    }
+  },
+  {
+    "_id": "cfc-a193ea10-4af2-4685-9ba0-20cc1fd79863",
+    "question": "What does the speaker say is not laziness, but the real issue preventing focus?",
+    "answer": "Being unable to get into the feeling of focus.",
+    "hint": "Focus vs laziness",
+    "explanation": "The speaker reframes laziness as a failure to enter a focused mental state.",
+    "source": 83.88,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-e28bd5fe-b968-4ab4-a048-f3d2e983eacd",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.057000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.204105+00:00",
+      "2": "2025-09-13T00:23:42.204105+00:00",
+      "3": "2025-09-13T00:30:42.204105+00:00",
+      "4": "2025-09-17T00:15:42.204105+00:00"
+    }
+  },
+  {
+    "_id": "cfc-8fb1f5b3-8a68-4013-bd59-2c4036d94948",
+    "question": "What does the author say about their lifelong pursuit?",
+    "answer": "I live my whole life chasing that moment.",
+    "hint": "A lifelong pursuit of a single moment.",
+    "explanation": "This echoes the idea that the moment of clear direction is the central goal of the author.",
+    "source": 0.04,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-8c3e33a2-a08b-473f-a4c3-f7c3e2ca016a",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.054000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.204183+00:00",
+      "2": "2025-09-13T00:23:42.204183+00:00",
+      "3": "2025-09-13T00:30:42.204183+00:00",
+      "4": "2025-09-17T00:15:42.204183+00:00"
+    }
+  },
+  {
+    "_id": "cfc-997672ec-ed96-44a9-98ce-53a313edee2d",
+    "question": "What is described as a 'bubble of focus' in the text?",
+    "answer": "A state where you're so focused that the whole world disappears and you can only execute what you thought about.",
+    "hint": "Think about being completely immersed in a task.",
+    "explanation": "The text portrays deep concentration as isolating attention from surroundings and highlighting action on planned thoughts.",
+    "source": 0.04,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-8c3e33a2-a08b-473f-a4c3-f7c3e2ca016a",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.053000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.204264+00:00",
+      "2": "2025-09-13T00:23:42.204264+00:00",
+      "3": "2025-09-13T00:30:42.204264+00:00",
+      "4": "2025-09-17T00:15:42.204264+00:00"
+    }
+  },
+  {
+    "_id": "cfc-a5138134-dbe8-4538-979a-bb9afecf9da0",
+    "question": "What wake-up time does the speaker mention?",
+    "answer": "Around 6:30 to 7:00 AM.",
+    "hint": "Early morning",
+    "explanation": "The speaker reports waking up in this window.",
+    "source": 83.88,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-e28bd5fe-b968-4ab4-a048-f3d2e983eacd",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.058000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.204341+00:00",
+      "2": "2025-09-13T00:23:42.204341+00:00",
+      "3": "2025-09-13T00:30:42.204341+00:00",
+      "4": "2025-09-17T00:15:42.204341+00:00"
+    }
+  },
+  {
+    "_id": "cfc-46669800-e36e-4e28-a848-91744fc2bdf9",
+    "question": "What does the speaker say tiredness is equivalent to?",
+    "answer": "Laziness.",
+    "hint": "A simple link the speaker makes",
+    "explanation": "The speaker asks, 'what is tiredness?' and answers, 'it's laziness'.",
+    "source": 224.72,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-8111c88a-22c5-4db0-9b0b-1ea97ca4eae8",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.063000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.204416+00:00",
+      "2": "2025-09-13T00:23:42.204416+00:00",
+      "3": "2025-09-13T00:30:42.204416+00:00",
+      "4": "2025-09-17T00:15:42.204416+00:00"
+    }
+  },
+  {
+    "_id": "cfc-d24c87ef-4248-4033-b4c0-b4c509e35047",
+    "question": "Around what time does the speaker say focus usually happens?",
+    "answer": "Around 9 in the morning.",
+    "hint": "Time of day",
+    "explanation": "The speaker notes focus commonly occurs around 9:00 AM after rest.",
+    "source": 83.88,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-e28bd5fe-b968-4ab4-a048-f3d2e983eacd",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.057000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.204491+00:00",
+      "2": "2025-09-13T00:23:42.204491+00:00",
+      "3": "2025-09-13T00:30:42.204491+00:00",
+      "4": "2025-09-17T00:15:42.204491+00:00"
+    }
+  },
+  {
+    "_id": "cfc-7f2ae2ce-e8ac-4c0f-8811-67de8dfdb3b1",
+    "question": "According to the speaker, when can they enter the feeling of focus?",
+    "answer": "Only when rested.",
+    "hint": "Rest is required for focus",
+    "explanation": "Rest enables the ability to enter the feeling of focus.",
+    "source": 83.88,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-e28bd5fe-b968-4ab4-a048-f3d2e983eacd",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.057000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.204569+00:00",
+      "2": "2025-09-13T00:23:42.204569+00:00",
+      "3": "2025-09-13T00:30:42.204569+00:00",
+      "4": "2025-09-17T00:15:42.204569+00:00"
+    }
+  },
+  {
+    "_id": "cfc-afc0c61d-8ce8-45a5-817d-e88e989e60f7",
+    "question": "What is the last video game the speaker finished?",
+    "answer": "The Last of Us 2.",
+    "hint": "A recent title that made them emotional",
+    "explanation": "The speaker recalls finishing The Last of Us 2 and crying.",
+    "source": 266.04,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-8111c88a-22c5-4db0-9b0b-1ea97ca4eae8",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.064000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.204644+00:00",
+      "2": "2025-09-13T00:23:42.204644+00:00",
+      "3": "2025-09-13T00:30:42.204644+00:00",
+      "4": "2025-09-17T00:15:42.204644+00:00"
+    }
+  },
+  {
+    "_id": "cfc-dd178851-16f0-4ef6-a93c-27c35466532e",
+    "question": "Where did the speaker move to four years ago, as mentioned in the extract?",
+    "answer": "Amsterdam.",
+    "hint": "A city in the Netherlands",
+    "explanation": "The speaker notes it's been 4 years since moving to Amsterdam.",
+    "source": 266.04,
+    "bbox": null,
+    "source_content": null,
+    "key_concept": {
+      "id": "ckc-8111c88a-22c5-4db0-9b0b-1ea97ca4eae8",
+      "collection": "content_key_concepts"
+    },
+    "created_at": "2025-09-13T00:14:27.064000+00:00",
+    "is_starred": false,
+    "is_chat": false,
+    "rating_previews": {
+      "1": "2025-09-13T00:16:42.204720+00:00",
+      "2": "2025-09-13T00:23:42.204720+00:00",
+      "3": "2025-09-13T00:30:42.204720+00:00",
+      "4": "2025-09-17T00:15:42.204720+00:00"
+    }
+  }
+]
