@@ -55,6 +55,8 @@ export function convertJsonToReactFlow(jsonData: any): [Node[], Edge[]] {
       style: {
         width: 300,
         height: 300,
+        minWidth: 200,
+        minHeight: 200,
       },
     };
 
@@ -94,6 +96,8 @@ export function convertJsonToReactFlow(jsonData: any): [Node[], Edge[]] {
         style: {
           width: 300,
           height: 300,
+          minWidth: 200,
+          minHeight: 200,
         },
       };
 

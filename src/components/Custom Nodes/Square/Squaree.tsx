@@ -292,8 +292,8 @@ const Squaree = (props: ExtendedNode) => {
     document.body.appendChild(tempDiv);
 
     // Measure content
-    const contentWidth = Math.max(tempDiv.scrollWidth, 120); // Minimum width
-    const contentHeight = Math.max(tempDiv.scrollHeight, 80); // Minimum height
+    const contentWidth = Math.max(tempDiv.scrollWidth, 200); // Minimum width
+    const contentHeight = Math.max(tempDiv.scrollHeight, 200); // Minimum height
 
     // Add some padding for comfort
     const newWidth = Math.max(contentWidth + 40, width || 300);
@@ -363,8 +363,8 @@ const Squaree = (props: ExtendedNode) => {
       onClick={handleNodeClick}
     >
       <NodeResizer
-        minHeight={100}
-        minWidth={100}
+        minHeight={200}
+        minWidth={200}
         isVisible={selected}
         lineClassName="border-2 border-blue-500"
         handleClassName="w-3 h-3 bg-white border-2 border-blue-500 rounded"

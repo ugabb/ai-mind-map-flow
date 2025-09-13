@@ -1,54 +1,24 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Progress } from "./ui/progress";
 import { useRef, useState } from "react";
 import { useConvertVideoToAudio } from "@/hooks/useConvertVideoToAudio";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { LuTrash2 } from "react-icons/lu";
 import { getAudioTranscript } from "@/services/mind-map/getAudioTranscript";
 import { generateMindMap } from "@/services/mind-map/generateMindMap";
 import { useNodeStore } from "@/store/NodeStore";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/services/axios";
-import { ImSpinner8 } from "react-icons/im";
-import { PiPaperPlaneTilt } from "react-icons/pi";
 import toast from "react-hot-toast";
 import { saveMindMap, SaveMindRequest } from "@/services/mind-map/saveMindMap";
 import { User } from "next-auth";
 import { useGetTranscriptionYouTube } from "@/services/hooks/use-get-transcription-youtube";
 
-interface GenerateMindMapModalProps {
-  open?: boolean;
-  onClose?: () => void;
-  currentUser: User | undefined;
-}
+export type UploadType = "YTB_URL" | "SYSTEM_FILE";
 
-export const GenerateMindMapModal = ({
-  open,
-  onClose,
-  currentUser,
-}: GenerateMindMapModalProps) => {
+export function useGenerateMindMap(currentUser: User | undefined) {
   const [video, setVideo] = useState<File | null>(null);
   const [url, setUrl] = useState<string>("");
   const [isUrlValid, setIsUrlValid] = useState<boolean>(false);
-  const [uploadType, setUploadType] = useState<"YTB_URL" | "SYSTEM_FILE">(
-    "YTB_URL"
-  );
+  const [uploadType, setUploadType] = useState<UploadType>("YTB_URL");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -96,29 +66,6 @@ export const GenerateMindMapModal = ({
     },
   });
 
-  const handleConvert = async (): Promise<File | null | undefined> => {
-    try {
-      if (uploadType === "SYSTEM_FILE" && video) {
-        // if (video.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-        //   setError(`File size exceeds ${MAX_FILE_SIZE_MB}MB.`);
-        //   return;
-        // }
-        return await convertVideoToAudio(video);
-      }
-
-      if (uploadType === "YTB_URL" && url) {
-        // will not download anymore
-        // here will call the backend to get the transcription directly
-        toast.error("Downloading from Youtube is not supported anymore.");
-        return null;
-        // return await downloadYtbVideoFn(url);
-      }
-    } catch (e) {
-      console.error("Error during conversion:", e);
-      setError("An error occurred while processing the video.");
-    }
-  };
-
   const {
     data: transcriptionResponse,
     isLoading: isLoadingTranscription,
@@ -127,7 +74,21 @@ export const GenerateMindMapModal = ({
     url,
   });
 
-  console.debug("transcriptionResponse:", transcriptionResponse);
+  const handleConvert = async (): Promise<File | null | undefined> => {
+    try {
+      if (uploadType === "SYSTEM_FILE" && video) {
+        return await convertVideoToAudio(video);
+      }
+
+      if (uploadType === "YTB_URL" && url) {
+        toast.error("Downloading from Youtube is not supported anymore.");
+        return null;
+      }
+    } catch (e) {
+      console.error("Error during conversion:", e);
+      setError("An error occurred while processing the video.");
+    }
+  };
 
   const handleGenerateMindMap = async () => {
     setMindMapLoadingRequest(true);
@@ -171,6 +132,7 @@ export const GenerateMindMapModal = ({
         setIsLoading(false);
         return;
       }
+
       // save mind map
       const mindmap = await saveMindMapFn({
         title: "Untitled",
@@ -187,7 +149,8 @@ export const GenerateMindMapModal = ({
       if (mindmap) {
         setMindMapToGenerate(mindMapJSON);
         setMindMapLoadingRequest(false);
-        router.push(`/mind-map/${mindmap.id}`);
+        // Redirect to study/content/[id] instead of mind-map/[id]
+        router.push(`/study/content/${mindmap.id}`);
       }
     } catch (e) {
       console.error("Error generating mind map:", e);
@@ -211,108 +174,41 @@ export const GenerateMindMapModal = ({
     const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
     setIsUrlValid(youtubeRegex.test(url.trim()));
   };
-  return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Generate Mind Map</DialogTitle>
-          <DialogDescription>
-            Upload a video to generate a mind map. Max file size is 25MB.
-          </DialogDescription>
-        </DialogHeader>
 
-        <div className="flex flex-col justify-center items-center mx-auto gap-5 w-full p-5">
-          <Select
-            onValueChange={(value: "YTB_URL" | "SYSTEM_FILE") => {
-              setUploadType(value);
-              setUrl("");
-              setVideo(null);
-            }}
-            defaultValue="YTB_URL"
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Choose the type of the upload" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="YTB_URL">Youtube URL</SelectItem>
-              <SelectItem value="SYSTEM_FILE">System File</SelectItem>
-            </SelectContent>
-          </Select>
+  const resetForm = () => {
+    setVideo(null);
+    setUrl("");
+    setIsUrlValid(false);
+    setError(null);
+    setIsLoading(false);
+  };
 
-          {video ? (
-            <div className="flex gap-5 items-center">
-              <p>Selected video: {video.name}</p>
-              <Button onClick={() => setVideo(null)}>
-                <LuTrash2 className="size-5 text-white" />
-              </Button>
-            </div>
-          ) : (
-            <div className="w-full">
-              {uploadType === "YTB_URL" && (
-                <Input
-                  type="text"
-                  className="w-full"
-                  placeholder="Youtube URL"
-                  onChange={(e) => handleUrlChange(e.target.value)}
-                />
-              )}
-              {uploadType === "SYSTEM_FILE" && (
-                <Input
-                  type="file"
-                  accept="video/*"
-                  onChange={(e) => setVideo(e.target.files?.[0] || null)}
-                  className="w-full"
-                />
-              )}
-            </div>
-          )}
+  const setUploadTypeAndReset = (type: UploadType) => {
+    setUploadType(type);
+    setUrl("");
+    setVideo(null);
+  };
 
-          {progress > 0 && (
-            <Progress value={progress} max={100} className="h-3" />
-          )}
+  return {
+    // State
+    video,
+    url,
+    isUrlValid,
+    uploadType,
+    error,
+    isLoading,
+    progress,
+    loadingFFMPEG,
+    isLoadingTranscription,
+    transcriptionError,
+    transcriptionResponse,
+    isPending,
 
-          {uploadType === "YTB_URL" && isUrlValid && isLoadingTranscription && (
-            <div className="flex items-center gap-2 text-primary">
-              <ImSpinner8 className="animate-spin size-4" />
-              <p className="text-sm">Loading transcription...</p>
-            </div>
-          )}
-
-          {uploadType === "YTB_URL" && transcriptionError && (
-            <p className="text-destructive text-sm">
-              Failed to load transcription. Please check the YouTube URL.
-            </p>
-          )}
-
-          {error && <p className="text-destructive text-sm">{error}</p>}
-        </div>
-
-        <Button
-          onClick={handleGenerateMindMap}
-          disabled={
-            (!isUrlValid && uploadType === "YTB_URL") ||
-            (!video && uploadType === "SYSTEM_FILE") ||
-            isPending ||
-            loadingFFMPEG ||
-            isLoadingTranscription ||
-            (uploadType === "YTB_URL" &&
-              !transcriptionResponse?.transcriptionRaw)
-          }
-          className="bg-primary w-fit mx-auto"
-        >
-          {(isLoading || isLoadingTranscription) && (
-            <ImSpinner8 className="animate-spin size-5" />
-          )}
-          {!(isLoading || isLoadingTranscription) && (
-            <>
-              {isLoadingTranscription
-                ? "Loading Transcription..."
-                : "Generate Mind Map"}
-              <PiPaperPlaneTilt className="ml-2 text-white size-5" />
-            </>
-          )}
-        </Button>
-      </DialogContent>
-    </Dialog>
-  );
-};
+    // Actions
+    setVideo,
+    handleUrlChange,
+    setUploadTypeAndReset,
+    handleGenerateMindMap,
+    resetForm,
+  };
+}

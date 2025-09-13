@@ -10,8 +10,18 @@ import {
   Search,
   ArrowUpRight,
 } from "lucide-react";
+import { useState } from "react";
+import { GenerateMindMapModal } from "./GenerateMindMapModal";
+import { useSession } from "next-auth/react";
 
 export const HeroSection = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data: session } = useSession();
+
+  const handlePasteClick = () => {
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="w-full">
       {/* Hero */}
@@ -36,10 +46,20 @@ export const HeroSection = () => {
           }}
         >
           {[
-            { label: "Upload", sub: "File, audio, video", Icon: Upload },
-            { label: "Paste", sub: "YouTube, website, text", Icon: LinkIcon },
+            {
+              label: "Upload",
+              sub: "File, audio, video",
+              Icon: Upload,
+              onClick: () => {},
+            },
+            {
+              label: "Paste",
+              sub: "YouTube, website, text",
+              Icon: LinkIcon,
+              onClick: handlePasteClick,
+            },
             // { label: "Record", sub: "Record class, video call", Icon: Mic },
-          ].map(({ label, sub, Icon }) => (
+          ].map(({ label, sub, Icon, onClick }) => (
             <motion.div
               key={label}
               variants={{
@@ -52,6 +72,7 @@ export const HeroSection = () => {
               <Button
                 variant="outline"
                 className="w-full justify-start gap-3 bg-card text-card-foreground hover:bg-accent rounded-2xl h-16"
+                onClick={onClick}
               >
                 <Icon className="size-5 text-primary" />
                 <div className="text-left">
@@ -77,10 +98,20 @@ export const HeroSection = () => {
           className="hidden md:grid mt-3 grid-cols-2 gap-2 md:gap-3 w-full max-w-2xl"
         >
           {[
-            { label: "Upload", sub: "File, audio, video", Icon: Upload },
-            { label: "Paste", sub: "YouTube, website, text", Icon: LinkIcon },
+            {
+              label: "Upload",
+              sub: "File, audio, video",
+              Icon: Upload,
+              onClick: () => {},
+            },
+            {
+              label: "Paste",
+              sub: "YouTube, website, text",
+              Icon: LinkIcon,
+              onClick: handlePasteClick,
+            },
             // { label: "Record", sub: "Record class, video call", Icon: Mic },
-          ].map(({ label, Icon, sub }) => (
+          ].map(({ label, Icon, sub, onClick }) => (
             <motion.div
               key={label}
               variants={{
@@ -93,6 +124,7 @@ export const HeroSection = () => {
               <Button
                 variant="outline"
                 className="w-full flex flex-col justify-center items-start gap-2 bg-card text-card-foreground hover:bg-accent rounded-xl h-32"
+                onClick={onClick}
               >
                 <Icon className="size-5 text-primary" />
                 <span className="text-sm font-medium">{label}</span>
@@ -124,6 +156,14 @@ export const HeroSection = () => {
           </div>
         </motion.div>
       </div>
+
+      <GenerateMindMapModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        currentUser={session?.user}
+        title="Youtube Link"
+        defaultUploadType="YTB_URL"
+      />
     </div>
   );
 };

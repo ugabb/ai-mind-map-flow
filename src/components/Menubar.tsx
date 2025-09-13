@@ -161,7 +161,7 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
   }, [mindMapData, setCurrentMindMap]);
 
   return (
-    <T.Root className="flex items-center w-full h-20 max-w-[425px] rounded-lg border border-border z-50 bg-background fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
+    <T.Root className="absolute flex items-center w-full h-20 max-w-[425px] rounded-lg border border-border z-50 bg-background fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
       <T.Button />
       <T.Separator />
       <T.Link />
