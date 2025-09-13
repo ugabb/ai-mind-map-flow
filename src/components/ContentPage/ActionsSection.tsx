@@ -30,6 +30,7 @@ import { ImSpinner8 } from "react-icons/im";
 import toast from "react-hot-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FlashCardTab } from "./FlashCard/FlashCard";
+import { SummaryTab } from "./SummaryTab/SummaryTab";
 
 const elk = new ELK();
 
@@ -262,6 +263,9 @@ export function ActionsSection() {
         </TabsContent>
         <TabsContent value="flashcard" className="flex-1 m-0">
           <FlashCardTab />
+        </TabsContent>
+        <TabsContent value="summary" className="flex-1 m-0">
+          <SummaryTab data={currentMindMap?.summary} />
         </TabsContent>
       </Tabs>
     </div>
