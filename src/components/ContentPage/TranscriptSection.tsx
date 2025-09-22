@@ -50,6 +50,18 @@ export function TranscriptSection({
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}]`;
   };
 
+  // Function to concatenate 3 chunks into one larger transcript box
+  const concatChunks = (chunks: typeof transcription.chunks) => {
+    const groupedChunks = [];
+
+    for (let i = 0; i < chunks.length; i += 3) {
+      const group = chunks.slice(i, i + 3);
+      groupedChunks.push(group);
+    }
+
+    return groupedChunks;
+  };
+
   // Handle click to jump to specific time in YouTube video
   const handleTranscriptClick = (offset: number) => {
     if (youtubePlayerRef.current) {
@@ -66,17 +78,19 @@ export function TranscriptSection({
       </h3>
       <ScrollArea className="h-full">
         <div className="text-muted-foreground leading-relaxed space-y-2">
-          {transcription.chunks.map((chunk) => {
+          {concatChunks(transcription.chunks).map((chunk) => {
+            const firstChunk = chunk[0];
+            const combinedText = chunk.map((chunk) => chunk.text).join(" ");
             return (
               <TranscriptBox
-                key={chunk.id}
-                onClick={() => handleTranscriptClick(chunk.offset)}
+                key={firstChunk.id}
+                onClick={() => handleTranscriptClick(firstChunk.offset)}
               >
                 <p>
                   <span className="text-muted-foreground text-xs font-mono">
-                    {calculateTranscriptionTime(chunk.offset)}
+                    {calculateTranscriptionTime(firstChunk.offset)}
                   </span>{" "}
-                  {chunk.text}
+                  {combinedText}
                 </p>
               </TranscriptBox>
             );
