@@ -5,6 +5,7 @@ import { getVideoIdYouTube } from "@/utils/get-video-id-youtube";
 
 interface YouTubeTranscriptRequest {
   url: string;
+  isUrlValid: boolean;
   lang?: string;
 }
 
@@ -35,22 +36,26 @@ const isValidYouTubeUrl = (url: string): boolean => {
 
 export function useGetTranscriptionYouTube(props: YouTubeTranscriptRequest) {
   // Memoize URL validation and video ID extraction to prevent unnecessary recalculations
-  const { isValidUrl, videoId } = useMemo(() => {
+  const { videoId } = useMemo(() => {
     const trimmedUrl = props.url?.trim() || "";
     const valid = isValidYouTubeUrl(trimmedUrl);
     const id = valid ? getVideoIdYouTube(trimmedUrl) : null;
 
     return {
-      isValidUrl: valid,
       videoId: id,
     };
   }, [props.url]);
 
   // Only enable the query when we have a valid URL and valid video ID
-  const shouldFetch = isValidUrl && !!videoId;
+  const shouldFetch = props.isUrlValid && !!videoId;
 
   return useQuery({
-    queryKey: ["get-transcription-youtube", props.url, props.lang],
+    queryKey: [
+      "get-transcription-youtube",
+      props.url,
+      props.lang,
+      props.isUrlValid,
+    ],
     queryFn: async () => {
       if (!videoId) {
         throw new Error("Invalid YouTube video ID");
