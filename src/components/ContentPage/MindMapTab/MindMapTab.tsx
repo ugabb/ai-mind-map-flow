@@ -28,6 +28,8 @@ import { useNodeStore } from "@/store/NodeStore";
 import { ImSpinner8 } from "react-icons/im";
 import toast from "react-hot-toast";
 import { Menubar } from "@/components/Menubar";
+import { EmptyMindMap } from "./EmptyMindMap";
+import { useContentContext } from "../ContentContext";
 
 const elk = new ELK();
 
@@ -160,6 +162,7 @@ export function MindMapTab() {
   );
 
   useLayoutEffect(() => {
+    console.log("mindMapToGenerate", mindMapToGenerate);
     if (mindMapToGenerate) {
       const [newNodes, newEdges] = convertJsonToReactFlow(mindMapToGenerate);
       setNodes(newNodes);
@@ -179,56 +182,60 @@ export function MindMapTab() {
 
   return (
     <div className="h-full border rounded-lg overflow-hidden">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgesTypes}
-        defaultEdgeOptions={{
-          type: "default",
-          markerEnd: {
-            type: MarkerType.Arrow,
-            width: 25,
-            height: 25,
-            color: "hsl(var(--muted-foreground))",
-          },
-        }}
-        onInit={setRfInstance}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        connectionMode={ConnectionMode.Loose}
-        fitView
-        fitViewOptions={{ padding: 2 }}
-        className="h-full w-full"
-        onMouseMove={handleMouseMove}
-        panOnDrag={false}
-        panOnScroll
-        selectionOnDrag
-      >
-        {isCreatingNode && (
-          <div
-            className="bg-primary/20 rounded min-w-[200px] min-h-[200px]"
-            style={{
-              position: "absolute",
-              left: mousePosition?.x - 8,
-              top: mousePosition?.y - 8,
-              pointerEvents: "none", // Allow clicks to pass through
-              zIndex: 1, // Ensure it's above the background
-            }}
-          />
-        )}
+      {nodes.length === 0 && <EmptyMindMap />}
 
-        <Background />
-        <MiniMap />
-        <Menubar rfInstance={rfInstance} />
+      {nodes.length > 0 && (
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgesTypes}
+          defaultEdgeOptions={{
+            type: "default",
+            markerEnd: {
+              type: MarkerType.Arrow,
+              width: 25,
+              height: 25,
+              color: "hsl(var(--muted-foreground))",
+            },
+          }}
+          onInit={setRfInstance}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          connectionMode={ConnectionMode.Loose}
+          fitView
+          fitViewOptions={{ padding: 2 }}
+          className="h-full w-full"
+          onMouseMove={handleMouseMove}
+          panOnDrag={false}
+          panOnScroll
+          selectionOnDrag
+        >
+          {isCreatingNode && (
+            <div
+              className="bg-primary/20 rounded min-w-[200px] min-h-[200px]"
+              style={{
+                position: "absolute",
+                left: mousePosition?.x - 8,
+                top: mousePosition?.y - 8,
+                pointerEvents: "none", // Allow clicks to pass through
+                zIndex: 1, // Ensure it's above the background
+              }}
+            />
+          )}
 
-        {mindMapLoadingRequest && (
-          <div className="fixed inset-0 flex items-center justify-center z-[999] bg-background/80">
-            <ImSpinner8 className="w-10 h-10 text-primary animate-spin z-50" />
-          </div>
-        )}
-      </ReactFlow>
+          <Background />
+          <MiniMap />
+          <Menubar rfInstance={rfInstance} />
+
+          {mindMapLoadingRequest && (
+            <div className="fixed inset-0 flex items-center justify-center z-[999] bg-background/80">
+              <ImSpinner8 className="w-10 h-10 text-primary animate-spin z-50" />
+            </div>
+          )}
+        </ReactFlow>
+      )}
     </div>
   );
 }

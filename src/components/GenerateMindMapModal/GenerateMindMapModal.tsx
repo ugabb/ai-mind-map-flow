@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { ImSpinner8 } from "react-icons/im";
 import { PiPaperPlaneTilt } from "react-icons/pi";
-import { useGenerateMindMap } from "./useGenerateMindMap";
+import { useContent } from "../ContentPage/hooks/useContent";
 import { User } from "next-auth";
 
 interface GenerateMindMapModalProps {
@@ -26,38 +26,18 @@ interface GenerateMindMapModalProps {
   onClose?: () => void;
   currentUser: User | undefined;
   title?: string;
-  defaultUploadType?: "YTB_URL" | "SYSTEM_FILE";
 }
 
-export const GenerateMindMapModal = ({
+export const GenerateContentUrlModal = ({
   open,
   onClose,
   currentUser,
-  title = "Generate Mind Map",
-  defaultUploadType = "YTB_URL",
+  title = "Paste Content URL",
 }: GenerateMindMapModalProps) => {
-  const {
-    video,
-    url,
-    isUrlValid,
-    uploadType,
-    error,
-    isLoading,
-    progress,
-    loadingFFMPEG,
-    isLoadingTranscription,
-    transcriptionError,
-    transcriptionResponse,
-    isPending,
-    setVideo,
-    handleUrlChange,
-    setUploadTypeAndReset,
-    handleGenerateMindMap,
-    resetForm,
-  } = useGenerateMindMap(currentUser);
+  const { url, isGeneratingContent, handleUrlChange, generateContent } =
+    useContent(currentUser?.id as string);
 
   const handleClose = () => {
-    resetForm();
     onClose?.();
   };
 
@@ -72,88 +52,32 @@ export const GenerateMindMapModal = ({
         </DialogHeader>
 
         <div className="flex flex-col justify-center items-center mx-auto gap-5 w-full p-5">
-          <Select
-            onValueChange={(value: "YTB_URL" | "SYSTEM_FILE") => {
-              setUploadTypeAndReset(value);
-            }}
-            defaultValue={defaultUploadType}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Choose the type of the upload" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="YTB_URL">Youtube URL</SelectItem>
-              <SelectItem value="SYSTEM_FILE">System File</SelectItem>
-            </SelectContent>
-          </Select>
+          <Input
+            type="text"
+            className="w-full"
+            placeholder="URL"
+            onChange={(e) => handleUrlChange(e.target.value)}
+          />
 
-          {video ? (
-            <div className="flex gap-5 items-center">
-              <p>Selected video: {video.name}</p>
-              <Button onClick={() => setVideo(null)}>
-                <LuTrash2 className="size-5 text-white" />
-              </Button>
-            </div>
-          ) : (
-            <div className="w-full">
-              {uploadType === "YTB_URL" && (
-                <Input
-                  type="text"
-                  className="w-full"
-                  placeholder="Youtube URL"
-                  onChange={(e) => handleUrlChange(e.target.value)}
-                />
-              )}
-              {uploadType === "SYSTEM_FILE" && (
-                <Input
-                  type="file"
-                  accept="video/*"
-                  onChange={(e) => setVideo(e.target.files?.[0] || null)}
-                  className="w-full"
-                />
-              )}
-            </div>
-          )}
-
-          {progress > 0 && (
-            <Progress value={progress} max={100} className="h-3" />
-          )}
-
-          {uploadType === "YTB_URL" && isUrlValid && isLoadingTranscription && (
+          {isGeneratingContent && (
             <div className="flex items-center gap-2 text-primary">
               <ImSpinner8 className="animate-spin size-4" />
               <p className="text-sm">Loading transcription...</p>
             </div>
           )}
-
-          {uploadType === "YTB_URL" && transcriptionError && (
-            <p className="text-destructive text-sm">
-              Failed to load transcription. Please check the YouTube URL.
-            </p>
-          )}
-
-          {error && <p className="text-destructive text-sm">{error}</p>}
         </div>
 
         <Button
-          onClick={handleGenerateMindMap}
-          disabled={
-            (!isUrlValid && uploadType === "YTB_URL") ||
-            (!video && uploadType === "SYSTEM_FILE") ||
-            isPending ||
-            loadingFFMPEG ||
-            isLoadingTranscription ||
-            (uploadType === "YTB_URL" &&
-              !transcriptionResponse?.transcriptionRaw)
-          }
+          onClick={() => generateContent({ url })}
+          disabled={isGeneratingContent}
           className="bg-primary w-fit mx-auto"
         >
-          {(isLoading || isLoadingTranscription) && (
+          {isGeneratingContent && (
             <ImSpinner8 className="animate-spin size-5" />
           )}
-          {!(isLoading || isLoadingTranscription) && (
+          {!isGeneratingContent && (
             <>
-              {isLoadingTranscription
+              {isGeneratingContent
                 ? "Loading Transcription..."
                 : "Generate Mind Map"}
               <PiPaperPlaneTilt className="ml-2 text-white size-5" />

@@ -1,16 +1,30 @@
 import { api } from "../axios";
 
-export async function generateMindMap(transcription: string) {
+interface GenerateMindMapProps {
+  transcription: string;
+}
+
+interface GenerateMindMapResponse {
+  mindMap: any;
+  mindMapRaw: string;
+  error?: any;
+}
+
+export async function generateMindMap(
+  props: GenerateMindMapProps
+): Promise<GenerateMindMapResponse> {
   try {
-    const { data } = await api.post(`/mindmap`, {
-      transcription,
+    const { data } = await api.post<GenerateMindMapResponse>(`/mindmap`, {
+      transcription: props.transcription,
     });
 
-    return data.mindMapRaw;
+    return data;
   } catch (error) {
     console.error(error);
     return {
       error: error,
+      mindMap: null,
+      mindMapRaw: "",
     };
   }
 }

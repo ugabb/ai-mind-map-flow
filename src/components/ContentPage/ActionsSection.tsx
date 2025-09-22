@@ -11,7 +11,7 @@ export function ActionsSection() {
 
   return (
     <div className="h-full px-2">
-      <Tabs defaultValue="mindmap" className="h-full flex flex-col">
+      <Tabs defaultValue="mindmap" className="h-full flex flex-col space-y-2">
         <TabsList className="flex gap-2 w-full">
           <TabsTrigger className="w-full" value="mindmap">
             Mind Map
