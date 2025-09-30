@@ -1,0 +1,173 @@
+{
+  "nodes": [
+    {
+      "id": "n15",
+      "data": {
+        "label": "<p>Sedentary Lifestyle: The Silent Killer</p>"
+      },
+      "positionAbsoluteX": 0,
+      "positionAbsoluteY": 0,
+      "dragging": true,
+      "isConnectable": true,
+      "type": "square",
+      "zIndex": 0,
+      "parent": "n13",
+      "children": [],
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "width": 300,
+      "height": 300,
+      "$H": 348,
+      "x": 490,
+      "y": 490,
+      "position": {
+        "x": 456,
+        "y": 828
+      },
+      "measured": {
+        "width": 300,
+        "height": 300
+      },
+      "selected": true
+    },
+    {
+      "id": "n17",
+      "data": {
+        "label": "<p>1. Sitting Epidemic</p>"
+      },
+      "positionAbsoluteX": 0,
+      "positionAbsoluteY": 0,
+      "dragging": false,
+      "isConnectable": true,
+      "type": "square",
+      "zIndex": 0,
+      "parent": "n16",
+      "children": [],
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "width": 300,
+      "height": 300,
+      "$H": 352,
+      "x": 40,
+      "y": 1390,
+      "position": {
+        "x": -32,
+        "y": 1356
+      },
+      "measured": {
+        "width": 300,
+        "height": 300
+      },
+      "selected": false
+    },
+    {
+      "id": "n19",
+      "data": {
+        "label": "<p>2. Health Consequences</p>"
+      },
+      "positionAbsoluteX": 0,
+      "positionAbsoluteY": 0,
+      "dragging": false,
+      "isConnectable": true,
+      "type": "square",
+      "zIndex": 0,
+      "parent": "n16",
+      "children": [],
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "width": 300,
+      "height": 300,
+      "$H": 356,
+      "x": 490,
+      "y": 1390,
+      "position": {
+        "x": 468,
+        "y": 1380
+      },
+      "measured": {
+        "width": 300,
+        "height": 300
+      },
+      "selected": false
+    },
+    {
+      "id": "n21",
+      "data": {
+        "label": "<p>3. Personal Experience</p>"
+      },
+      "positionAbsoluteX": 0,
+      "positionAbsoluteY": 0,
+      "dragging": false,
+      "isConnectable": true,
+      "type": "square",
+      "zIndex": 0,
+      "parent": "n16",
+      "children": [],
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "width": 300,
+      "height": 300,
+      "$H": 360,
+      "x": 940,
+      "y": 1390,
+      "position": {
+        "x": 998,
+        "y": 1378
+      },
+      "measured": {
+        "width": 300,
+        "height": 300
+      },
+      "selected": false
+    }
+  ],
+  "edges": [
+    {
+      "type": "default",
+      "markerEnd": {
+        "type": "arrow",
+        "width": 25,
+        "height": 25,
+        "color": "#a1a1aa"
+      },
+      "source": "n15",
+      "sourceHandle": "bottom",
+      "target": "n19",
+      "targetHandle": "top",
+      "id": "xy-edge__n15bottom-n19top"
+    },
+    {
+      "type": "default",
+      "markerEnd": {
+        "type": "arrow",
+        "width": 25,
+        "height": 25,
+        "color": "#a1a1aa"
+      },
+      "source": "n15",
+      "sourceHandle": "bottom",
+      "target": "n17",
+      "targetHandle": "top",
+      "id": "xy-edge__n15bottom-n17top"
+    },
+    {
+      "type": "default",
+      "markerEnd": {
+        "type": "arrow",
+        "width": 25,
+        "height": 25,
+        "color": "#a1a1aa"
+      },
+      "source": "n15",
+      "sourceHandle": "bottom",
+      "target": "n21",
+      "targetHandle": "top",
+      "id": "xy-edge__n15bottom-n21top"
+    }
+  ],
+  "viewport": {
+    "x": 714.2553191489361,
+    "y": -191.3404255319149,
+    "zoom": 0.5
+  }
+}

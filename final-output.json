@@ -1,0 +1,414 @@
+{
+  "nodes": [
+    {
+      "id": "n1",
+      "data": {
+        "label": "<p>Sedentary Lifestyle: The Silent Killer</p>"
+      },
+      "position": {
+        "x": 490,
+        "y": 40
+      },
+      "type": "square",
+      "connectable": true,
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "style": {
+        "width": 300,
+        "height": 300
+      },
+      "width": 300,
+      "height": 300,
+      "$H": 390,
+      "x": 490,
+      "y": 40,
+      "measured": {
+        "width": 300,
+        "height": 300
+      }
+    },
+    {
+      "id": "n2",
+      "data": {
+        "label": "<p>1. Sitting Epidemic</p>"
+      },
+      "position": {
+        "x": 40,
+        "y": 490
+      },
+      "type": "square",
+      "connectable": true,
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "style": {
+        "width": 300,
+        "height": 300
+      },
+      "width": 300,
+      "height": 300,
+      "$H": 392,
+      "x": 40,
+      "y": 490,
+      "measured": {
+        "width": 300,
+        "height": 300
+      }
+    },
+    {
+      "id": "n3",
+      "data": {
+        "label": "<p>Statistics</p>"
+      },
+      "position": {
+        "x": 40,
+        "y": 940
+      },
+      "type": "square",
+      "connectable": true,
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "style": {
+        "width": 300,
+        "height": 300
+      },
+      "width": 300,
+      "height": 300,
+      "$H": 394,
+      "x": 40,
+      "y": 940,
+      "measured": {
+        "width": 300,
+        "height": 300
+      }
+    },
+    {
+      "id": "n4",
+      "data": {
+        "label": "<p>2. Health Consequences</p>"
+      },
+      "position": {
+        "x": 490,
+        "y": 490
+      },
+      "type": "square",
+      "connectable": true,
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "style": {
+        "width": 300,
+        "height": 300
+      },
+      "width": 300,
+      "height": 300,
+      "$H": 396,
+      "x": 490,
+      "y": 490,
+      "measured": {
+        "width": 300,
+        "height": 300
+      }
+    },
+    {
+      "id": "n5",
+      "data": {
+        "label": "<p>Direct Links to Diseases</p>"
+      },
+      "position": {
+        "x": 488,
+        "y": 938
+      },
+      "type": "square",
+      "connectable": true,
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "style": {
+        "width": 300,
+        "height": 300
+      },
+      "width": 300,
+      "height": 300,
+      "$H": 398,
+      "x": 490,
+      "y": 940,
+      "measured": {
+        "width": 300,
+        "height": 300
+      },
+      "selected": true,
+      "dragging": true
+    },
+    {
+      "id": "n6",
+      "data": {
+        "label": "<p>3. Personal Experience</p>"
+      },
+      "position": {
+        "x": 940,
+        "y": 490
+      },
+      "type": "square",
+      "connectable": true,
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "style": {
+        "width": 300,
+        "height": 300
+      },
+      "width": 300,
+      "height": 300,
+      "$H": 400,
+      "x": 940,
+      "y": 490,
+      "measured": {
+        "width": 300,
+        "height": 300
+      }
+    },
+    {
+      "id": "n7",
+      "data": {
+        "label": "<p>Walking Meetings</p>"
+      },
+      "position": {
+        "x": 940,
+        "y": 940
+      },
+      "type": "square",
+      "connectable": true,
+      "sourcePosition": "bottom",
+      "targetPosition": "top",
+      "style": {
+        "width": 300,
+        "height": 300
+      },
+      "width": 300,
+      "height": 300,
+      "$H": 402,
+      "x": 940,
+      "y": 940,
+      "measured": {
+        "width": 300,
+        "height": 300
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "xy-edge__n1bottom-n2top",
+      "source": "n1",
+      "sourceHandle": "bottom",
+      "target": "n2",
+      "targetHandle": "top",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrow",
+        "width": 25,
+        "height": 25,
+        "color": "#a1a1aa"
+      },
+      "sections": [
+        {
+          "id": "xy-edge__n1bottom-n2top_s0",
+          "startPoint": {
+            "x": 565,
+            "y": 340
+          },
+          "endPoint": {
+            "x": 190,
+            "y": 490
+          },
+          "bendPoints": [
+            {
+              "x": 565,
+              "y": 343
+            },
+            {
+              "x": 193.5,
+              "y": 488.6792452830189
+            }
+          ]
+        }
+      ],
+      "container": "root"
+    },
+    {
+      "id": "xy-edge__n2bottom-n3top",
+      "source": "n2",
+      "sourceHandle": "bottom",
+      "target": "n3",
+      "targetHandle": "top",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrow",
+        "width": 25,
+        "height": 25,
+        "color": "#a1a1aa"
+      },
+      "sections": [
+        {
+          "id": "xy-edge__n2bottom-n3top_s0",
+          "startPoint": {
+            "x": 190,
+            "y": 790
+          },
+          "endPoint": {
+            "x": 190,
+            "y": 940
+          },
+          "bendPoints": [
+            {
+              "x": 190,
+              "y": 793
+            }
+          ]
+        }
+      ],
+      "container": "root"
+    },
+    {
+      "id": "xy-edge__n1bottom-n4top",
+      "source": "n1",
+      "sourceHandle": "bottom",
+      "target": "n4",
+      "targetHandle": "top",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrow",
+        "width": 25,
+        "height": 25,
+        "color": "#a1a1aa"
+      },
+      "sections": [
+        {
+          "id": "xy-edge__n1bottom-n4top_s0",
+          "startPoint": {
+            "x": 640,
+            "y": 340
+          },
+          "endPoint": {
+            "x": 640,
+            "y": 490
+          },
+          "bendPoints": [
+            {
+              "x": 640,
+              "y": 343
+            }
+          ]
+        }
+      ],
+      "container": "root"
+    },
+    {
+      "id": "xy-edge__n4bottom-n5top",
+      "source": "n4",
+      "sourceHandle": "bottom",
+      "target": "n5",
+      "targetHandle": "top",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrow",
+        "width": 25,
+        "height": 25,
+        "color": "#a1a1aa"
+      },
+      "sections": [
+        {
+          "id": "xy-edge__n4bottom-n5top_s0",
+          "startPoint": {
+            "x": 640,
+            "y": 790
+          },
+          "endPoint": {
+            "x": 640,
+            "y": 940
+          },
+          "bendPoints": [
+            {
+              "x": 640,
+              "y": 793
+            }
+          ]
+        }
+      ],
+      "container": "root"
+    },
+    {
+      "id": "xy-edge__n1bottom-n6top",
+      "source": "n1",
+      "sourceHandle": "bottom",
+      "target": "n6",
+      "targetHandle": "top",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrow",
+        "width": 25,
+        "height": 25,
+        "color": "#a1a1aa"
+      },
+      "sections": [
+        {
+          "id": "xy-edge__n1bottom-n6top_s0",
+          "startPoint": {
+            "x": 715,
+            "y": 340
+          },
+          "endPoint": {
+            "x": 1090,
+            "y": 490
+          },
+          "bendPoints": [
+            {
+              "x": 715,
+              "y": 343
+            },
+            {
+              "x": 1086.5,
+              "y": 488.6792452830189
+            }
+          ]
+        }
+      ],
+      "container": "root"
+    },
+    {
+      "id": "xy-edge__n6bottom-n7top",
+      "source": "n6",
+      "sourceHandle": "bottom",
+      "target": "n7",
+      "targetHandle": "top",
+      "type": "default",
+      "markerEnd": {
+        "type": "arrow",
+        "width": 25,
+        "height": 25,
+        "color": "#a1a1aa"
+      },
+      "sections": [
+        {
+          "id": "xy-edge__n6bottom-n7top_s0",
+          "startPoint": {
+            "x": 1090,
+            "y": 790
+          },
+          "endPoint": {
+            "x": 1090,
+            "y": 940
+          },
+          "bendPoints": [
+            {
+              "x": 1090,
+              "y": 793
+            }
+          ]
+        }
+      ],
+      "container": "root"
+    }
+  ],
+  "viewport": {
+    "x": 717.2553191489361,
+    "y": -40.34042553191489,
+    "zoom": 0.5
+  }
+}

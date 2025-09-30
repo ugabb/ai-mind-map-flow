@@ -1,0 +1,384 @@
+{
+  "_id": "summary-fb4cdf50-25b4-463b-b90a-04a7d6a485fd",
+  "created_at": "2025-09-13T00:50:45.787000",
+  "user": {
+    "id": "zx87UMNwclTKhJSNrY603fXz2733",
+    "collection": "users"
+  },
+  "content": {
+    "id": "DCtMKoBzW8tVwLq",
+    "collection": "contents"
+  },
+  "prompt": null,
+  "template": "detailed",
+  "summary_range": null,
+  "summary": [
+    {
+      "content": "## A Busca Pelo Foco Produtivo\n- O autor descreve um estado de foco e concentração intensa, onde o mundo desaparece e a pessoa apenas executa o que planejou, como a melhor sensação do mundo, que ele busca constantemente ",
+      "type": "response"
+    },
+    {
+      "content": "【0.04】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【0】"
+    },
+    {
+      "content": ".\n- Ele se identifica como alguém com **TDAH**, para quem momentos de foco são raros, ocorrendo talvez uma ou duas vezes por dia por mais de meia hora, e são considerados sagrados ",
+      "type": "response"
+    },
+    {
+      "content": "【29.24】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【1】"
+    },
+    {
+      "content": "【57.48】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【2】"
+    },
+    {
+      "content": ".\n- Frequentemente, ele se sente culpado por não conseguir entrar nesse estado de foco, percebendo que confunde essa dificuldade com preguiça, mas na verdade é uma incapacidade de alcançar o estado de concentração ",
+      "type": "response"
+    },
+    {
+      "content": "【57.48】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【2】"
+    },
+    {
+      "content": "【83.88】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【3】"
+    },
+    {
+      "content": ".\n\nAqui está um mapa mental sobre o foco produtivo:\n",
+      "type": "response"
+    },
+    {
+      "content": "<whiteboard type=\"mindmap\" title=\"A Busca Pelo Foco Produtivo\" identifier=\"busca_foco_produtivo\">\n\n  <central topic=\"Foco Produtivo\">\n    <subtopic position=\"1\" label=\"O Que É?\">\n      <subtopic position=\"1\" label=\"Bolha de Concentração\"/>\n      <subtopic position=\"2\" label=\"Saber o que Fazer &amp; Executar\"/>\n      <subtopic position=\"3\" label=\"Melhor Sensação do Mundo\"/>\n    </subtopic>\n    <subtopic position=\"2\" label=\"Desafios\">\n      <subtopic position=\"1\" label=\"TDAH &amp; Raridade do Foco\"/>\n      <subtopic position=\"2\" label=\"Culpa por Não Focar\"/>\n      <subtopic position=\"3\" label=\"Confusão com Preguiça\"/>\n      <subtopic position=\"4\" label=\"Escassez Recente de Foco\"/>\n    </subtopic>\n    <subtopic position=\"3\" label=\"Estratégias\">\n      <subtopic position=\"1\" label=\"Descanso Essencial\"/>\n      <subtopic position=\"2\" label=\"Rotina Matinal (Café, Banho, Comida)\"/>\n      <subtopic position=\"3\" label=\"Lista de Tarefas Diária\"/>\n      <subtopic position=\"4\" label=\"Começar Pela Tarefa Mais Difícil\"/>\n      <subtopic position=\"5\" label=\"Manhã com Mente Fresca\"/>\n    </subtopic>\n    <subtopic position=\"4\" label=\"Distinção Cansaço/Preguiça\">\n      <subtopic position=\"1\" label=\"Bloqueio Criativo é Cansaço\"/>\n      <subtopic position=\"2\" label=\"Adultos com Responsabilidade Estão Cansados, Não Preguiçosos\"/>\n    </subtopic>\n  </central>\n\n</whiteboard>",
+      "type": "whiteboard",
+      "pre_delta": null,
+      "identifier": "busca_foco_produtivo",
+      "title": "A Busca Pelo Foco Produtivo",
+      "wtype": "xml"
+    },
+    {
+      "content": "\n",
+      "type": "response"
+    },
+    {
+      "content": "【0.04】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【0】"
+    },
+    {
+      "content": "【29.24】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【1】"
+    },
+    {
+      "content": "【57.48】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【2】"
+    },
+    {
+      "content": "【83.88】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【3】"
+    },
+    {
+      "content": "【115.759】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【4】"
+    },
+    {
+      "content": "【135.599】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【5】"
+    },
+    {
+      "content": "【153.72】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【6】"
+    },
+    {
+      "content": "【174.56】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【7】"
+    },
+    {
+      "content": "【224.72】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【9】"
+    },
+    {
+      "content": "【349.56】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【15】"
+    },
+    {
+      "content": "\n\n## Diferenciando Cansaço e Preguiça\n- O autor percebeu que só consegue focar quando está **descansado**, o que geralmente ocorre por volta das 9h da manhã, uma hora e meia depois de acordar ",
+      "type": "response"
+    },
+    {
+      "content": "【83.88】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【3】"
+    },
+    {
+      "content": ".\n- Para que sua mente comece a funcionar, ele precisa de uma rotina matinal que inclui acordar, tomar banho, tomar café e comer algo ",
+      "type": "response"
+    },
+    {
+      "content": "【115.759】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【4】"
+    },
+    {
+      "content": ".\n- Para otimizar a produtividade, ele cria uma lista de tarefas diárias e começa pela mais difícil, comparando-a ao treino de pernas na segunda-feira, para aproveitar a mente fresca da manhã e evitar a procrastinação por cansaço posterior ",
+      "type": "response"
+    },
+    {
+      "content": "【135.599】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【5】"
+    },
+    {
+      "content": "【153.72】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【6】"
+    },
+    {
+      "content": ".\n- Nos últimos dois meses, a capacidade de focar tem diminuído, levando-o a questionar se está procrastinando, sendo preguiçoso ou apenas cansado ",
+      "type": "response"
+    },
+    {
+      "content": "【174.56】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【7】"
+    },
+    {
+      "content": "【200.319】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【8】"
+    },
+    {
+      "content": ".\n- Ele conclui que o **bloqueio criativo** é, na verdade, **cansaço**, não falta de ideias ",
+      "type": "response"
+    },
+    {
+      "content": "【224.72】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【9】"
+    },
+    {
+      "content": ".\n- Inicialmente, ele pensa que preguiça é não querer fazer o que se deve fazer, mas ele mesmo preferiria passar o dia construindo coisas ou jogando videogames, algo que não faz há quatro anos ",
+      "type": "response"
+    },
+    {
+      "content": "【244.599】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【10】"
+    },
+    {
+      "content": "【266.04】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【11】"
+    },
+    {
+      "content": "【286.96】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【12】"
+    },
+    {
+      "content": ".\n- Após pesquisar, ele define **preguiça** como \"aversão ao trabalho, ociosidade, vagabundagem, estado de prostração e fraqueza de origem orgânica ou psíquica\" ",
+      "type": "response"
+    },
+    {
+      "content": "【327.08】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【14】"
+    },
+    {
+      "content": ".\n- Ele argumenta que adultos com responsabilidades e contas a pagar não podem ser preguiçosos; eles estão, na verdade, cansados, com a \"bateria acabando\" ",
+      "type": "response"
+    },
+    {
+      "content": "【349.56】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【15】"
+    },
+    {
+      "content": ".\n- O autor relata sentir-se cansado mesmo depois de dormir, e embora ame as manhãs por serem o único período em que sente que pode realizar tarefas, sua produtividade diminui drasticamente à noite, quando se sente \"preguiçoso\" e só consegue assistir a coisas \"burras\" ",
+      "type": "response"
+    },
+    {
+      "content": "【370.8】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【16】"
+    },
+    {
+      "content": "【453.72】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【20】"
+    },
+    {
+      "content": ".\n\nAqui está um diagrama de Venn que explora a distinção entre cansaço e preguiça na perspectiva do autor:\n",
+      "type": "response"
+    },
+    {
+      "content": "<whiteboard type=\"venn\" title=\"Cansaço vs. Preguiça\" identifier=\"cansaco_vs_preguica\">\n\n  <circle id=\"A\" label=\"Cansaço (Exaustão)\"/>\n  <circle id=\"B\" label=\"Preguiça (Aversão ao Trabalho)\"/>\n  <intersection circles=\"A\" label=\"Mente exausta, corpo sem energia, acordar cansado\"/>\n  <intersection circles=\"B\" label=\"Ociosidade, não querer fazer o que se deve\"/>\n  <intersection circles=\"A,B\" label=\"Dificuldade inicial em diferenciar os dois\"/>\n\n</whiteboard>",
+      "type": "whiteboard",
+      "pre_delta": null,
+      "identifier": "cansaco_vs_preguica",
+      "title": "Cansaço vs. Preguiça",
+      "wtype": "xml"
+    },
+    {
+      "content": "\n",
+      "type": "response"
+    },
+    {
+      "content": "【83.88】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【3】"
+    },
+    {
+      "content": "【224.72】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【9】"
+    },
+    {
+      "content": "【244.599】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【10】"
+    },
+    {
+      "content": "【327.08】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【14】"
+    },
+    {
+      "content": "【349.56】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【15】"
+    },
+    {
+      "content": "【370.8】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【16】"
+    },
+    {
+      "content": "\n\n## Rotina Idealizada\n- O autor idealiza uma rotina de acordar às 4h da manhã, trabalhar até as 15h ou 16h, e dormir às 20h30, assistindo a um filme até as 21h30 ",
+      "type": "response"
+    },
+    {
+      "content": "【393.759】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【17】"
+    },
+    {
+      "content": "【415.12】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【18】"
+    },
+    {
+      "content": ".\n- Ele acredita que seria muito feliz vivendo assim, apesar de reconhecer que é uma rotina um tanto egoísta para as pessoas ao seu redor e difícil de implementar devido a compromissos de trabalho e burocracias de visto no momento ",
+      "type": "response"
+    },
+    {
+      "content": "【436.12】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【19】"
+    },
+    {
+      "content": "【453.72】",
+      "type": "source",
+      "bbox": null,
+      "is_invalid": false,
+      "og_source": "【20】"
+    },
+    {
+      "content": ".",
+      "type": "response"
+    }
+  ],
+  "language": "portuguese_brazil",
+  "metadata": {}
+}
