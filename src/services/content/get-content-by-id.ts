@@ -1,9 +1,9 @@
+import type { Content } from "@/types/content";
 import { getServerSideAPIClient } from "../axios-server";
-import { Content } from "@/types/content";
 
-interface GetContentByIdResponse {
+type GetContentByIdResponse = {
   content: Content;
-}
+};
 
 export async function getContentById(
   id: string

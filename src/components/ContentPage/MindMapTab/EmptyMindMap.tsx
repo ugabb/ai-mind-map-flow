@@ -1,25 +1,25 @@
+import { ImSpinner8 } from "react-icons/im";
 import { useGenerateMindMap } from "@/components/GenerateMindMapModal/hooks/useGenerateMindMap";
 import { Button } from "@/components/ui/button";
-import { ImSpinner8 } from "react-icons/im";
 
 export function EmptyMindMap() {
   const { mutateAsync: generateMindMap, isPending: isGeneratingMindMap } =
     useGenerateMindMap();
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-3 relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-br dark:from-black dark:to-white/10 opacity-40 from-white to-black/20" />
-      <h1 className="text-2xl font-bold">No Mind Map Yet</h1>
-      <p className="text-sm text-muted-foreground">
+    <div className="relative flex h-full flex-col items-center justify-center gap-3 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-br from-white to-black/20 opacity-40 dark:from-black dark:to-white/10" />
+      <h1 className="font-bold text-2xl">No Mind Map Yet</h1>
+      <p className="text-muted-foreground text-sm">
         Create a mind map to get started
       </p>
       <Button
-        variant={"outline"}
-        size={isGeneratingMindMap ? "icon" : "default"}
-        onClick={() => generateMindMap()}
         disabled={isGeneratingMindMap}
+        onClick={() => generateMindMap()}
+        size={isGeneratingMindMap ? "icon" : "default"}
+        variant={"outline"}
       >
         {isGeneratingMindMap ? (
-          <ImSpinner8 className="animate-spin size-4" />
+          <ImSpinner8 className="size-4 animate-spin" />
         ) : (
           "Generate Mind Map"
         )}

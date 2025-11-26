@@ -1,12 +1,12 @@
 import { memo, useMemo } from "react";
 import { indigo } from "tailwindcss/colors";
 
-interface GhostSquareProps {
+type GhostSquareProps = {
   width: number;
   height: number;
   direction?: string;
   color?: string;
-}
+};
 
 const GhostSquare_ = (props: GhostSquareProps) => {
   const { width, height, direction, color } = props;
@@ -14,9 +14,8 @@ const GhostSquare_ = (props: GhostSquareProps) => {
     const DISTANCE = 100;
     if (direction === "left" || direction === "right") {
       return width + DISTANCE;
-    } else {
-      return height + DISTANCE;
     }
+    return height + DISTANCE;
   }, [direction, height, width]);
 
   console.log(width, height, distance);
@@ -34,9 +33,9 @@ const GhostSquare_ = (props: GhostSquareProps) => {
         opacity: 0.5,
         minWidth: width ? width : 200,
         minHeight: height ? height : 200,
-        width: width,
-        height: height,
-        borderRadius: '0.25rem',
+        width,
+        height,
+        borderRadius: "0.25rem",
       }}
     />
   );

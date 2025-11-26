@@ -1,7 +1,7 @@
-import { generateMindMap } from "@/services/mind-map/generateMindMap";
-import { useNodeStore } from "@/store/NodeStore";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { generateMindMap } from "@/services/mind-map/generateMindMap";
+import { useNodeStore } from "@/store/NodeStore";
 import { useContentContext } from "../../ContentPage/ContentContext";
 
 export function useGenerateMindMap() {
@@ -14,8 +14,8 @@ export function useGenerateMindMap() {
         transcription: rawTranscription,
       });
       return {
-        mindMap: mindMap,
-        mindMapRaw: mindMapRaw,
+        mindMap,
+        mindMapRaw,
       };
     },
     onError: (error) => {

@@ -1,26 +1,25 @@
 "use client";
 
-import { Node, NodeResizer, useReactFlow } from "@xyflow/react";
-import { memo, useCallback, useEffect, useState } from "react";
+import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
+import { type Node, NodeResizer, useReactFlow } from "@xyflow/react";
+import { memo, useCallback, useEffect, useState } from "react";
+import { indigo } from "tailwindcss/colors";
+import { Toolbar } from "@/components/Toolbar";
+import { fontSizes } from "@/constants/values";
+import type { DataNode } from "@/hooks/useNodes";
+import { cn } from "@/lib/utils";
+import type { ExtendedNode } from "@/types/node";
+import { getTextColor } from "@/utils/getTextColor";
 import { Handles } from "../Handles";
 
-import { cn } from "@/lib/utils";
-import { Toolbar } from "@/components/Toolbar";
-import { indigo } from "tailwindcss/colors";
-import { DataNode } from "@/hooks/useNodes";
-import { ExtendedNode } from "@/types/node";
-import { getTextColor } from "@/utils/getTextColor";
-import { fontSizes } from "@/constants/values";
-
-export interface Direction {
+export type Direction = {
   top: boolean;
   bottom: boolean;
   left: boolean;
   right: boolean;
-}
+};
 
 const Squaree = (props: ExtendedNode) => {
   const {
@@ -84,7 +83,9 @@ const Squaree = (props: ExtendedNode) => {
     },
     editable: isEditingText, // Only editable when explicitly editing
     onUpdate: ({ editor }) => {
-      if (!editor) return;
+      if (!editor) {
+        return;
+      }
       const content = editor.getHTML();
       // Update node data immediately
       updateNodeData(id, { ...data, label: content });
@@ -133,7 +134,9 @@ const Squaree = (props: ExtendedNode) => {
   const handleAddSideNode = useCallback(
     (direction: string) => {
       if (direction === "left" || direction === "right") {
-        if (!width) return;
+        if (!width) {
+          return;
+        }
         const newNode: Node = {
           id: crypto.randomUUID(),
           position: {
@@ -146,8 +149,8 @@ const Squaree = (props: ExtendedNode) => {
           },
           data: { label: "", color: data.color },
           type: "square",
-          width: width,
-          height: height,
+          width,
+          height,
           expandParent: true,
         };
 
@@ -163,7 +166,9 @@ const Squaree = (props: ExtendedNode) => {
         addNodes(newNode);
         addEdges(newEdge);
       } else {
-        if (!height) return;
+        if (!height) {
+          return;
+        }
         const newNode: Node = {
           id: crypto.randomUUID(),
           position: {
@@ -176,8 +181,8 @@ const Squaree = (props: ExtendedNode) => {
           },
           data: { label: "", color: data.color },
           type: "square",
-          width: width,
-          height: height,
+          width,
+          height,
           expandParent: true,
         };
 
@@ -243,7 +248,9 @@ const Squaree = (props: ExtendedNode) => {
 
   const handleUpdateNodeColor = useCallback(
     (color: string) => {
-      if (!color) return;
+      if (!color) {
+        return;
+      }
       const textColor = getTextColor(color);
 
       updateNodeData(id, { ...data, color, textColor });
@@ -273,7 +280,9 @@ const Squaree = (props: ExtendedNode) => {
 
   // Auto-resize node to fit content
   const resizeNodeToContent = useCallback(() => {
-    if (!editor) return;
+    if (!editor) {
+      return;
+    }
 
     // Create a temporary element to measure content size
     const tempDiv = document.createElement("div");
@@ -283,7 +292,7 @@ const Squaree = (props: ExtendedNode) => {
     tempDiv.style.pointerEvents = "none";
     tempDiv.style.maxWidth = "none";
     tempDiv.style.fontSize =
-      node?.data?.fontSize || data.fontSize || fontSizes.md + "px";
+      node?.data?.fontSize || data.fontSize || `${fontSizes.md}px`;
     tempDiv.style.fontFamily = "inherit";
     tempDiv.style.padding = "16px"; // Match node padding
     tempDiv.style.textAlign = "center";
@@ -329,11 +338,9 @@ const Squaree = (props: ExtendedNode) => {
   // Handle delete key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (selected && !isEditingText) {
-        if (event.key === "Delete" && id) {
-          const nodesToDelete = [{ id }];
-          deleteElements({ nodes: nodesToDelete });
-        }
+      if (selected && !isEditingText && event.key === "Delete" && id) {
+        const nodesToDelete = [{ id }];
+        deleteElements({ nodes: nodesToDelete });
       }
     };
 
@@ -346,60 +353,60 @@ const Squaree = (props: ExtendedNode) => {
   return (
     <div
       className={cn(
-        "rounded-lg p-2 flex justify-center items-center relative",
+        "relative flex items-center justify-center rounded-lg p-2",
         {
           "ring-2 ring-blue-500": selected,
           "cursor-pointer": !isEditingText,
           "cursor-text": isEditingText,
         }
       )}
+      onClick={handleNodeClick}
       style={{
         backgroundColor: node?.data?.color || data.color || indigo[300],
         color: node?.data?.textColor || data.textColor || "#000000",
-        width: width,
-        height: height,
+        width,
+        height,
         fontSize: node?.data?.fontSize || data.fontSize || fontSizes.md,
       }}
-      onClick={handleNodeClick}
     >
       <NodeResizer
-        minHeight={200}
-        minWidth={200}
+        handleClassName="w-3 h-3 bg-white border-2 border-blue-500 rounded"
         isVisible={selected}
         lineClassName="border-2 border-blue-500"
-        handleClassName="w-3 h-3 bg-white border-2 border-blue-500 rounded"
+        minHeight={200}
+        minWidth={200}
       />
 
       <Handles
+        color={node?.data?.color || data.color || indigo[300]}
         handleAddSideNode={handleAddSideNode}
+        height={height ?? 0}
         isAddingNode={isAddingNode}
         setIsAddingNode={setIsAddingNode}
-        width={width ?? 0}
-        height={height ?? 0}
-        targetPosition={targetPosition}
         sourcePosition={sourcePosition}
-        color={node?.data?.color || data.color || indigo[300]}
+        targetPosition={targetPosition}
+        width={width ?? 0}
       />
 
       {selected && (
         <Toolbar
-          handleUpdateNodeColor={handleUpdateNodeColor}
-          selected={selected}
           handleDeleteNode={handleDeleteNode}
+          handleUpdateNodeColor={handleUpdateNodeColor}
           handleUpdateTextSize={handleUpdateTextSize}
+          selected={selected}
         />
       )}
 
       <div
-        className="w-full h-full flex items-center justify-center p-2"
+        className="flex h-full w-full items-center justify-center p-2"
         style={{
           pointerEvents: isEditingText ? "all" : "none",
         }}
       >
         {isEditingText ? (
           <EditorContent
+            className="nodrag h-full w-full"
             editor={editor}
-            className="w-full h-full nodrag"
             style={{
               pointerEvents: "all",
               minHeight: "100%",
@@ -407,7 +414,7 @@ const Squaree = (props: ExtendedNode) => {
           />
         ) : (
           <div
-            className="w-full h-full flex items-center justify-center text-center break-words prose-mirror-content"
+            className="prose-mirror-content flex h-full w-full items-center justify-center break-words text-center"
             style={{
               wordWrap: "break-word",
               overflowWrap: "break-word",
@@ -424,11 +431,11 @@ const Squaree = (props: ExtendedNode) => {
                 return (
                   <span className="text-muted-foreground italic">Add text</span>
                 );
-              } else if (isEmpty) {
-                return "";
-              } else {
-                return <div dangerouslySetInnerHTML={{ __html: content }} />;
               }
+              if (isEmpty) {
+                return "";
+              }
+              return <div dangerouslySetInnerHTML={{ __html: content }} />;
             })()}
           </div>
         )}

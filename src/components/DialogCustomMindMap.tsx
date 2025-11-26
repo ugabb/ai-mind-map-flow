@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-import { Button } from "./ui/button";
-import { useNodeStore } from "@/store/NodeStore";
 import toast from "react-hot-toast";
+import { useNodeStore } from "@/store/NodeStore";
+import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
 function DialogCustomMindMap() {
   const [mindMapData, setMindMapData] = useState("");
@@ -22,7 +22,7 @@ function DialogCustomMindMap() {
       setIsOpen(false);
       setMindMapData("");
       toast.success("Mind map data applied successfully!");
-    } catch (error) {
+    } catch (_error) {
       toast.error("Invalid JSON format. Please check your input.");
     }
   };
@@ -42,43 +42,43 @@ function DialogCustomMindMap() {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Custom Mind Map</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[80vh]">
+      <DialogContent className="max-h-[80vh] max-w-2xl">
         <div className="space-y-4">
           <div>
-            <h2 className="text-lg font-semibold">Custom Mind Map Data</h2>
-            <p className="text-sm text-muted-foreground">
+            <h2 className="font-semibold text-lg">Custom Mind Map Data</h2>
+            <p className="text-muted-foreground text-sm">
               Enter your mind map data in JSON format
             </p>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="mindMapData" className="text-sm font-medium">
+            <label className="font-medium text-sm" htmlFor="mindMapData">
               Mind Map JSON:
             </label>
             <textarea
+              className="h-64 w-full resize-none rounded-md border border-gray-300 p-3 font-mono text-sm"
               id="mindMapData"
-              value={mindMapData}
               onChange={(e) => setMindMapData(e.target.value)}
               placeholder={`Example format:\n${JSON.stringify(
                 exampleData,
                 null,
                 2
               )}`}
-              className="w-full h-64 p-3 border border-gray-300 rounded-md resize-none font-mono text-sm"
+              value={mindMapData}
             />
           </div>
 
           <div className="flex justify-end space-x-3">
             <Button
-              variant="outline"
               onClick={() => {
                 setIsOpen(false);
                 setMindMapData("");
               }}
+              variant="outline"
             >
               Cancel
             </Button>

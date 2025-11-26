@@ -7,6 +7,7 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
 });
+
 import { CustomQueryClientProvider } from "@/components/CustomQueryClientProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -21,18 +22,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="en" suppressHydrationWarning>
-        <body className={poppins.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <CustomQueryClientProvider>{children}</CustomQueryClientProvider>
-            <Toaster />
-          </ThemeProvider>
-        </body>
-      </html>
+    <html lang="en" suppressHydrationWarning>
+      <body className={poppins.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableSystem
+        >
+          <CustomQueryClientProvider>{children}</CustomQueryClientProvider>
+          <Toaster />
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

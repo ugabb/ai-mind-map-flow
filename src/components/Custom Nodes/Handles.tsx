@@ -1,9 +1,9 @@
 import { Handle, Position } from "@xyflow/react";
-import { Direction } from "./Square/Squaree";
-import { GhostSquare } from "../GhostSquare";
 import { memo } from "react";
+import { GhostSquare } from "../GhostSquare";
+import type { Direction } from "./Square/Squaree";
 
-interface HandleProps {
+type HandleProps = {
   isAddingNode: Direction;
   setIsAddingNode: React.Dispatch<React.SetStateAction<Direction>>;
   handleAddSideNode: (direction: string) => void;
@@ -12,7 +12,7 @@ interface HandleProps {
   targetPosition: Position | undefined;
   sourcePosition: Position | undefined;
   color?: string;
-}
+};
 
 export const Handles_ = (props: HandleProps) => {
   const {
@@ -30,157 +30,157 @@ export const Handles_ = (props: HandleProps) => {
     <>
       {isAddingNode.top ? (
         <Handle
+          className={`-top-6 flex size-10 items-center justify-center bg-[url('/icons/arrow-up.svg')] bg-center bg-primary bg-no-repeat`}
           id="top"
-          type="target"
-          position={Position.Top}
-          className={`-top-6 size-10 bg-primary flex justify-center items-center bg-[url('/icons/arrow-up.svg')] bg-no-repeat bg-center`}
-          onMouseOver={() =>
-            setIsAddingNode((prev) => ({ ...prev, top: true }))
-          }
+          onClick={() => handleAddSideNode("top")}
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, top: false }))
           }
-          onClick={() => handleAddSideNode("top")}
+          onMouseOver={() =>
+            setIsAddingNode((prev) => ({ ...prev, top: true }))
+          }
+          position={Position.Top}
+          type="target"
         />
       ) : (
         <Handle
+          className={"-top-6 h-3 w-3 bg-primary"}
           id="top"
-          type="target"
-          position={Position.Top}
-          className={`-top-6 w-3 h-3 bg-primary`}
-          onMouseOver={() =>
-            setIsAddingNode((prev) => ({ ...prev, top: true }))
-          }
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, top: false }))
           }
+          onMouseOver={() =>
+            setIsAddingNode((prev) => ({ ...prev, top: true }))
+          }
+          position={Position.Top}
+          type="target"
         />
       )}
 
       {isAddingNode.top && (
         <GhostSquare
-          width={width as number}
-          height={height as number}
-          direction="top"
           color={color}
+          direction="top"
+          height={height as number}
+          width={width as number}
         />
       )}
 
       {isAddingNode.bottom ? (
         <Handle
+          className={`-bottom-6 flex size-10 items-center justify-center bg-[url('/icons/arrow-down.svg')] bg-center bg-primary bg-no-repeat`}
           id="bottom"
-          type="source"
-          position={Position.Bottom}
-          className={`-bottom-6 size-10 bg-primary flex justify-center items-center bg-[url('/icons/arrow-down.svg')] bg-no-repeat bg-center`}
-          onMouseOver={() =>
-            setIsAddingNode((prev) => ({ ...prev, bottom: true }))
-          }
+          onClick={() => handleAddSideNode("bottom")}
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, bottom: false }))
           }
-          onClick={() => handleAddSideNode("bottom")}
+          onMouseOver={() =>
+            setIsAddingNode((prev) => ({ ...prev, bottom: true }))
+          }
+          position={Position.Bottom}
+          type="source"
         />
       ) : (
         <Handle
+          className={"-bottom-6 h-3 w-3 bg-primary"}
           id="bottom"
-          type="source"
-          position={Position.Bottom}
-          className={`-bottom-6 w-3 h-3 bg-primary  `}
-          onMouseOver={() =>
-            setIsAddingNode((prev) => ({ ...prev, bottom: true }))
-          }
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, bottom: false }))
           }
+          onMouseOver={() =>
+            setIsAddingNode((prev) => ({ ...prev, bottom: true }))
+          }
+          position={Position.Bottom}
+          type="source"
         />
       )}
 
       {isAddingNode.bottom && (
         <GhostSquare
-          width={width as number}
-          height={height as number}
-          direction="bottom"
           color={color}
+          direction="bottom"
+          height={height as number}
+          width={width as number}
         />
       )}
 
       {isAddingNode.right ? (
         <Handle
+          className={`-right-6 flex size-10 items-center justify-center bg-[url('/icons/arrow-right.svg')] bg-center bg-primary bg-no-repeat`}
           id="right"
-          type="source"
-          position={Position.Right}
-          className={`-right-6 size-10 bg-primary flex justify-center items-center bg-[url('/icons/arrow-right.svg')] bg-no-repeat bg-center`}
-          onMouseOver={() =>
-            setIsAddingNode((prev) => ({ ...prev, right: true }))
-          }
+          onClick={() => handleAddSideNode("right")}
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, right: false }))
           }
-          onClick={() => handleAddSideNode("right")}
+          onMouseOver={() =>
+            setIsAddingNode((prev) => ({ ...prev, right: true }))
+          }
+          position={Position.Right}
+          type="source"
         />
       ) : (
         <Handle
-          id="right"
-          type="source"
-          position={Position.Right}
-          className={`-right-6 w-3 h-3 bg-primary ${
+          className={`-right-6 h-3 w-3 bg-primary ${
             (targetPosition === Position.Right ||
               sourcePosition === Position.Right) &&
             "bg-transparent"
           }`}
-          onMouseOver={() =>
-            setIsAddingNode((prev) => ({ ...prev, right: true }))
-          }
+          id="right"
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, right: false }))
           }
+          onMouseOver={() =>
+            setIsAddingNode((prev) => ({ ...prev, right: true }))
+          }
+          position={Position.Right}
+          type="source"
         />
       )}
 
       {isAddingNode.right && (
         <GhostSquare
-          width={width as number}
-          height={height as number}
-          direction="right"
           color={color}
+          direction="right"
+          height={height as number}
+          width={width as number}
         />
       )}
 
       {isAddingNode.left ? (
         <Handle
+          className={`-left-6 flex size-10 items-center justify-center bg-[url('/icons/arrow-left.svg')] bg-center bg-primary bg-no-repeat`}
           id="left"
-          type="source"
-          position={Position.Left}
-          className={`-left-6 size-10 bg-primary flex justify-center items-center bg-[url('/icons/arrow-left.svg')] bg-no-repeat bg-center`}
-          onMouseOver={() =>
-            setIsAddingNode((prev) => ({ ...prev, left: true }))
-          }
+          onClick={() => handleAddSideNode("left")}
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, left: false }))
           }
-          onClick={() => handleAddSideNode("left")}
+          onMouseOver={() =>
+            setIsAddingNode((prev) => ({ ...prev, left: true }))
+          }
+          position={Position.Left}
+          type="source"
         />
       ) : (
         <Handle
+          className={"-left-6 h-3 w-3 bg-primary"}
           id="left"
-          type="source"
-          position={Position.Left}
-          className={`-left-6 w-3 h-3 bg-primary `}
-          onMouseOver={() =>
-            setIsAddingNode((prev) => ({ ...prev, left: true }))
-          }
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, left: false }))
           }
+          onMouseOver={() =>
+            setIsAddingNode((prev) => ({ ...prev, left: true }))
+          }
+          position={Position.Left}
+          type="source"
         />
       )}
 
       {isAddingNode.left && (
         <GhostSquare
-          width={width as number}
-          height={height as number}
-          direction="left"
           color={color}
+          direction="left"
+          height={height as number}
+          width={width as number}
         />
       )}
     </>

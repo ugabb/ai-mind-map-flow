@@ -1,11 +1,11 @@
 import {
-  useReactFlow,
   getNodesBounds,
   getViewportForBounds,
+  useReactFlow,
 } from "@xyflow/react";
 import { toPng } from "html-to-image";
-import { zinc } from "tailwindcss/colors";
 import { PiArrowDown } from "react-icons/pi";
+import { zinc } from "tailwindcss/colors";
 
 import {
   Tooltip,
@@ -45,7 +45,9 @@ function Export() {
       ".react-flow__viewport"
     ) as HTMLElement;
 
-    if (!reactFlow) return;
+    if (!reactFlow) {
+      return;
+    }
 
     toPng(reactFlow, {
       backgroundColor: zinc[50],
@@ -65,8 +67,8 @@ function Export() {
       <Tooltip>
         <TooltipTrigger>
           <PiArrowDown
+            className="size-24 translate-y-4 cursor-pointer transition-transform hover:translate-y-1"
             onClick={onClick}
-            className="size-24 translate-y-4 hover:translate-y-1 transition-transform cursor-pointer"
           />
         </TooltipTrigger>
         <TooltipContent className="bg-primary">

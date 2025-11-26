@@ -75,7 +75,7 @@
   }
 }
 
-.text-shadow{
+.text-shadow {
   text-shadow: 1px 1px 10px rgb(0, 0, 0, 0.25);
 }
 
@@ -124,7 +124,7 @@
 }
 
 .ProseMirror[contenteditable="true"] > p:only-child:empty::before {
-  content: '';
+  content: "";
   display: inline-block;
 }
 
@@ -239,7 +239,8 @@
 }
 
 /* Lists and bullet points */
-.ProseMirror ul, .prose-mirror-content ul {
+.ProseMirror ul,
+.prose-mirror-content ul {
   list-style-type: disc !important;
   margin-left: 1.5em !important;
   margin: 0.5em 0 !important;
@@ -247,7 +248,8 @@
   text-align: left !important;
 }
 
-.ProseMirror ol, .prose-mirror-content ol {
+.ProseMirror ol,
+.prose-mirror-content ol {
   list-style-type: decimal !important;
   margin-left: 1.5em !important;
   margin: 0.5em 0 !important;
@@ -255,22 +257,25 @@
   text-align: left !important;
 }
 
-.ProseMirror li, .prose-mirror-content li {
+.ProseMirror li,
+.prose-mirror-content li {
   margin: 0.2em 0 !important;
   text-align: left !important;
 }
 
 /* Code blocks and inline code */
-.ProseMirror code, .prose-mirror-content code {
+.ProseMirror code,
+.prose-mirror-content code {
   background-color: #f3f4f6 !important;
   color: #1f2937 !important;
   padding: 0.125rem 0.25rem !important;
   border-radius: 0.25rem !important;
-  font-family: 'Courier New', monospace !important;
+  font-family: "Courier New", monospace !important;
   font-size: 0.875em !important;
 }
 
-.ProseMirror pre, .prose-mirror-content pre {
+.ProseMirror pre,
+.prose-mirror-content pre {
   background-color: #f3f4f6 !important;
   color: #1f2937 !important;
   padding: 1rem !important;
@@ -280,14 +285,16 @@
   text-align: left !important;
 }
 
-.ProseMirror pre code, .prose-mirror-content pre code {
+.ProseMirror pre code,
+.prose-mirror-content pre code {
   background-color: transparent !important;
   padding: 0 !important;
   border-radius: 0 !important;
 }
 
 /* Blockquotes */
-.ProseMirror blockquote, .prose-mirror-content blockquote {
+.ProseMirror blockquote,
+.prose-mirror-content blockquote {
   border-left: 4px solid #d1d5db !important;
   margin: 0.5em 0 !important;
   padding-left: 1rem !important;
@@ -297,7 +304,8 @@
 }
 
 /* Horizontal rule */
-.ProseMirror hr, .prose-mirror-content hr {
+.ProseMirror hr,
+.prose-mirror-content hr {
   border: none !important;
   border-top: 2px solid #e5e7eb !important;
   margin: 1em 0 !important;
@@ -306,10 +314,10 @@
 @layer base {
   * {
     @apply border-border;
-    }
+  }
   body {
     @apply bg-background text-foreground;
-    }
+  }
 }
 
 /* Helper class for content measurement */
@@ -346,7 +354,8 @@
   line-height: 1.4 !important;
 }
 
-.content-measure ul, .content-measure ol {
+.content-measure ul,
+.content-measure ol {
   margin: 0.5em 0 !important;
   padding-left: 1.5em !important;
 }

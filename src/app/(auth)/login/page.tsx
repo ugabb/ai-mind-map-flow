@@ -1,9 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
+import { ImSpinner8 } from "react-icons/im";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,12 +16,8 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ImSpinner8 } from "react-icons/im";
-import { FcGoogle } from "react-icons/fc";
-import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/authClient";
+import { cn } from "@/lib/utils";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -35,7 +33,7 @@ export default function Login() {
 
   const onSubmit = async (data: LoginFormValues) => {
     await authClient.signIn.email({
-      email: data.email,  
+      email: data.email,
       password: data.password,
       callbackURL: "/home",
       rememberMe: true,
@@ -52,7 +50,7 @@ export default function Login() {
   return (
     <div className="p-5">
       <div className="mb-5">
-        <h1 className="text-3xl font-bold">Login</h1>
+        <h1 className="font-bold text-3xl">Login</h1>
         <p className="text-base text-muted-foreground">
           Welcome! Enter your e-mail
         </p>
@@ -60,8 +58,8 @@ export default function Login() {
 
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-3"
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField
             control={form.control}
@@ -73,15 +71,15 @@ export default function Login() {
                   <div className="flex flex-col">
                     <Input
                       {...field}
-                      placeholder="E-mail"
-                      type="email"
                       className={cn({
                         "border-red-500 focus-visible:ring-red-500":
                           form.formState.errors.password,
                       })}
+                      placeholder="E-mail"
+                      type="email"
                     />
                     {form.formState.errors.email && (
-                      <p className="text-xs text-destructive">
+                      <p className="text-destructive text-xs">
                         {form.formState.errors.email?.message}
                       </p>
                     )}
@@ -101,15 +99,15 @@ export default function Login() {
                   <div className="flex flex-col gap-1">
                     <Input
                       {...field}
-                      placeholder="Password"
-                      type="password"
                       className={cn({
                         "border-red-500 focus-visible:ring-red-500":
                           form.formState.errors.password,
                       })}
+                      placeholder="Password"
+                      type="password"
                     />
                     {form.formState.errors.password && (
-                      <p className="text-xs text-destructive">
+                      <p className="text-destructive text-xs">
                         {form.formState.errors.password?.message}
                       </p>
                     )}
@@ -119,34 +117,34 @@ export default function Login() {
               </FormItem>
             )}
           />
-          <div className="flex flex-col gap-1 justify-center items-center w-full">
+          <div className="flex w-full flex-col items-center justify-center gap-1">
             <Button
-              type="submit"
-              className="bg-primary text-primary-foreground font-semibold hover:bg-primary/90 w-full"
+              className="w-full bg-primary font-semibold text-primary-foreground hover:bg-primary/90"
               disabled={form.formState.isSubmitting}
+              type="submit"
             >
               {form.formState.isSubmitting ? (
-                <ImSpinner8 className="size-5 text-primary-foreground animate-spin" />
+                <ImSpinner8 className="size-5 animate-spin text-primary-foreground" />
               ) : (
                 "Sign In"
               )}
             </Button>
             <div className="space-x-2">
-              <span className="text-sm text-muted-foreground">
+              <span className="text-muted-foreground text-sm">
                 Don&apos;t have an account?
               </span>
               <Link
+                className="text-primary text-sm transition-all hover:underline"
                 href={"/sign-up"}
-                className="text-sm text-primary hover:underline transition-all"
               >
                 Click here!
               </Link>
             </div>
           </div>
-          <div className="flex justify-center items-center">
+          <div className="flex items-center justify-center">
             <FcGoogle
-              onClick={handleGoogleLogin}
               className="size-10 cursor-pointer"
+              onClick={handleGoogleLogin}
             />
           </div>
         </form>

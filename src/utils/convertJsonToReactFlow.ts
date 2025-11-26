@@ -1,4 +1,4 @@
-import { Node, Edge, Position, MarkerType } from "@xyflow/react";
+import { type Edge, MarkerType, type Node, Position } from "@xyflow/react";
 
 // Counter to generate unique node IDs
 let nodeCounter = 0;
@@ -39,7 +39,7 @@ export function convertJsonToReactFlow(jsonData: any): [Node[], Edge[]] {
   function processNode(
     data: any,
     parentId: string | null = null,
-    key: string = ""
+    key = ""
   ): string {
     const nodeId = generateNodeId();
 

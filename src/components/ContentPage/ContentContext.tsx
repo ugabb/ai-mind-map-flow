@@ -1,22 +1,22 @@
 "use client";
 
-import { createContext, useContext, ReactNode } from "react";
-import { Content } from "@/types/content";
+import { createContext, type ReactNode, useContext } from "react";
+import type { Content } from "@/types/content";
 
-interface ContentContextType {
+type ContentContextType = {
   contentId: string;
   rawTranscription: string;
   content: Content;
-}
+};
 
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
 
-interface ContentProviderProps {
+type ContentProviderProps = {
   children: ReactNode;
   contentId: string;
   rawTranscription: string;
   content: Content;
-}
+};
 
 export function ContentProvider({
   children,

@@ -1,35 +1,34 @@
 "use client";
 
-import { useState, useCallback, useLayoutEffect } from "react";
 import {
-  ReactFlow,
-  useNodesState,
-  useEdgesState,
   addEdge,
-  Background,
-  ConnectionMode,
-  Connection,
-  MarkerType,
-  ReactFlowInstance,
-  Edge,
-  Node,
   applyEdgeChanges,
   applyNodeChanges,
-  NodeChange,
-  EdgeChange,
+  Background,
+  type Connection,
+  ConnectionMode,
+  type Edge,
+  type EdgeChange,
+  MarkerType,
   MiniMap,
+  type Node,
+  type NodeChange,
+  ReactFlow,
+  type ReactFlowInstance,
+  useEdgesState,
+  useNodesState,
 } from "@xyflow/react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import "@xyflow/react/dist/style.css";
+import ELK from "elkjs/lib/elk.bundled.js";
+import toast from "react-hot-toast";
+import { ImSpinner8 } from "react-icons/im";
 import { Square } from "@/components/Custom Nodes/Square/Squaree";
 import { DefaultEdge } from "@/components/edges/DefaultEdges";
-import convertJsonToReactFlow from "@/utils/convertJsonToReactFlow";
-import ELK from "elkjs/lib/elk.bundled.js";
-import { useNodeStore } from "@/store/NodeStore";
-import { ImSpinner8 } from "react-icons/im";
-import toast from "react-hot-toast";
 import { Menubar } from "@/components/Menubar";
+import { useNodeStore } from "@/store/NodeStore";
+import convertJsonToReactFlow from "@/utils/convertJsonToReactFlow";
 import { EmptyMindMap } from "./EmptyMindMap";
-import { useContentContext } from "../ContentContext";
 
 const elk = new ELK();
 
@@ -111,7 +110,7 @@ export function MindMapTab() {
       console.log("onNodesChange", rfInstance?.toObject());
       setNodes((nds) => applyNodeChanges(changes, nds));
     },
-    [setNodes]
+    [setNodes, rfInstance?.toObject]
   );
 
   const onEdgesChange = useCallback(
@@ -123,7 +122,9 @@ export function MindMapTab() {
 
   const handleMouseMove = useCallback(
     (event: any) => {
-      if (!isCreatingNode) return;
+      if (!isCreatingNode) {
+        return;
+      }
       setMousePosition({ x: event.clientX, y: event.clientY });
     },
     [isCreatingNode]
@@ -149,16 +150,16 @@ export function MindMapTab() {
       getLayoutedElements(ns, es, opts).then((layoutedGraph) => {
         if (layoutedGraph) {
           const { nodes: layoutedNodes, edges: layoutedEdges } = layoutedGraph;
-          // @ts-ignore
+          // @ts-expect-error
           setNodes(layoutedNodes);
-          // @ts-ignore
+          // @ts-expect-error
           setEdges(layoutedEdges);
         } else {
           toast.error("Error layouting the graph");
         }
       });
     },
-    [setNodes, setEdges]
+    [setNodes, setEdges, edges, nodes]
   );
 
   useLayoutEffect(() => {
@@ -169,7 +170,7 @@ export function MindMapTab() {
       setEdges(newEdges);
       onLayout({ direction: "DOWN" }, [newNodes, newEdges]);
     }
-  }, [mindMapToGenerate]);
+  }, [mindMapToGenerate, onLayout, setEdges, setNodes]);
 
   useLayoutEffect(() => {
     if (currentMindMap) {
@@ -178,18 +179,16 @@ export function MindMapTab() {
       setEdges(newEdges);
       onLayout({ direction: "DOWN" }, [newNodes, newEdges]);
     }
-  }, [currentMindMap]);
+  }, [currentMindMap, onLayout, setEdges, setNodes]);
 
   return (
-    <div className="h-full border rounded-lg overflow-hidden">
+    <div className="h-full overflow-hidden rounded-lg border">
       {nodes.length === 0 && <EmptyMindMap />}
 
       {nodes.length > 0 && (
         <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgesTypes}
+          className="h-full w-full"
+          connectionMode={ConnectionMode.Loose}
           defaultEdgeOptions={{
             type: "default",
             markerEnd: {
@@ -199,22 +198,24 @@ export function MindMapTab() {
               color: "hsl(var(--muted-foreground))",
             },
           }}
-          onInit={setRfInstance}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          connectionMode={ConnectionMode.Loose}
+          edges={edges}
+          edgeTypes={edgesTypes}
           fitView
           fitViewOptions={{ padding: 2 }}
-          className="h-full w-full"
+          nodes={nodes}
+          nodeTypes={nodeTypes}
+          onConnect={onConnect}
+          onEdgesChange={onEdgesChange}
+          onInit={setRfInstance}
           onMouseMove={handleMouseMove}
+          onNodesChange={onNodesChange}
           panOnDrag={false}
           panOnScroll
           selectionOnDrag
         >
           {isCreatingNode && (
             <div
-              className="bg-primary/20 rounded min-w-[200px] min-h-[200px]"
+              className="min-h-[200px] min-w-[200px] rounded bg-primary/20"
               style={{
                 position: "absolute",
                 left: mousePosition?.x - 8,
@@ -230,8 +231,8 @@ export function MindMapTab() {
           <Menubar rfInstance={rfInstance} />
 
           {mindMapLoadingRequest && (
-            <div className="fixed inset-0 flex items-center justify-center z-[999] bg-background/80">
-              <ImSpinner8 className="w-10 h-10 text-primary animate-spin z-50" />
+            <div className="fixed inset-0 z-[999] flex items-center justify-center bg-background/80">
+              <ImSpinner8 className="z-50 h-10 w-10 animate-spin text-primary" />
             </div>
           )}
         </ReactFlow>

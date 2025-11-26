@@ -1,23 +1,26 @@
 import * as T from "@radix-ui/react-toolbar";
-import { Node, ReactFlowInstance, useReactFlow } from "@xyflow/react";
-import { memo, useCallback, useEffect } from "react";
-import { useNodeStore } from "@/store/NodeStore";
-import { saveMindMap, SaveMindRequest } from "@/services/mind-map/saveMindMap";
-import { SaveMindMapModal } from "./SaveMindMapModal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getMindMap } from "@/services/mind-map/getMindMap";
+import { type Node, type ReactFlowInstance, useReactFlow } from "@xyflow/react";
 import { useParams, usePathname } from "next/navigation";
-import {
-  updateMindMap,
-  UpdateMindMapRequest,
-} from "@/services/mind-map/updateMindMap";
+import { memo, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
-import Export from "./Export";
 import { authClient } from "@/lib/authClient";
+import { getMindMap } from "@/services/mind-map/getMindMap";
+import {
+  type SaveMindRequest,
+  saveMindMap,
+} from "@/services/mind-map/saveMindMap";
+import {
+  type UpdateMindMapRequest,
+  updateMindMap,
+} from "@/services/mind-map/updateMindMap";
+import { useNodeStore } from "@/store/NodeStore";
+import Export from "./Export";
+import { SaveMindMapModal } from "./SaveMindMapModal";
 
-interface MenuBarProps {
+type MenuBarProps = {
   rfInstance: ReactFlowInstance | null;
-}
+};
 
 export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
   const {
@@ -97,7 +100,9 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
   );
 
   useEffect(() => {
-    if (!isCreatingNode) return;
+    if (!isCreatingNode) {
+      return;
+    }
     document.addEventListener("click", handleClickToCreate);
     return () => document.removeEventListener("click", handleClickToCreate);
   }, [handleClickToCreate, isCreatingNode]);
@@ -106,7 +111,9 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
 
   const onSave = useCallback(
     async (title: string) => {
-      if (!rfInstance) return;
+      if (!rfInstance) {
+        return;
+      }
 
       const mindMapId = mindMapData?.id;
       const mindMapObject = rfInstance.toObject();
@@ -121,7 +128,7 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
       }
 
       if (pathname.includes("/unsaved")) {
-        console.log(`unsaved`, mindMapObject);
+        console.log("unsaved", mindMapObject);
         await saveMindMapFn.mutateAsync({
           userId: session?.user?.id as string,
           title,
@@ -129,11 +136,20 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
         });
       }
     },
-    [rfInstance, mindMapData?.id, updateMindMapFn, session?.user?.id, pathname]
+    [
+      rfInstance,
+      mindMapData?.id,
+      updateMindMapFn,
+      session?.user?.id,
+      pathname,
+      saveMindMapFn.mutateAsync,
+    ]
   );
 
   const onRestore = useCallback(() => {
-    if (!mindMapData?.mindMap) return;
+    if (!mindMapData?.mindMap) {
+      return;
+    }
 
     const {
       nodes = [],
@@ -146,13 +162,13 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
     if (typeof mindMapData.mindMap === "string") {
       setMindMapToGenerate(mindMapData.mindMap);
     }
-  }, [mindMapData]);
+  }, [mindMapData, setEdges, setMindMapToGenerate, setNodes, setViewport]);
 
   useEffect(() => {
     if (mindMapData?.mindMap) {
       onRestore();
     }
-  }, [mindMapData, viewportInitialized, onRestore]);
+  }, [mindMapData, onRestore]);
 
   useEffect(() => {
     if (mindMapData) {
@@ -161,23 +177,23 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
   }, [mindMapData, setCurrentMindMap]);
 
   return (
-    <T.Root className="absolute flex items-center w-full h-20 max-w-[425px] rounded-lg border border-border z-50 bg-background fixed bottom-20 left-1/2 -translate-x-1/2 drop-shadow-md overflow-hidden">
+    <T.Root className="-translate-x-1/2 fixed absolute bottom-20 left-1/2 z-50 flex h-20 w-full max-w-[425px] items-center overflow-hidden rounded-lg border border-border bg-background drop-shadow-md">
       <T.Button />
       <T.Separator />
       <T.Link />
       <T.ToggleGroup
+        className="flex w-full items-center justify-between gap-5 px-2"
         type="single"
-        className="flex items-center justify-between w-full gap-5 px-2"
       >
         <T.ToggleItem
+          className="h-24 w-24 translate-y-8 rounded-md bg-primary transition-transform hover:translate-y-5"
           onClick={activeIsCreatingNode}
           value="create-node"
-          className="w-24 h-24 translate-y-8 bg-primary rounded-md hover:translate-y-5 transition-transform"
         />
         <Export />
         <SaveMindMapModal
-          onSave={onSave}
           isPending={saveMindMapFn.isPending || updateMindMapFn.isPending}
+          onSave={onSave}
           title={mindMapData?.title}
         />
       </T.ToggleGroup>

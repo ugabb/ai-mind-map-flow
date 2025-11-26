@@ -1,34 +1,36 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { api } from "../axios";
 import { getVideoIdYouTube } from "@/utils/get-video-id-youtube";
+import { api } from "../axios";
 
-interface YouTubeTranscriptRequest {
+type YouTubeTranscriptRequest = {
   url: string;
   isUrlValid: boolean;
   lang?: string;
-}
+};
 
-interface TranscriptChunk {
+type TranscriptChunk = {
   text: string;
   offset: number;
   duration: number;
   lang: string;
-}
-interface Transcript {
+};
+type Transcript = {
   content: TranscriptChunk[] | string;
   lang: string;
   availableLangs: string[];
-}
+};
 
-export interface YoutubeTranscriptionResult {
+export type YoutubeTranscriptionResult = {
   transcript: Transcript;
   transcriptionRaw: string;
-}
+};
 
 // Helper function to validate YouTube URL
 const isValidYouTubeUrl = (url: string): boolean => {
-  if (!url || typeof url !== "string" || url.trim() === "") return false;
+  if (!url || typeof url !== "string" || url.trim() === "") {
+    return false;
+  }
 
   const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
   return youtubeRegex.test(url.trim());

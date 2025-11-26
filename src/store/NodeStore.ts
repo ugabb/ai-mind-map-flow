@@ -1,8 +1,7 @@
-import { MindMapResponse } from "@/types/mind-map";
-import { Edge, XYPosition } from "@xyflow/react";
 import { create } from "zustand";
+import type { MindMapResponse } from "@/types/mind-map";
 
-export interface NodeState {
+export type NodeState = {
   nodes: Node[];
   mindMapToGenerate: any;
   setMindMapToGenerate: (mindMap: string) => void;
@@ -25,7 +24,7 @@ export interface NodeState {
   // edges: Edge[];
   mindMapLoadingRequest: boolean;
   setMindMapLoadingRequest: (isLoading: boolean) => void;
-}
+};
 
 export const useNodeStore = create<NodeState>()((set) => ({
   isCreatingNode: false,

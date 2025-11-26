@@ -2,7 +2,6 @@
 
 import { HeroSection } from "@/components/HeroSection";
 import { RecentsGrid } from "@/components/RecentsGrid";
-import { MindMapList } from "@/components/MindMapList";
 
 export default function Home() {
   return (

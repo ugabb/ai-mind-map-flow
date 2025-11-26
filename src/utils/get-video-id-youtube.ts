@@ -1,5 +1,7 @@
 export function getVideoIdYouTube(url: string): string | null {
-  if (!url || typeof url !== "string" || url.trim() === "") return null;
+  if (!url || typeof url !== "string" || url.trim() === "") {
+    return null;
+  }
 
   try {
     const trimmedUrl = url.trim();

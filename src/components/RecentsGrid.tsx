@@ -1,26 +1,26 @@
 "use client";
 
-import { RecentCard } from "./RecentCard";
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { RecentCard } from "./RecentCard";
 
-interface RecentItem {
+type RecentItem = {
   id: string;
   title: string;
   subtitle?: string;
   timestamp: string;
   thumbnail?: string;
   type?: "video" | "document";
-}
+};
 
-interface RecentsGridProps {
+type RecentsGridProps = {
   items?: RecentItem[];
   onViewAll?: () => void;
   onItemClick?: (item: RecentItem) => void;
   onItemDelete?: (item: RecentItem) => void;
   onItemEdit?: (item: RecentItem) => void;
   onItemShare?: (item: RecentItem) => void;
-}
+};
 
 // Mock data for demonstration
 const mockItems: RecentItem[] = [
@@ -52,10 +52,10 @@ export const RecentsGrid = ({
   return (
     <div className="w-full">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold">Recents</h2>
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="font-semibold text-lg">Recents</h2>
         {onViewAll && (
-          <Button variant="ghost" size="sm" onClick={onViewAll}>
+          <Button onClick={onViewAll} size="sm" variant="ghost">
             View all
           </Button>
         )}
@@ -63,9 +63,9 @@ export const RecentsGrid = ({
 
       {/* Grid */}
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-        initial="hidden"
         animate="show"
+        className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        initial="hidden"
         variants={{
           hidden: { opacity: 0 },
           show: {
@@ -85,15 +85,15 @@ export const RecentsGrid = ({
             }}
           >
             <RecentCard
-              title={item.title}
-              subtitle={item.subtitle}
-              timestamp={item.timestamp}
-              thumbnail={item.thumbnail}
-              type={item.type}
               onClick={() => onItemClick?.(item)}
               onDelete={() => onItemDelete?.(item)}
               onEdit={() => onItemEdit?.(item)}
               onShare={() => onItemShare?.(item)}
+              subtitle={item.subtitle}
+              thumbnail={item.thumbnail}
+              timestamp={item.timestamp}
+              title={item.title}
+              type={item.type}
             />
           </motion.div>
         ))}
@@ -101,9 +101,9 @@ export const RecentsGrid = ({
 
       {/* Empty state */}
       {items.length === 0 && (
-        <div className="text-center py-12">
-          <div className="text-muted-foreground mb-2">No recent items</div>
-          <p className="text-sm text-muted-foreground">
+        <div className="py-12 text-center">
+          <div className="mb-2 text-muted-foreground">No recent items</div>
+          <p className="text-muted-foreground text-sm">
             Your recent learning materials will appear here
           </p>
         </div>

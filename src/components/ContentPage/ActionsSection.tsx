@@ -1,18 +1,18 @@
 "use client";
 
-import { useNodeStore } from "@/store/NodeStore";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useNodeStore } from "@/store/NodeStore";
 import { FlashCardTab } from "./FlashCard/FlashCard";
-import { SummaryTab } from "./SummaryTab/SummaryTab";
 import { MindMapTab } from "./MindMapTab/MindMapTab";
+import { SummaryTab } from "./SummaryTab/SummaryTab";
 
 export function ActionsSection() {
   const { currentMindMap } = useNodeStore();
 
   return (
     <div className="h-full px-2">
-      <Tabs defaultValue="mindmap" className="h-full flex flex-col space-y-2">
-        <TabsList className="flex gap-2 w-full">
+      <Tabs className="flex h-full flex-col space-y-2" defaultValue="mindmap">
+        <TabsList className="flex w-full gap-2">
           <TabsTrigger className="w-full" value="mindmap">
             Mind Map
           </TabsTrigger>
@@ -27,13 +27,13 @@ export function ActionsSection() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="mindmap" className="flex-1 m-0">
+        <TabsContent className="m-0 flex-1" value="mindmap">
           <MindMapTab />
         </TabsContent>
-        <TabsContent value="flashcard" className="flex-1 m-0">
+        <TabsContent className="m-0 flex-1" value="flashcard">
           <FlashCardTab />
         </TabsContent>
-        <TabsContent value="summary" className="flex-1 m-0">
+        <TabsContent className="m-0 flex-1" value="summary">
           <SummaryTab data={undefined} />
         </TabsContent>
       </Tabs>

@@ -1,13 +1,7 @@
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { NodeToolbar, Position } from "@xyflow/react";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
+import { memo } from "react";
+import { LuTrash, LuType } from "react-icons/lu";
 import {
   black,
   blue,
@@ -24,11 +18,15 @@ import {
   white,
   yellow,
 } from "tailwindcss/colors";
-import { cn } from "@/lib/utils";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { LuTrash, LuType } from "react-icons/lu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { fontSizes } from "@/constants/values";
-import { memo } from "react";
+import { cn } from "@/lib/utils";
 
 const bgColors = [
   { color: "bg-blue-500", name: "Blue", value: blue[500] },
@@ -47,12 +45,12 @@ const bgColors = [
   { color: "bg-white", name: "White", value: white },
 ];
 
-interface ColorPickerProps {
+type ColorPickerProps = {
   handleUpdateNodeColor: (color: string) => void;
   handleUpdateTextSize: (size: "sm" | "md" | "lg" | "xl") => void;
   handleDeleteNode: () => void;
   selected: boolean;
-}
+};
 
 export const Toolbar_ = (props: ColorPickerProps) => {
   const {
@@ -63,26 +61,26 @@ export const Toolbar_ = (props: ColorPickerProps) => {
   } = props;
   return (
     <NodeToolbar
+      className="flex items-center gap-3 rounded-lg bg-muted-foreground px-5 py-2 text-muted text-xs"
       isVisible={selected}
-      position={Position.Top}
       offset={50}
-      className="flex items-center gap-3 bg-muted-foreground text-muted text-xs px-5 py-2 rounded-lg"
+      position={Position.Top}
     >
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center">
-          <span className="h-5 w-5 bg-primary rounded-full"></span>
+          <span className="h-5 w-5 rounded-full bg-primary" />
           <ChevronDownIcon className="size-3 text-muted" />
         </DropdownMenuTrigger>
         <DropdownMenuContent className="flex flex-col p-2">
           <DropdownMenuLabel>Select a Color</DropdownMenuLabel>
-          <div className="flex flex-wrap items-center justify-center gap-1 max-w-40">
+          <div className="flex max-w-40 flex-wrap items-center justify-center gap-1">
             {bgColors.map(({ color, name, value }) => (
               <DropdownMenuItem
-                key={name}
-                className={cn(`h-5 w-5 ${color} rounded-full cursor-pointer`)}
-                onClick={() => handleUpdateNodeColor(value)}
                 aria-label={name}
-              ></DropdownMenuItem>
+                className={cn(`h-5 w-5 ${color} cursor-pointer rounded-full`)}
+                key={name}
+                onClick={() => handleUpdateNodeColor(value)}
+              />
             ))}
           </div>
         </DropdownMenuContent>
@@ -97,15 +95,15 @@ export const Toolbar_ = (props: ColorPickerProps) => {
           <DropdownMenuLabel className="text-center">
             Font size
           </DropdownMenuLabel>
-          <div className="flex flex-col items-center justify-center gap-1 max-w-40">
+          <div className="flex max-w-40 flex-col items-center justify-center gap-1">
             {Object.keys(fontSizes).map((size) => (
               <DropdownMenuItem
-                key={size}
+                aria-label={size}
                 className="cursor-pointer"
+                key={size}
                 onClick={() =>
                   handleUpdateTextSize(size as "sm" | "md" | "lg" | "xl")
                 }
-                aria-label={size}
               >
                 {size}
               </DropdownMenuItem>

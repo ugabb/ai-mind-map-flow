@@ -1,11 +1,11 @@
+import { ActionsSection } from "@/components/ContentPage/ActionsSection";
+import { ContentProvider } from "@/components/ContentPage/ContentContext";
+import { ContentSection } from "@/components/ContentPage/ContentSection";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { ContentSection } from "@/components/ContentPage/ContentSection";
-import { ActionsSection } from "@/components/ContentPage/ActionsSection";
-import { ContentProvider } from "@/components/ContentPage/ContentContext";
 import { getContentById } from "@/services/content/get-content-by-id";
 
 export default async function ContentPage({
@@ -20,12 +20,12 @@ export default async function ContentPage({
     .join(" ");
   return (
     <ContentProvider
+      content={content}
       contentId={id}
       rawTranscription={rawTranscription}
-      content={content}
     >
       <div className="h-full w-full py-6">
-        <ResizablePanelGroup direction="horizontal" className="h-full">
+        <ResizablePanelGroup className="h-full" direction="horizontal">
           <ResizablePanel minSize={30}>
             <ContentSection content={content} />
           </ResizablePanel>

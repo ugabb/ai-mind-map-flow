@@ -2,7 +2,6 @@
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Transcription } from "@/types/content";
-import { useRef } from "react";
 import type { YouTubePlayerRef } from "./YouTubePlayer";
 
 // Transcript component with ghost variant styling
@@ -19,7 +18,7 @@ function TranscriptBox({
 }) {
   return (
     <div
-      className={`rounded-md p-4 text-sm transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer ${className}`}
+      className={`cursor-pointer rounded-md p-4 text-sm transition-colors hover:bg-accent hover:text-accent-foreground ${className}`}
       onClick={onClick}
       {...props}
     >
@@ -28,10 +27,10 @@ function TranscriptBox({
   );
 }
 
-interface TranscriptSectionProps {
+type TranscriptSectionProps = {
   transcription: Transcription;
   youtubePlayerRef: React.RefObject<YouTubePlayerRef>;
-}
+};
 
 export function TranscriptSection({
   transcription,
@@ -72,12 +71,12 @@ export function TranscriptSection({
   };
 
   return (
-    <div className="flex-1 min-h-0">
-      <h3 className="text-lg font-semibold mb-3 text-foreground">
+    <div className="min-h-0 flex-1">
+      <h3 className="mb-3 font-semibold text-foreground text-lg">
         Transcription
       </h3>
       <ScrollArea className="h-full">
-        <div className="text-muted-foreground leading-relaxed space-y-2">
+        <div className="space-y-2 text-muted-foreground leading-relaxed">
           {concatChunks(transcription.chunks).map((chunk) => {
             const firstChunk = chunk[0];
             const combinedText = chunk.map((chunk) => chunk.text).join(" ");
@@ -87,7 +86,7 @@ export function TranscriptSection({
                 onClick={() => handleTranscriptClick(firstChunk.offset)}
               >
                 <p>
-                  <span className="text-muted-foreground text-xs font-mono">
+                  <span className="font-mono text-muted-foreground text-xs">
                     {calculateTranscriptionTime(firstChunk.offset)}
                   </span>{" "}
                   {combinedText}
@@ -96,7 +95,7 @@ export function TranscriptSection({
             );
           })}
           {/* Placeholder content */}
-          <div className="text-muted-foreground italic text-center py-8 border-t border-border mt-6">
+          <div className="mt-6 border-border border-t py-8 text-center text-muted-foreground italic">
             More transcription content will be loaded here...
           </div>
         </div>

@@ -1,10 +1,9 @@
 // @ts-nocheck
-import { Edge, NodeProps, Position } from "@xyflow/react";
+import { type Edge, type NodeProps, Position } from "@xyflow/react";
 
 function generateEdgeId(sourceId: string, targetId: string) {
   return `edge-${sourceId}-${targetId}`;
 }
-
 
 let nodes: NodeProps[] = [];
 let edges: any[] = [];
@@ -13,7 +12,7 @@ function addRootNode(node: NodeProps) {
   const newNode: NodeProps = {
     id: node.id,
     data: { label: node.value },
-    positionAbsoluteX:  0,
+    positionAbsoluteX: 0,
     positionAbsoluteY: 0,
     dragging: false,
     isConnectable: true,
@@ -22,7 +21,6 @@ function addRootNode(node: NodeProps) {
     children: [],
     sourcePosition: Position.Bottom,
     targetPosition: Position.Top,
-
   };
 
   nodes = [...nodes, newNode];
@@ -37,7 +35,7 @@ function addChildNode(node: NodeProps, parentNode: NodeProps) {
           ? node.value
           : node.value,
     },
-    positionAbsoluteX:  0,
+    positionAbsoluteX: 0,
     positionAbsoluteY: 0,
     dragging: false,
     isConnectable: true,
@@ -49,7 +47,7 @@ function addChildNode(node: NodeProps, parentNode: NodeProps) {
     targetPosition: Position.Top,
   };
   const newEdge: Edge = {
-    id: generateEdgeId(parentNode.id,node.id),
+    id: generateEdgeId(parentNode.id, node.id),
     source: `${parentNode.id}`,
     target: `${node.id}`,
   };
@@ -77,9 +75,9 @@ function convertTreeToNodes(nodeTree: NodeProps, isRoot = false) {
     edges = [];
     addRootNode(nodeTree);
     convertTreeToNodes(nodeTree);
-} else {
-  // @ts-ignore
-    traverseNodeChild(nodeTree.children , nodeTree);
+  } else {
+    // @ts-expect-error
+    traverseNodeChild(nodeTree.children, nodeTree);
   }
   // console.log("[VMO ver]",nodes,edges)
   return [nodes, edges];

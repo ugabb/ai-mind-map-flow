@@ -1,10 +1,15 @@
-import { Direction } from "@/components/Custom Nodes/Square/Squaree";
-import { useNodeStore } from "@/store/NodeStore";
-import { Connection, Edge, Node, useReactFlow } from "@xyflow/react";
-import { useCallback, useState } from "react";
+import Placeholder from "@tiptap/extension-placeholder";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
+import {
+  type Connection,
+  type Edge,
+  type Node,
+  useReactFlow,
+} from "@xyflow/react";
+import { useCallback, useState } from "react";
+import type { Direction } from "@/components/Custom Nodes/Square/Squaree";
+import { useNodeStore } from "@/store/NodeStore";
 
 export type DataNode = {
   label: string;
@@ -15,7 +20,7 @@ export type DataNode = {
   fontSize?: number;
 };
 
-interface useNodeProps {
+type useNodeProps = {
   id: string;
   selected: boolean;
   width: number;
@@ -25,7 +30,7 @@ interface useNodeProps {
   label?: string;
   updateNodeData: (id: string, data: DataNode) => void;
   color?: string;
-}
+};
 
 export const useNode = (props: useNodeProps) => {
   const {
@@ -75,7 +80,9 @@ export const useNode = (props: useNodeProps) => {
   const handleAddSideNode = useCallback(
     (direction: string) => {
       if (direction === "left" || direction === "right") {
-        if (!width) return;
+        if (!width) {
+          return;
+        }
         const newNode: Node = {
           id: crypto.randomUUID(),
           position: {
@@ -88,8 +95,8 @@ export const useNode = (props: useNodeProps) => {
           },
           data: { label: "", color },
           type: "square",
-          width: width,
-          height: height,
+          width,
+          height,
           expandParent: true,
         };
 
@@ -103,7 +110,9 @@ export const useNode = (props: useNodeProps) => {
         addNodes(newNode);
         handleNewConnections(newConnection);
       } else {
-        if (!height) return;
+        if (!height) {
+          return;
+        }
         const newNode: Node = {
           id: crypto.randomUUID(),
           position: {
@@ -116,8 +125,8 @@ export const useNode = (props: useNodeProps) => {
           },
           data: { label: "", color },
           type: "square",
-          width: width,
-          height: height,
+          width,
+          height,
           expandParent: true,
         };
         const newConnection: Connection = {
@@ -145,11 +154,9 @@ export const useNode = (props: useNodeProps) => {
 
   const handleDeleteNodeByPressEnter = useCallback(
     (event: KeyboardEvent) => {
-      if (selected) {
-        if (event.key === "Delete" && id) {
-          const nodesToDelete = [{ id }];
-          deleteElements({ nodes: nodesToDelete });
-        }
+      if (selected && event.key === "Delete" && id) {
+        const nodesToDelete = [{ id }];
+        deleteElements({ nodes: nodesToDelete });
       }
     },
     [deleteElements, selected, id]
@@ -172,7 +179,9 @@ export const useNode = (props: useNodeProps) => {
     },
     onBlur: handleInputBlur,
     onUpdate: ({ editor }) => {
-      if (!editor) return;
+      if (!editor) {
+        return;
+      }
       console.log("editor", editor.getHTML());
       const content = editor.getHTML();
       updateNodeData(id, { label: content });
@@ -181,7 +190,9 @@ export const useNode = (props: useNodeProps) => {
   });
 
   const handleEnableEditing = useCallback(() => {
-    if (!selected) return; // Only enable editing if node is selected
+    if (!selected) {
+      return; // Only enable editing if node is selected
+    }
 
     activeIsEditingNode(); // Set editing mode in the store
 

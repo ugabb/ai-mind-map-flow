@@ -1,14 +1,14 @@
-import { useNodeStore } from "@/store/NodeStore";
 import { useEffect, useState } from "react";
+import { useNodeStore } from "@/store/NodeStore";
 
-interface FlashCard {
+type FlashCard = {
   _id: string;
   question: string;
   answer: string;
   hint: string;
   explanation: string;
   is_starred: boolean;
-}
+};
 
 export function useFlashCard() {
   const { currentMindMap } = useNodeStore();
@@ -50,7 +50,7 @@ export function useFlashCard() {
       },
     ];
     setFlashcards(exampleFlashcards);
-  }, [currentMindMap]);
+  }, []);
 
   const currentCard = flashcards[currentIndex];
   const progress = ((currentIndex + 1) / flashcards.length) * 100;

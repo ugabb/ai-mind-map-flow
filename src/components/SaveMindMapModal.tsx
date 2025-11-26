@@ -1,5 +1,8 @@
 "use client";
 
+import { useRef } from "react";
+import { ImSpinner8 } from "react-icons/im";
+import { LuSave } from "react-icons/lu";
 import {
   Dialog,
   DialogContent,
@@ -7,25 +10,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useRef } from "react";
-import { LuSave } from "react-icons/lu";
-import { ImSpinner8 } from "react-icons/im";
 
-interface SaveMindMapModalProps {
+type SaveMindMapModalProps = {
   onSave: (title: string) => Promise<void>;
   isPending: boolean;
   title?: string;
-}
+};
 
 export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
   const { onSave, isPending, title } = props;
@@ -37,7 +35,7 @@ export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
         <Tooltip>
           <DialogTrigger>
             <TooltipTrigger>
-              <LuSave className="w-24 h-24 translate-y-8 rounded-md hover:translate-y-5 transition-transform cursor-pointer" />
+              <LuSave className="h-24 w-24 translate-y-8 cursor-pointer rounded-md transition-transform hover:translate-y-5" />
             </TooltipTrigger>
             <TooltipContent className="bg-primary">
               <p>Save Mind Map</p>
@@ -50,18 +48,18 @@ export const SaveMindMapModal = (props: SaveMindMapModalProps) => {
           <DialogTitle>Save Mind Map</DialogTitle>
         </DialogHeader>
         <Input
+          defaultValue={title ? title : ""}
           placeholder="Title"
           ref={titleRef}
-          defaultValue={title ? title : ""}
         />
         <Button
+          className="bg-primary hover:bg-primary/90"
           onClick={() => {
             onSave(titleRef.current ? titleRef.current.value : "");
           }}
-          className="bg-primary hover:bg-primary/90"
         >
           {isPending ? (
-            <ImSpinner8 className="w-5 h-5 text-primary-foreground animate-spin z-50" />
+            <ImSpinner8 className="z-50 h-5 w-5 animate-spin text-primary-foreground" />
           ) : (
             "Save"
           )}

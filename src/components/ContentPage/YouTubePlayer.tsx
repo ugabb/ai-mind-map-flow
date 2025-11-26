@@ -1,16 +1,16 @@
 "use client";
 
-import { useRef, forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { getYouTubeEmbedUrl } from "@/utils/get-youtube-embed-url";
 
-interface YouTubePlayerProps {
+type YouTubePlayerProps = {
   sourceUrl: string;
   title: string;
-}
+};
 
-export interface YouTubePlayerRef {
+export type YouTubePlayerRef = {
   jumpToTime: (timeInSeconds: number) => void;
-}
+};
 
 export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
   ({ sourceUrl, title }, ref) => {
@@ -18,11 +18,15 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
     const [currentUrl, setCurrentUrl] = useState<string>("");
 
     // Convert YouTube URL to embed URL with initial parameters
-    const getEmbedUrlWithTime = (timeInSeconds: number = 0) => {
-      if (!sourceUrl) return null;
+    const getEmbedUrlWithTime = (timeInSeconds = 0) => {
+      if (!sourceUrl) {
+        return null;
+      }
 
       const baseEmbedUrl = getYouTubeEmbedUrl(sourceUrl);
-      if (!baseEmbedUrl) return null;
+      if (!baseEmbedUrl) {
+        return null;
+      }
 
       return `${baseEmbedUrl}?start=${timeInSeconds}&autoplay=1&enablejsapi=1`;
     };
@@ -56,14 +60,14 @@ export const YouTubePlayer = forwardRef<YouTubePlayerRef, YouTubePlayerProps>(
     return (
       <div className="w-full">
         <iframe
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          className="aspect-video w-full rounded-lg"
+          frameBorder="0"
           ref={iframeRef}
+          referrerPolicy="strict-origin-when-cross-origin"
           src={currentUrl}
           title={title}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          allowFullScreen
-          className="w-full aspect-video rounded-lg"
         />
       </div>
     );

@@ -1,14 +1,14 @@
 "use client";
 
+import { CheckCircle2, Copy, Download, Volume2 } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Copy, Volume2, Download, Clock, CheckCircle2 } from "lucide-react";
-import toast from "react-hot-toast";
 
-interface SummaryItem {
+type SummaryItem = {
   content: string;
   type: "response" | "source" | "whiteboard";
   bbox?: any;
@@ -18,15 +18,15 @@ interface SummaryItem {
   identifier?: string;
   title?: string;
   wtype?: string;
-}
+};
 
-interface SummaryData {
+type SummaryData = {
   summary: SummaryItem[];
-}
+};
 
-interface SummaryTabProps {
+type SummaryTabProps = {
   data?: SummaryData;
-}
+};
 
 export function SummaryTab({ data }: SummaryTabProps) {
   const [isReading, setIsReading] = useState(false);
@@ -167,7 +167,7 @@ export function SummaryTab({ data }: SummaryTabProps) {
     let currentText = "";
     let currentTimestamps: string[] = [];
 
-    summaryData.summary.forEach((item, index) => {
+    summaryData.summary.forEach((item, _index) => {
       if (item.type === "response") {
         // If we have accumulated text and timestamps, save them
         if (currentText.trim()) {
@@ -203,9 +203,11 @@ export function SummaryTab({ data }: SummaryTabProps) {
 
   const formatTimestamp = (timestamp: string) => {
     const match = timestamp.match(/【([\d.]+)】/);
-    if (!match) return timestamp;
+    if (!match) {
+      return timestamp;
+    }
 
-    const seconds = parseFloat(match[1]);
+    const seconds = Number.parseFloat(match[1]);
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
 
@@ -226,7 +228,7 @@ export function SummaryTab({ data }: SummaryTabProps) {
           return newSet;
         });
       }, 2000);
-    } catch (err) {
+    } catch (_err) {
       toast.error("Failed to copy to clipboard");
     }
   };
@@ -262,7 +264,7 @@ export function SummaryTab({ data }: SummaryTabProps) {
       };
 
       speechSynthesis.speak(utterance);
-    } catch (err) {
+    } catch (_err) {
       toast.error("Text-to-speech not supported");
     }
   };
@@ -284,7 +286,7 @@ export function SummaryTab({ data }: SummaryTabProps) {
       URL.revokeObjectURL(url);
 
       toast.success("Summary saved successfully!");
-    } catch (err) {
+    } catch (_err) {
       toast.error("Failed to save summary");
     }
   };
@@ -293,7 +295,7 @@ export function SummaryTab({ data }: SummaryTabProps) {
     // Extract the time value and convert to seconds
     const match = timestamp.match(/【([\d.]+)】/);
     if (match) {
-      const seconds = parseFloat(match[1]);
+      const _seconds = Number.parseFloat(match[1]);
       // This would typically trigger a video seek action
       // For now, we'll just show a toast
       toast.success(`Seek to ${formatTimestamp(timestamp)}`);
@@ -301,15 +303,15 @@ export function SummaryTab({ data }: SummaryTabProps) {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between p-4 border-b flex-shrink-0">
-        <h2 className="text-lg font-semibold">Video Summary</h2>
+    <div className="flex h-full flex-col">
+      <div className="flex flex-shrink-0 items-center justify-between border-b p-4">
+        <h2 className="font-semibold text-lg">Video Summary</h2>
         <div className="flex gap-2">
           <Button
-            variant="outline"
-            size="sm"
-            onClick={handleSaveSummary}
             className="flex items-center gap-2"
+            onClick={handleSaveSummary}
+            size="sm"
+            variant="outline"
           >
             <Download className="h-4 w-4" />
             Save
@@ -325,17 +327,17 @@ export function SummaryTab({ data }: SummaryTabProps) {
                 <CardTitle className="text-lg leading-tight">
                   Video Summary
                 </CardTitle>
-                <div className="flex gap-2 ml-4">
+                <div className="ml-4 flex gap-2">
                   <Button
-                    variant="ghost"
-                    size="sm"
+                    className="h-8 w-8 p-0"
                     onClick={() =>
                       handleCopyToClipboard(
                         processedData.map((item) => item.content).join("\n\n"),
                         0
                       )
                     }
-                    className="h-8 w-8 p-0"
+                    size="sm"
+                    variant="ghost"
                   >
                     {copiedItems.has(0) ? (
                       <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -344,14 +346,14 @@ export function SummaryTab({ data }: SummaryTabProps) {
                     )}
                   </Button>
                   <Button
-                    variant="ghost"
-                    size="sm"
+                    className="h-8 w-8 p-0"
                     onClick={() =>
                       handleReadAloud(
                         processedData.map((item) => item.content).join("\n\n")
                       )
                     }
-                    className="h-8 w-8 p-0"
+                    size="sm"
+                    variant="ghost"
                   >
                     <Volume2
                       className={`h-4 w-4 ${isReading ? "text-primary" : ""}`}
@@ -365,7 +367,7 @@ export function SummaryTab({ data }: SummaryTabProps) {
               <div className="space-y-6">
                 {/* Render each text block with its associated timestamps */}
                 {processedData.map((item, itemIndex) => (
-                  <div key={itemIndex} className="space-y-3">
+                  <div className="space-y-3" key={itemIndex}>
                     {/* Render content line by line */}
                     {item.content.split("\n").map((line, lineIndex) => {
                       // Handle headers
@@ -374,14 +376,14 @@ export function SummaryTab({ data }: SummaryTabProps) {
                         const text = line.replace(/^#{1,6}\s+/, "");
                         return (
                           <h3
-                            key={lineIndex}
-                            className={`font-semibold text-foreground mb-3 mt-6 ${
+                            className={`mt-6 mb-3 font-semibold text-foreground ${
                               level === 1
                                 ? "text-lg"
                                 : level === 2
-                                ? "text-base"
-                                : "text-sm"
+                                  ? "text-base"
+                                  : "text-sm"
                             }`}
+                            key={lineIndex}
                           >
                             {text}
                           </h3>
@@ -392,10 +394,10 @@ export function SummaryTab({ data }: SummaryTabProps) {
                       if (line.trim().startsWith("- ")) {
                         return (
                           <div
+                            className="mb-2 flex items-start gap-2"
                             key={lineIndex}
-                            className="flex items-start gap-2 mb-2"
                           >
-                            <span className="text-muted-foreground mt-1 text-sm">
+                            <span className="mt-1 text-muted-foreground text-sm">
                               •
                             </span>
                             <div className="flex-1">
@@ -404,15 +406,15 @@ export function SummaryTab({ data }: SummaryTabProps) {
                               </span>
                               {/* Show timestamps for this text block */}
                               {item.timestamps.length > 0 && (
-                                <div className="flex flex-wrap gap-1 mt-1">
+                                <div className="mt-1 flex flex-wrap gap-1">
                                   {item.timestamps.map((timestamp, tsIndex) => (
                                     <Badge
+                                      className="cursor-pointer text-xs transition-colors hover:bg-primary hover:text-primary-foreground"
                                       key={tsIndex}
-                                      variant="outline"
-                                      className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors text-xs"
                                       onClick={() =>
                                         handleTimestampClick(timestamp)
                                       }
+                                      variant="outline"
                                     >
                                       {formatTimestamp(timestamp)}
                                     </Badge>
@@ -427,19 +429,19 @@ export function SummaryTab({ data }: SummaryTabProps) {
                       // Handle regular paragraphs
                       if (line.trim()) {
                         return (
-                          <div key={lineIndex} className="mb-3">
+                          <div className="mb-3" key={lineIndex}>
                             <p className="text-sm leading-relaxed">{line}</p>
                             {/* Show timestamps for this text block */}
                             {item.timestamps.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-1">
+                              <div className="mt-1 flex flex-wrap gap-1">
                                 {item.timestamps.map((timestamp, tsIndex) => (
                                   <Badge
+                                    className="cursor-pointer text-xs transition-colors hover:bg-primary hover:text-primary-foreground"
                                     key={tsIndex}
-                                    variant="outline"
-                                    className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors text-xs"
                                     onClick={() =>
                                       handleTimestampClick(timestamp)
                                     }
+                                    variant="outline"
                                   >
                                     {formatTimestamp(timestamp)}
                                   </Badge>
@@ -451,7 +453,7 @@ export function SummaryTab({ data }: SummaryTabProps) {
                       }
 
                       // Handle empty lines
-                      return <div key={lineIndex} className="h-2" />;
+                      return <div className="h-2" key={lineIndex} />;
                     })}
                   </div>
                 ))}

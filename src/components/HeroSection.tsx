@@ -1,17 +1,13 @@
 "use client";
 
+import { motion } from "framer-motion";
+import { ArrowUpRight, Link as LinkIcon, Search, Upload } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { motion } from "framer-motion";
-import {
-  Upload,
-  Link as LinkIcon, Search,
-  ArrowUpRight
-} from "lucide-react";
-import { useState } from "react";
 
 export const HeroSection = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [_isModalOpen, setIsModalOpen] = useState(false);
 
   const handlePasteClick = () => {
     setIsModalOpen(true);
@@ -20,21 +16,21 @@ export const HeroSection = () => {
   return (
     <div className="w-full">
       {/* Hero */}
-      <div className="w-full flex flex-col items-center text-center py-6 md:py-10">
+      <div className="flex w-full flex-col items-center py-6 text-center md:py-10">
         <motion.h1
-          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
+          className="font-semibold text-2xl tracking-tight md:text-3xl"
+          initial={{ opacity: 0, y: 8 }}
           transition={{ duration: 0.35 }}
-          className="text-2xl md:text-3xl font-semibold tracking-tight"
         >
           What do you want to learn?
         </motion.h1>
 
         {/* Quick actions - mobile stacked */}
         <motion.div
+          animate="show"
           className="mt-4 w-full md:hidden"
           initial="hidden"
-          animate="show"
           variants={{
             hidden: { opacity: 0 },
             show: { opacity: 1, transition: { staggerChildren: 0.08 } },
@@ -56,23 +52,23 @@ export const HeroSection = () => {
             // { label: "Record", sub: "Record class, video call", Icon: Mic },
           ].map(({ label, sub, Icon, onClick }) => (
             <motion.div
+              className="mb-3 last:mb-0"
               key={label}
               variants={{
                 hidden: { y: 8, opacity: 0 },
                 show: { y: 0, opacity: 1 },
               }}
-              className="mb-3 last:mb-0"
               whileTap={{ scale: 0.98 }}
             >
               <Button
-                variant="outline"
-                className="w-full justify-start gap-3 bg-card text-card-foreground hover:bg-accent rounded-2xl h-16"
+                className="h-16 w-full justify-start gap-3 rounded-2xl bg-card text-card-foreground hover:bg-accent"
                 onClick={onClick}
+                variant="outline"
               >
                 <Icon className="size-5 text-primary" />
                 <div className="text-left">
-                  <div className="text-sm font-semibold">{label}</div>
-                  <div className="text-xs text-muted-foreground">{sub}</div>
+                  <div className="font-semibold text-sm">{label}</div>
+                  <div className="text-muted-foreground text-xs">{sub}</div>
                 </div>
               </Button>
             </motion.div>
@@ -81,8 +77,9 @@ export const HeroSection = () => {
 
         {/* Quick actions - desktop */}
         <motion.div
-          initial="hidden"
           animate="show"
+          className="mt-3 hidden w-full max-w-2xl grid-cols-2 gap-2 md:grid md:gap-3"
+          initial="hidden"
           variants={{
             hidden: { opacity: 0 },
             show: {
@@ -90,7 +87,6 @@ export const HeroSection = () => {
               transition: { staggerChildren: 0.06, delayChildren: 0.1 },
             },
           }}
-          className="hidden md:grid mt-3 grid-cols-2 gap-2 md:gap-3 w-full max-w-2xl"
         >
           {[
             {
@@ -117,13 +113,13 @@ export const HeroSection = () => {
               whileTap={{ scale: 0.98 }}
             >
               <Button
-                variant="outline"
-                className="w-full flex flex-col justify-center items-start gap-2 bg-card text-card-foreground hover:bg-accent rounded-xl h-32"
+                className="flex h-32 w-full flex-col items-start justify-center gap-2 rounded-xl bg-card text-card-foreground hover:bg-accent"
                 onClick={onClick}
+                variant="outline"
               >
                 <Icon className="size-5 text-primary" />
-                <span className="text-sm font-medium">{label}</span>
-                <div className="text-xs text-muted-foreground">{sub}</div>
+                <span className="font-medium text-sm">{label}</span>
+                <div className="text-muted-foreground text-xs">{sub}</div>
               </Button>
             </motion.div>
           ))}
@@ -131,20 +127,20 @@ export const HeroSection = () => {
 
         {/* Large search */}
         <motion.div
-          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.35 }}
           className="mt-4 w-full max-w-2xl"
+          initial={{ opacity: 0, y: 8 }}
+          transition={{ delay: 0.1, duration: 0.35 }}
         >
           <div className="relative">
             <Input
-              className="h-12 pl-10 pr-24 rounded-2xl text-base"
+              className="h-12 rounded-2xl pr-24 pl-10 text-base"
               placeholder="Learn anything"
             />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
+            <Search className="-translate-y-1/2 absolute top-1/2 left-3 size-5 text-muted-foreground" />
             <Button
+              className="-translate-y-1/2 absolute top-1/2 right-2 h-9 w-9 rounded-full p-0"
               variant="secondary"
-              className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 p-0 rounded-full"
             >
               <ArrowUpRight className="size-5" />
             </Button>

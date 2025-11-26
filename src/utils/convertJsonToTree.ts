@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { NodeProps, Position } from '@xyflow/react';
+import { type NodeProps, Position } from "@xyflow/react";
 
 // Counter to generate unique node IDs
 let nodeCounter = 0;
@@ -38,7 +38,7 @@ const jsonToTree = (data: any, newNode: NodeProps, isRoot = false) => {
         newNode.key = key;
         newNode.value[key] = value;
       } else {
-        node.key = newNode.key + '-children';
+        node.key = `${newNode.key}-children`;
         node.value[key] = value;
       }
     } else if (Array.isArray(value)) {
@@ -49,7 +49,7 @@ const jsonToTree = (data: any, newNode: NodeProps, isRoot = false) => {
         // If the array contains objects, create child nodes for each object
         const childNode: NodeProps = {
           id: generateNodeId(),
-          key: key,
+          key,
           value: key,
           positionAbsoluteX: 0,
           positionAbsoluteY: 0,
@@ -64,12 +64,12 @@ const jsonToTree = (data: any, newNode: NodeProps, isRoot = false) => {
           targetPosition: Position.Top,
         };
         value.forEach((valueFromArray) => {
-          if (typeof valueFromArray === 'object') {
+          if (typeof valueFromArray === "object") {
             jsonToTree(valueFromArray, childNode);
           } else {
             const childNodeForPropertyWithValueArray: NodeProps = {
               id: generateNodeId(),
-              key: childNode.key + '-children',
+              key: `${childNode.key}-children`,
               value: {},
               positionAbsoluteX: 0,
               positionAbsoluteY: 0,
@@ -84,7 +84,9 @@ const jsonToTree = (data: any, newNode: NodeProps, isRoot = false) => {
               targetPosition: Position.Top,
             };
             childNodeForPropertyWithValueArray.value = valueFromArray;
-            if (childNode.children) childNode.children.push(childNodeForPropertyWithValueArray);
+            if (childNode.children) {
+              childNode.children.push(childNodeForPropertyWithValueArray);
+            }
           }
         });
         if (isRoot) {
@@ -121,7 +123,7 @@ const jsonToTree = (data: any, newNode: NodeProps, isRoot = false) => {
         for (let i = 0; i < value.length; i++) {
           const childChildNode: NodeProps = {
             id: generateNodeId(),
-            key: key + "-child",
+            key: `${key}-child`,
             value: {},
             positionAbsoluteX: 0,
             positionAbsoluteY: 0,
@@ -136,15 +138,19 @@ const jsonToTree = (data: any, newNode: NodeProps, isRoot = false) => {
             targetPosition: Position.Top,
           };
           childChildNode.value = value[i];
-          if (childNodeAddition.children) childNodeAddition.children.push(childChildNode);
+          if (childNodeAddition.children) {
+            childNodeAddition.children.push(childChildNode);
+          }
         }
-        if (node.children) node.children.push(childNodeAddition);
+        if (node.children) {
+          node.children.push(childNodeAddition);
+        }
       }
     } else {
       // If the value is an object, recursively convert it to a tree
       const childNode: NodeProps = {
         id: generateNodeId(),
-        key: key,
+        key,
         value: key,
         positionAbsoluteX: 0,
         positionAbsoluteY: 0,
@@ -160,21 +166,23 @@ const jsonToTree = (data: any, newNode: NodeProps, isRoot = false) => {
       };
       jsonToTree(value, childNode);
       if (isRoot) {
-        if (newNode.children) newNode.children.push(childNode);
-      } else {
-        if (node.children) node.children.push(childNode);
+        if (newNode.children) {
+          newNode.children.push(childNode);
+        }
+      } else if (node.children) {
+        node.children.push(childNode);
       }
     }
   });
 
   // Add the node to the parent's children if it's not the root
-  if (!isRoot) {
-    if (newNode.children) newNode.children.push(node);
-  } else {
-    newNode.key = 'root';
+  if (isRoot) {
+    newNode.key = "root";
+  } else if (newNode.children) {
+    newNode.children.push(node);
   }
   return newNode;
-}
+};
 
 // Function to convert JSON data to a tree structure with a root node
 function convertJsonToTree(json: any) {

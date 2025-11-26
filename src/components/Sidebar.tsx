@@ -1,6 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
+import { Clock, LayoutGrid, LifeBuoy, Plus, Search } from "lucide-react";
 import Link from "next/link";
+import type { User } from "next-auth";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -18,26 +21,23 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { UserAvatar } from "./UserAvatar";
-import { motion } from "framer-motion";
-import { Plus, Search, Clock, LayoutGrid, LifeBuoy } from "lucide-react";
-import { User } from "next-auth";
 
-interface AppSidebarProps {
+type AppSidebarProps = {
   currentUser?: User;
-}
+};
 
 export function AppSidebar({ currentUser }: AppSidebarProps) {
   const { state } = useSidebar();
   return (
-    <Sidebar className="p-3 px-2 bg-sidebar">
+    <Sidebar className="bg-sidebar p-3 px-2">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-1">
           <LayoutGrid className="size-5" />
           <span className="font-semibold">YouLearn</span>
         </div>
         <div className="relative">
-          <SidebarInput placeholder="Search" className="pl-8" />
-          <Search className="absolute left-2 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <SidebarInput className="pl-8" placeholder="Search" />
+          <Search className="-translate-y-1/2 absolute top-1/2 left-2 size-4 text-muted-foreground" />
         </div>
       </SidebarHeader>
 
@@ -45,7 +45,7 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
         <SidebarGroup>
           <SidebarGroupLabel>Quick actions</SidebarGroupLabel>
           <SidebarGroupContent>
-            <Button className="w-full" asChild>
+            <Button asChild className="w-full">
               <Link href="#">
                 <Plus className="mr-2 size-4" /> Add content
               </Link>
@@ -85,10 +85,10 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
       </SidebarContent>
 
       <SidebarFooter>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }}>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton className="justify-start" asChild>
+              <SidebarMenuButton asChild className="justify-start">
                 <Link href="#">
                   <LifeBuoy className="size-4" />
                   <span>Help & Tools</span>

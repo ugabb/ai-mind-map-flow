@@ -1,10 +1,15 @@
 "use client";
-import React from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type React from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
+import { ImSpinner8 } from "react-icons/im";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,15 +21,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ImSpinner8 } from "react-icons/im";
-import { useCallback, useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { handleUploadProfilePicture } from "@/services/user/uploadProfilePicture";
-import toast from "react-hot-toast";
-import { registerUser } from "@/services/user/registerUser";
 import { authClient } from "@/lib/authClient";
+import { handleUploadProfilePicture } from "@/services/user/uploadProfilePicture";
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -38,7 +36,7 @@ export type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export default function SignUp() {
   const [preview, setPreview] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [_error, setError] = useState<string | null>(null);
 
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -52,40 +50,43 @@ export default function SignUp() {
       profilePictureURL = await handleUploadProfilePicture(data.profilePicture);
     }
 
-    const { data:response, error } = await authClient.signUp.email({
+    const { data: response, error } = await authClient.signUp.email({
       email: data.email,
       name: data.name,
       password: data.password,
       image: profilePictureURL,
-    })
+    });
     if (response?.user) {
       toast.success("Account created successfully");
       router.push("/login");
     }
     if (error) {
-      toast.error("Error creating account: " + error.message);
+      toast.error(`Error creating account: ${error.message}`);
     }
   };
 
-  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setError(null); // Reset any existing errors
-    form.setValue("profilePicture", undefined);
+  const handleDrop = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      setError(null); // Reset any existing errors
+      form.setValue("profilePicture", undefined);
 
-    const files = event.dataTransfer.files;
-    if (files.length > 0) {
-      const file = files[0]; // Assuming a single file upload
-      if (file.type.startsWith("image/")) {
-        const objectUrl = URL.createObjectURL(file); // Create a preview URL for the image
-        setPreview(objectUrl); // Set preview
-        console.log(file);
-        form.setValue("profilePicture", file); // Set the file in the form
-      } else {
-        setError("Please drop an image file (e.g., .jpg, .png)"); // Handle non-image files
-        setPreview(null); // Clear any previous preview
+      const files = event.dataTransfer.files;
+      if (files.length > 0) {
+        const file = files[0]; // Assuming a single file upload
+        if (file.type.startsWith("image/")) {
+          const objectUrl = URL.createObjectURL(file); // Create a preview URL for the image
+          setPreview(objectUrl); // Set preview
+          console.log(file);
+          form.setValue("profilePicture", file); // Set the file in the form
+        } else {
+          setError("Please drop an image file (e.g., .jpg, .png)"); // Handle non-image files
+          setPreview(null); // Clear any previous preview
+        }
       }
-    }
-  }, []);
+    },
+    [form.setValue]
+  );
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -115,9 +116,9 @@ export default function SignUp() {
   };
 
   return (
-    <div className="px-5 py-20 min-w-[533px]">
+    <div className="min-w-[533px] px-5 py-20">
       <div className="mb-5">
-        <h1 className="text-3xl font-bold">Sign Up</h1>
+        <h1 className="font-bold text-3xl">Sign Up</h1>
         <p className="text-base text-muted-foreground">
           Welcome! Enter your e-mail
         </p>
@@ -125,8 +126,8 @@ export default function SignUp() {
 
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-3"
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField
             control={form.control}
@@ -158,7 +159,7 @@ export default function SignUp() {
               </FormItem>
             )}
           />
-          <div className="flex gap-5 items-center">
+          <div className="flex items-center gap-5">
             <FormField
               control={form.control}
               name="password"
@@ -168,12 +169,12 @@ export default function SignUp() {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="Password"
-                      type="password"
                       className={`${
                         form.formState?.errors?.password &&
                         "border border-red-500"
                       }`}
+                      placeholder="Password"
+                      type="password"
                     />
                   </FormControl>
                   {form.formState?.errors?.password ? (
@@ -197,12 +198,12 @@ export default function SignUp() {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="Password"
-                      type="password"
                       className={`${
                         form.formState?.errors?.confirmPassword &&
                         "border border-red-500"
                       } w-full`}
+                      placeholder="Password"
+                      type="password"
                     />
                   </FormControl>
                   {form.formState?.errors?.confirmPassword ? (
@@ -222,21 +223,35 @@ export default function SignUp() {
             name="profilePicture"
             render={({ field }) => (
               <FormItem className="w-full">
-                {!preview ? (
+                {preview ? (
+                  <div className="relative h-48 w-48">
+                    <img
+                      alt="Preview"
+                      className="h-48 w-48 rounded-full object-cover"
+                      src={preview}
+                    />
+                    <button
+                      className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-destructive p-2 text-destructive-foreground"
+                      onClick={handleRemove}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ) : (
                   <>
                     <FormLabel htmlFor={field.name}>Drop your photo</FormLabel>
-                    <FormControl className="flex justify-center items-center h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400">
+                    <FormControl className="flex h-48 cursor-pointer items-center justify-center rounded-lg border-2 border-gray-300 border-dashed hover:border-gray-400">
                       <Input
-                        onDragOver={handleDragOver}
-                        onDrop={handleDrop}
-                        onChange={handleFileSelect}
-                        placeholder="drop your profile photo"
-                        type="file"
+                        accept="image/*"
                         className={`${
                           form.formState?.errors?.confirmPassword &&
                           "border border-red-500"
                         } w-full`}
-                        accept="image/*"
+                        onChange={handleFileSelect}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                        placeholder="drop your profile photo"
+                        type="file"
                       />
                     </FormControl>
                     {form.formState?.errors?.confirmPassword ? (
@@ -244,53 +259,39 @@ export default function SignUp() {
                         {form.formState.errors.confirmPassword?.message}
                       </FormMessage>
                     ) : (
-                      <FormDescription></FormDescription>
+                      <FormDescription />
                     )}
                   </>
-                ) : (
-                  <div className="relative h-48 w-48">
-                    <img
-                      src={preview}
-                      alt="Preview"
-                      className="h-48 w-48 object-cover rounded-full"
-                    />
-                    <button
-                      onClick={handleRemove}
-                      className="absolute w-5 h-5 top-0 right-0 p-2 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center"
-                    >
-                      &times;
-                    </button>
-                  </div>
                 )}
               </FormItem>
             )}
           />
 
-          <div className="flex flex-col gap-1 justify-center items-center w-full">
+          <div className="flex w-full flex-col items-center justify-center gap-1">
             <Button
-              type="submit"
-              className="flex gap-2 items-center bg-primary text-primary-foreground font-semibold hover:bg-primary/90 w-full"
+              className="flex w-full items-center gap-2 bg-primary font-semibold text-primary-foreground hover:bg-primary/90"
               disabled={form.formState.isSubmitting}
+              type="submit"
             >
               {form.formState.isSubmitting ? (
-                <ImSpinner8 className="size-5 text-primary-foreground animate-spin" />
+                <ImSpinner8 className="size-5 animate-spin text-primary-foreground" />
               ) : (
                 "Sign Up"
               )}
             </Button>
             <div className="space-x-2">
-              <span className="text-sm text-muted-foreground">
+              <span className="text-muted-foreground text-sm">
                 Already have an account?
               </span>
               <Link
+                className="text-primary text-sm transition-all hover:underline"
                 href={"/login"}
-                className="text-sm text-primary hover:underline transition-all"
               >
                 Click here!
               </Link>
             </div>
           </div>
-          <div className="flex justify-center items-center">
+          <div className="flex items-center justify-center">
             <FcGoogle
               // onClick={googleLogin}
               className="size-10 cursor-pointer"

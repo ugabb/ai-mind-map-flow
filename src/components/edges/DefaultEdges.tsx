@@ -1,14 +1,5 @@
-import React, { memo } from 'react';
-import {
-  BaseEdge,
-  EdgeLabelRenderer,
-  EdgeProps,
-  getBezierPath,
-  getSmoothStepPath,
-  getSimpleBezierPath,
-  useReactFlow,
-} from '@xyflow/react';
-
+import { BaseEdge, type EdgeProps, getSimpleBezierPath } from "@xyflow/react";
+import { memo } from "react";
 
 function DefaultEdge_({
   id,
@@ -21,7 +12,7 @@ function DefaultEdge_({
   style = {},
   markerEnd,
 }: EdgeProps) {
-  const [edgePath, labelX, labelY] = getSimpleBezierPath({
+  const [edgePath, _labelX, _labelY] = getSimpleBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -31,9 +22,12 @@ function DefaultEdge_({
   });
 
   return (
-    <>
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} className='stroke-2' />
-    </>
+    <BaseEdge
+      className="stroke-2"
+      markerEnd={markerEnd}
+      path={edgePath}
+      style={style}
+    />
   );
 }
 

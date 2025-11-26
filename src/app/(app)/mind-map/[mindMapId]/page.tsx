@@ -1,40 +1,39 @@
 "use client";
 
-import { useState, useCallback, useLayoutEffect, useEffect } from "react";
 import {
-  ReactFlow,
-  useNodesState,
-  useEdgesState,
   addEdge,
-  Background,
-  ConnectionMode,
-  Connection,
-  MarkerType,
-  ReactFlowInstance,
-  Edge,
-  Node,
-  Panel,
   applyEdgeChanges,
   applyNodeChanges,
-  NodeChange,
-  EdgeChange,
+  Background,
+  type Connection,
+  ConnectionMode,
+  type Edge,
+  type EdgeChange,
+  MarkerType,
   MiniMap,
+  type Node,
+  type NodeChange,
+  Panel,
+  ReactFlow,
+  type ReactFlowInstance,
+  useEdgesState,
+  useNodesState,
 } from "@xyflow/react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import "@xyflow/react/dist/style.css";
-import { Square } from "@/components/Custom Nodes/Square/Squaree";
-import { DefaultEdge } from "@/components/edges/DefaultEdges";
-import convertJsonToReactFlow from "@/utils/convertJsonToReactFlow";
 
 import ELK from "elkjs/lib/elk.bundled.js";
-import { Menubar } from "@/components/Menubar";
-import { useNodeStore } from "@/store/NodeStore";
-import { ImSpinner8 } from "react-icons/im";
-import { zinc } from "tailwindcss/colors";
-import { PiArrowLeft } from "react-icons/pi";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { ImSpinner8 } from "react-icons/im";
+import { PiArrowLeft } from "react-icons/pi";
+import { zinc } from "tailwindcss/colors";
+import { Square } from "@/components/Custom Nodes/Square/Squaree";
 import DialogCustomMindMap from "@/components/DialogCustomMindMap";
+import { DefaultEdge } from "@/components/edges/DefaultEdges";
+import { Menubar } from "@/components/Menubar";
+import { useNodeStore } from "@/store/NodeStore";
+import convertJsonToReactFlow from "@/utils/convertJsonToReactFlow";
 
 const elk = new ELK();
 
@@ -57,8 +56,8 @@ const elkOptions = {
  * @returns promises that contains array of nodes or edges that already get layouted or repositioned
  */
 const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
-  // @ts-ignore
-  const isHorizontal = options?.["elk.direction"] === "RIGHT";
+  // @ts-expect-error
+  const _isHorizontal = options?.["elk.direction"] === "RIGHT";
   const graph = {
     id: "root",
     layoutOptions: options,
@@ -71,7 +70,7 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
       width: 300,
       height: 300,
     })),
-    edges: edges,
+    edges,
   };
 
   //Return promises
@@ -79,15 +78,13 @@ const getLayoutedElements = (nodes: any[], edges: any[], options = {}) => {
     .layout(graph)
     .then((layoutedGraph) => {
       return {
-        nodes:
-          layoutedGraph.children &&
-          layoutedGraph.children.map((node) => {
-            return {
-              ...node,
-              // React Flow expects a position property on the node instead of `x` and `y` fields.
-              position: { x: node.x, y: node.y },
-            };
-          }),
+        nodes: layoutedGraph.children?.map((node) => {
+          return {
+            ...node,
+            // React Flow expects a position property on the node instead of `x` and `y` fields.
+            position: { x: node.x, y: node.y },
+          };
+        }),
         edges: layoutedGraph.edges,
       };
     })
@@ -119,7 +116,7 @@ const MindMapCanvas = () => {
       console.log("onNodesChange", rfInstance?.toObject());
       setNodes((nds) => applyNodeChanges(changes, nds));
     },
-    [setNodes]
+    [setNodes, rfInstance?.toObject]
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange<Edge>[]) => {
@@ -129,7 +126,9 @@ const MindMapCanvas = () => {
   );
   const handleMouseMove = useCallback(
     (event: any) => {
-      if (!isCreatingNode) return;
+      if (!isCreatingNode) {
+        return;
+      }
       setMousePosition({ x: event.clientX, y: event.clientY });
     },
     [isCreatingNode]
@@ -155,20 +154,27 @@ const MindMapCanvas = () => {
       getLayoutedElements(ns, es, opts).then((layoutedGraph) => {
         if (layoutedGraph) {
           const { nodes: layoutedNodes, edges: layoutedEdges } = layoutedGraph;
-          // @ts-ignore
+          // @ts-expect-error
           setNodes(layoutedNodes);
-          // @ts-ignore
+          // @ts-expect-error
           setEdges(layoutedEdges);
         } else {
           toast.error("Error layouting the graph");
         }
       });
     },
-    [nodes, edges]
+    [
+      nodes,
+      edges, // @ts-expect-error
+      setEdges, // @ts-expect-error
+      setNodes,
+    ]
   );
 
   useLayoutEffect(() => {
-    if (!mindMapToGenerate) return;
+    if (!mindMapToGenerate) {
+      return;
+    }
     console.log("mindMapToGenerate", mindMapToGenerate);
 
     // Parse the JSON string if it's a string
@@ -185,7 +191,7 @@ const MindMapCanvas = () => {
     // Convert JSON directly to React Flow format
     const [convertedNodes, convertedEdges] = convertJsonToReactFlow(jsonData);
     onLayout({ direction: "DOWN" }, [convertedNodes, convertedEdges]);
-  }, [mindMapToGenerate]);
+  }, [mindMapToGenerate, onLayout]);
 
   useEffect(() => {
     if (rfInstance) {
@@ -195,10 +201,8 @@ const MindMapCanvas = () => {
 
   return (
     <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgesTypes}
+      className="h-screen w-screen"
+      connectionMode={ConnectionMode.Loose}
       defaultEdgeOptions={{
         type: "default",
         markerEnd: {
@@ -208,22 +212,24 @@ const MindMapCanvas = () => {
           color: zinc[400],
         },
       }}
-      onInit={setRfInstance}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      connectionMode={ConnectionMode.Loose}
+      edges={edges}
+      edgeTypes={edgesTypes}
       fitView
       fitViewOptions={{ padding: 2 }}
-      className="h-screen w-screen"
+      nodes={nodes}
+      nodeTypes={nodeTypes}
+      onConnect={onConnect}
+      onEdgesChange={onEdgesChange}
+      onInit={setRfInstance}
       onMouseMove={handleMouseMove}
+      onNodesChange={onNodesChange}
       panOnDrag={false}
       panOnScroll
       selectionOnDrag
     >
       {isCreatingNode && (
         <div
-          className="bg-primary/20 rounded  min-w-[200px] min-h-[200px]"
+          className="min-h-[200px] min-w-[200px] rounded bg-primary/20"
           style={{
             position: "absolute",
             left: mousePosition?.x - 8,
@@ -235,18 +241,18 @@ const MindMapCanvas = () => {
       )}
 
       <Panel
+        className="flex items-center gap-3 rounded-lg bg-primary/10 p-3"
         position="top-left"
-        className="flex gap-3 items-center bg-primary/10 p-3 rounded-lg"
       >
         <Link href="/home">
           <PiArrowLeft className="size-5 text-foreground" />
         </Link>
-        <h1 className="text-xl font-medium">
+        <h1 className="font-medium text-xl">
           {currentMindMap?.title ? currentMindMap?.title : "Untitled"}
         </h1>
       </Panel>
 
-      <Panel position="top-right" className="bg-primary/10 p-3 rounded-lg">
+      <Panel className="rounded-lg bg-primary/10 p-3" position="top-right">
         <DialogCustomMindMap />
       </Panel>
 
@@ -255,8 +261,8 @@ const MindMapCanvas = () => {
       <Menubar rfInstance={rfInstance} />
 
       {mindMapLoadingRequest && (
-        <div className="fixed inset-0 flex items-center justify-center z-[999] bg-background/80">
-          <ImSpinner8 className="w-10 h-10 text-primary animate-spin z-50" />
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-background/80">
+          <ImSpinner8 className="z-50 h-10 w-10 animate-spin text-primary" />
         </div>
       )}
     </ReactFlow>
