@@ -18,8 +18,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
-import { credentialsSignIn, googleLogin } from "@/lib/authjs/actions";
 import { cn } from "@/lib/utils";
+import { authClient } from "@/lib/authClient";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -33,13 +33,20 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  const router = useRouter();
-
   const onSubmit = async (data: LoginFormValues) => {
-    const result = await credentialsSignIn(data);
-    if (result?.success) {
-      router.push("/home"); // Redirect on success
-    }
+    await authClient.signIn.email({
+      email: data.email,  
+      password: data.password,
+      callbackURL: "/home",
+      rememberMe: true,
+    });
+  };
+
+  const handleGoogleLogin = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/home`,
+    });
   };
 
   return (
@@ -138,7 +145,7 @@ export default function Login() {
           </div>
           <div className="flex justify-center items-center">
             <FcGoogle
-              onClick={googleLogin}
+              onClick={handleGoogleLogin}
               className="size-10 cursor-pointer"
             />
           </div>

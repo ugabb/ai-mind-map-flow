@@ -5,18 +5,13 @@ import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import {
   Upload,
-  Link as LinkIcon,
-  Mic,
-  Search,
-  ArrowUpRight,
+  Link as LinkIcon, Search,
+  ArrowUpRight
 } from "lucide-react";
 import { useState } from "react";
-import { GenerateMindMapModal } from "./GenerateMindMapModal";
-import { useSession } from "next-auth/react";
 
 export const HeroSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data: session } = useSession();
 
   const handlePasteClick = () => {
     setIsModalOpen(true);
@@ -157,13 +152,13 @@ export const HeroSection = () => {
         </motion.div>
       </div>
 
-      <GenerateMindMapModal
+      {/* <GenerateMindMapModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         currentUser={session?.user}
         title="Youtube Link"
         defaultUploadType="YTB_URL"
-      />
+      /> */}
     </div>
   );
 };

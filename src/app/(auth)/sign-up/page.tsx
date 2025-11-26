@@ -21,10 +21,10 @@ import { useRouter } from "next/navigation";
 import { ImSpinner8 } from "react-icons/im";
 import { useCallback, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { googleLogin } from "@/lib/authjs/actions";
 import { handleUploadProfilePicture } from "@/services/user/uploadProfilePicture";
 import toast from "react-hot-toast";
 import { registerUser } from "@/services/user/registerUser";
+import { authClient } from "@/lib/authClient";
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -52,18 +52,18 @@ export default function SignUp() {
       profilePictureURL = await handleUploadProfilePicture(data.profilePicture);
     }
 
-    const { status, message } = await registerUser({
+    const { data:response, error } = await authClient.signUp.email({
       email: data.email,
-      password: data.password,
       name: data.name,
-      ...(profilePictureURL && { profilePicture: profilePictureURL }),
-    });
-    if (status === 201) {
+      password: data.password,
+      image: profilePictureURL,
+    })
+    if (response?.user) {
       toast.success("Account created successfully");
       router.push("/login");
     }
-    if (status === 400) {
-      toast.error("Error creating account: " + message);
+    if (error) {
+      toast.error("Error creating account: " + error.message);
     }
   };
 
@@ -292,7 +292,7 @@ export default function SignUp() {
           </div>
           <div className="flex justify-center items-center">
             <FcGoogle
-              onClick={googleLogin}
+              // onClick={googleLogin}
               className="size-10 cursor-pointer"
             />
           </div>

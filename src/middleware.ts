@@ -1,22 +1,30 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { cookies } from "next/headers";
-import { cookieValues, isProduction, productionCookieToken } from "./services/axios";
+import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { authClient } from "@/lib/authClient";
+import { getSessionCookie } from "better-auth/cookies";
 
 
+const publicRoutes = ['/login', '/sign-up'];
 
-export function middleware(request: NextRequest) {
-  const myCookie = cookies();
-
-  let token: string | null = null;
-  if (myCookie.get(isProduction ? productionCookieToken : cookieValues.token)) {
-    token = myCookie.get(isProduction ? productionCookieToken : cookieValues.token)!.value;
+export async function middleware(request: NextRequest) {
+  const sessionCookie = getSessionCookie(request);
+  const isAuthenticated = !!sessionCookie;
+  console.log('==== isAuthenticated', isAuthenticated);
+  if(isAuthenticated && publicRoutes.includes(request.nextUrl.pathname)) {
+    return NextResponse.redirect(new URL("/home", request.url));
   }
-  if (!token) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
+  // if(!isAuthenticated && publicRoutes.includes(request.nextUrl.pathname)) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
   return NextResponse.next();
 }
+
 export const config = {
-  matcher: ['/home', '/mind-map/:path*', '/profile'],
+  runtime: "nodejs", // Required for auth.api calls
+  matcher: [
+    '/((?!api|trpc|.*\\..*|_next).*)',
+    // Skip Next.js internals and all static files
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    '/',
+  ],
 };

@@ -16,6 +16,8 @@ import { PiSignOut } from "react-icons/pi";
 import { signOut } from "next-auth/react";
 import { User } from "next-auth";
 import { Button } from "./ui/button";
+import { authClient } from "@/lib/authClient";
+import { useRouter } from "next/navigation";
 
 interface UserProps {
   currentUser: User | undefined;
@@ -23,6 +25,8 @@ interface UserProps {
 
 export const UserAvatar = (props: UserProps) => {
   const { currentUser } = props;
+
+  const router = useRouter();
 
   if (currentUser)
     return (
@@ -43,10 +47,11 @@ export const UserAvatar = (props: UserProps) => {
             <DropdownMenuItem
               className=" cursor-pointer"
               onClick={() =>
-                signOut({
-                  redirect: true,
-                  redirectTo: "/login",
-                })
+                  authClient.signOut({fetchOptions:{
+                    onSuccess: () => {
+                      router.push("/login");
+                    }
+                  }})
               }
             >
               Sign Out

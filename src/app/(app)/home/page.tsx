@@ -3,12 +3,8 @@
 import { HeroSection } from "@/components/HeroSection";
 import { RecentsGrid } from "@/components/RecentsGrid";
 import { MindMapList } from "@/components/MindMapList";
-import { useSession } from "next-auth/react";
 
 export default function Home() {
-  const { data: session } = useSession();
-  const currentUser = session?.user;
-
   return (
     <div className="flex flex-col">
       <HeroSection />

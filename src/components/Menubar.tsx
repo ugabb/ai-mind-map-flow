@@ -12,8 +12,8 @@ import {
   UpdateMindMapRequest,
 } from "@/services/mind-map/updateMindMap";
 import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
 import Export from "./Export";
+import { authClient } from "@/lib/authClient";
 
 interface MenuBarProps {
   rfInstance: ReactFlowInstance | null;
@@ -38,7 +38,7 @@ export const Menubar_ = ({ rfInstance }: MenuBarProps) => {
   } = useNodeStore();
 
   const params = useParams();
-  const { data: session } = useSession();
+  const { data: session } = authClient.useSession();
   const queryClient = useQueryClient();
 
   const { data: mindMapData, isPending } = useQuery({

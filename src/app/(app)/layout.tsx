@@ -1,14 +1,28 @@
 import { Header } from "@/components/Header";
 import { AppSidebar } from "@/components/Sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { getCurrentUser } from "@/lib/authjs/getCurrentUser";
+import { authClient } from "@/lib/authClient";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { currentUser } = await getCurrentUser();
+	const session = await authClient.getSession({
+    fetchOptions:{
+      headers: await headers(),
+    }
+  });
+
+  console.log('==== layoutsession', session);
+
+  const currentUser = session?.data?.user;
+
+  if (!session.data) {
+    redirect("/login");
+  }
 
   return (
     <SidebarProvider>

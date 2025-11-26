@@ -8,7 +8,6 @@ const poppins = Poppins({
   subsets: ["latin"],
 });
 import { CustomQueryClientProvider } from "@/components/CustomQueryClientProvider";
-import AuthContext from "@/components/SessionProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
@@ -22,7 +21,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthContext>
       <html lang="en" suppressHydrationWarning>
         <body className={poppins.className}>
           <ThemeProvider
@@ -36,6 +34,5 @@ export default function RootLayout({
           </ThemeProvider>
         </body>
       </html>
-    </AuthContext>
   );
 }
