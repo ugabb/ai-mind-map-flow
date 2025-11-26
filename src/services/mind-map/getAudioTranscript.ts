@@ -1,39 +1,37 @@
-import { api } from "../axios";
+import { api } from '../axios'
 
 type GetAudioTranscriptResponse = {
-  transcription: string;
-  status: number;
-};
+  transcription: string
+  status: number
+}
 
 export async function getAudioTranscript(
   audio: File
 ): Promise<GetAudioTranscriptResponse> {
   try {
     if (!audio) {
-      throw new Error("No audio file provided");
+      throw new Error('No audio file provided')
     }
-    const formData = new FormData();
-    formData.append("file", audio);
-    console.log(formData, audio);
+    const formData = new FormData()
+    formData.append('file', audio)
     const { data, status } = await api.post(
-      "/transcribe",
+      '/transcribe',
       formData, // Pass formData directly as the second argument
       {
         headers: {
-          "Content-Type": "multipart/form-data", // Axios will handle the boundary automatically
+          'Content-Type': 'multipart/form-data', // Axios will handle the boundary automatically
         },
       }
-    );
+    )
 
     return {
       transcription: data.transcription,
       status,
-    };
-  } catch (error) {
-    console.error(error);
+    }
+  } catch (_error) {
     return {
       status: 500,
-      transcription: "",
-    };
+      transcription: '',
+    }
   }
 }

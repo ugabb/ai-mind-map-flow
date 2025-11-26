@@ -1,18 +1,18 @@
-import { Handle, Position } from "@xyflow/react";
-import { memo } from "react";
-import { GhostSquare } from "../GhostSquare";
-import type { Direction } from "./Square/Squaree";
+import { Handle, Position } from '@xyflow/react'
+import { memo } from 'react'
+import { GhostSquare } from '../GhostSquare'
+import type { Direction } from './Square/Squaree'
 
 type HandleProps = {
-  isAddingNode: Direction;
-  setIsAddingNode: React.Dispatch<React.SetStateAction<Direction>>;
-  handleAddSideNode: (direction: string) => void;
-  width: number | string;
-  height: number | string;
-  targetPosition: Position | undefined;
-  sourcePosition: Position | undefined;
-  color?: string;
-};
+  isAddingNode: Direction
+  setIsAddingNode: React.Dispatch<React.SetStateAction<Direction>>
+  handleAddSideNode: (direction: string) => void
+  width: number | string
+  height: number | string
+  targetPosition: Position | undefined
+  sourcePosition: Position | undefined
+  color?: string
+}
 
 export const Handles_ = (props: HandleProps) => {
   const {
@@ -24,7 +24,7 @@ export const Handles_ = (props: HandleProps) => {
     targetPosition,
     sourcePosition,
     color,
-  } = props;
+  } = props
 
   return (
     <>
@@ -32,7 +32,7 @@ export const Handles_ = (props: HandleProps) => {
         <Handle
           className={`-top-6 flex size-10 items-center justify-center bg-[url('/icons/arrow-up.svg')] bg-center bg-primary bg-no-repeat`}
           id="top"
-          onClick={() => handleAddSideNode("top")}
+          onClick={() => handleAddSideNode('top')}
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, top: false }))
           }
@@ -44,7 +44,7 @@ export const Handles_ = (props: HandleProps) => {
         />
       ) : (
         <Handle
-          className={"-top-6 h-3 w-3 bg-primary"}
+          className={'-top-6 h-3 w-3 bg-primary'}
           id="top"
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, top: false }))
@@ -70,7 +70,7 @@ export const Handles_ = (props: HandleProps) => {
         <Handle
           className={`-bottom-6 flex size-10 items-center justify-center bg-[url('/icons/arrow-down.svg')] bg-center bg-primary bg-no-repeat`}
           id="bottom"
-          onClick={() => handleAddSideNode("bottom")}
+          onClick={() => handleAddSideNode('bottom')}
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, bottom: false }))
           }
@@ -82,7 +82,7 @@ export const Handles_ = (props: HandleProps) => {
         />
       ) : (
         <Handle
-          className={"-bottom-6 h-3 w-3 bg-primary"}
+          className={'-bottom-6 h-3 w-3 bg-primary'}
           id="bottom"
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, bottom: false }))
@@ -108,7 +108,7 @@ export const Handles_ = (props: HandleProps) => {
         <Handle
           className={`-right-6 flex size-10 items-center justify-center bg-[url('/icons/arrow-right.svg')] bg-center bg-primary bg-no-repeat`}
           id="right"
-          onClick={() => handleAddSideNode("right")}
+          onClick={() => handleAddSideNode('right')}
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, right: false }))
           }
@@ -123,7 +123,7 @@ export const Handles_ = (props: HandleProps) => {
           className={`-right-6 h-3 w-3 bg-primary ${
             (targetPosition === Position.Right ||
               sourcePosition === Position.Right) &&
-            "bg-transparent"
+            'bg-transparent'
           }`}
           id="right"
           onMouseLeave={() =>
@@ -150,7 +150,7 @@ export const Handles_ = (props: HandleProps) => {
         <Handle
           className={`-left-6 flex size-10 items-center justify-center bg-[url('/icons/arrow-left.svg')] bg-center bg-primary bg-no-repeat`}
           id="left"
-          onClick={() => handleAddSideNode("left")}
+          onClick={() => handleAddSideNode('left')}
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, left: false }))
           }
@@ -162,7 +162,7 @@ export const Handles_ = (props: HandleProps) => {
         />
       ) : (
         <Handle
-          className={"-left-6 h-3 w-3 bg-primary"}
+          className={'-left-6 h-3 w-3 bg-primary'}
           id="left"
           onMouseLeave={() =>
             setIsAddingNode((prev) => ({ ...prev, left: false }))
@@ -184,7 +184,7 @@ export const Handles_ = (props: HandleProps) => {
         />
       )}
     </>
-  );
-};
+  )
+}
 
-export const Handles = memo(Handles_);
+export const Handles = memo(Handles_)

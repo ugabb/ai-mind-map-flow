@@ -1,13 +1,13 @@
-"use client";
+'use client'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useNodeStore } from "@/store/NodeStore";
-import { FlashCardTab } from "./FlashCard/FlashCard";
-import { MindMapTab } from "./MindMapTab/MindMapTab";
-import { SummaryTab } from "./SummaryTab/SummaryTab";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useNodeStore } from '@/store/NodeStore'
+import { FlashCardTab } from './FlashCard/FlashCard'
+import { MindMapTab } from './MindMapTab/MindMapTab'
+import { SummaryTab } from './SummaryTab/SummaryTab'
 
 export function ActionsSection() {
-  const { currentMindMap } = useNodeStore();
+  const { currentMindMap } = useNodeStore()
 
   return (
     <div className="h-full px-2">
@@ -38,5 +38,5 @@ export function ActionsSection() {
         </TabsContent>
       </Tabs>
     </div>
-  );
+  )
 }

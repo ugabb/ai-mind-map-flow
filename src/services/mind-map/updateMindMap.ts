@@ -1,21 +1,21 @@
-import type { Edge, Node, ReactFlowJsonObject } from "@xyflow/react";
-import { api } from "../axios";
+import type { Edge, Node, ReactFlowJsonObject } from '@xyflow/react'
+import { api } from '../axios'
 
 export type MindMapResponse = {
-  id: string;
-  title: string;
-  mindMap: ReactFlowJsonObject<Node, Edge>;
-  createdAt: string;
-  updatedAt: string;
-  userId: string;
-};
+  id: string
+  title: string
+  mindMap: ReactFlowJsonObject<Node, Edge>
+  createdAt: string
+  updatedAt: string
+  userId: string
+}
 
 export type UpdateMindMapRequest = {
-  mindMap?: ReactFlowJsonObject<Node, Edge>;
-  title?: string;
-  userId: string;
-  mindMapId: string;
-};
+  mindMap?: ReactFlowJsonObject<Node, Edge>
+  title?: string
+  userId: string
+  mindMapId: string
+}
 
 export async function updateMindMap({
   userId,
@@ -30,14 +30,13 @@ export async function updateMindMap({
         ...(title && { title }),
         mindMap,
       }
-    );
+    )
 
     if (status === 200) {
-      return data;
+      return data
     }
-    return [];
-  } catch (error: any) {
-    console.error(error);
-    return [];
+    return []
+  } catch (_error: any) {
+    return []
   }
 }

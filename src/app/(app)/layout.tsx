@@ -1,27 +1,25 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { Header } from "@/components/Header";
-import { AppSidebar } from "@/components/Sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { authClient } from "@/lib/authClient";
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { Header } from '@/components/Header'
+import { AppSidebar } from '@/components/Sidebar'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { authClient } from '@/lib/authClient'
 
 export default async function AppLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   const session = await authClient.getSession({
     fetchOptions: {
       headers: await headers(),
     },
-  });
+  })
 
-  console.log("==== layoutsession", session);
-
-  const currentUser = session?.data?.user;
+  const currentUser = session?.data?.user
 
   if (!session.data) {
-    redirect("/login");
+    redirect('/login')
   }
 
   return (
@@ -34,5 +32,5 @@ export default async function AppLayout({
         </SidebarInset>
       </div>
     </SidebarProvider>
-  );
+  )
 }

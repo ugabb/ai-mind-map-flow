@@ -1,73 +1,73 @@
-import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { getVideoIdYouTube } from "@/utils/get-video-id-youtube";
-import { api } from "../axios";
+import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
+import { getVideoIdYouTube } from '@/utils/get-video-id-youtube'
+import { api } from '../axios'
 
 type YouTubeTranscriptRequest = {
-  url: string;
-  isUrlValid: boolean;
-  lang?: string;
-};
+  url: string
+  isUrlValid: boolean
+  lang?: string
+}
 
 type TranscriptChunk = {
-  text: string;
-  offset: number;
-  duration: number;
-  lang: string;
-};
+  text: string
+  offset: number
+  duration: number
+  lang: string
+}
 type Transcript = {
-  content: TranscriptChunk[] | string;
-  lang: string;
-  availableLangs: string[];
-};
+  content: TranscriptChunk[] | string
+  lang: string
+  availableLangs: string[]
+}
 
 export type YoutubeTranscriptionResult = {
-  transcript: Transcript;
-  transcriptionRaw: string;
-};
+  transcript: Transcript
+  transcriptionRaw: string
+}
 
 // Helper function to validate YouTube URL
 const isValidYouTubeUrl = (url: string): boolean => {
-  if (!url || typeof url !== "string" || url.trim() === "") {
-    return false;
+  if (!url || typeof url !== 'string' || url.trim() === '') {
+    return false
   }
 
-  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
-  return youtubeRegex.test(url.trim());
-};
+  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/
+  return youtubeRegex.test(url.trim())
+}
 
 export function useGetTranscriptionYouTube(props: YouTubeTranscriptRequest) {
   // Memoize URL validation and video ID extraction to prevent unnecessary recalculations
   const { videoId } = useMemo(() => {
-    const trimmedUrl = props.url?.trim() || "";
-    const valid = isValidYouTubeUrl(trimmedUrl);
-    const id = valid ? getVideoIdYouTube(trimmedUrl) : null;
+    const trimmedUrl = props.url?.trim() || ''
+    const valid = isValidYouTubeUrl(trimmedUrl)
+    const id = valid ? getVideoIdYouTube(trimmedUrl) : null
 
     return {
       videoId: id,
-    };
-  }, [props.url]);
+    }
+  }, [props.url])
 
   // Only enable the query when we have a valid URL and valid video ID
-  const shouldFetch = props.isUrlValid && !!videoId;
+  const shouldFetch = props.isUrlValid && !!videoId
 
   return useQuery({
     queryKey: [
-      "get-transcription-youtube",
+      'get-transcription-youtube',
       props.url,
       props.lang,
       props.isUrlValid,
     ],
     queryFn: async () => {
       if (!videoId) {
-        throw new Error("Invalid YouTube video ID");
+        throw new Error('Invalid YouTube video ID')
       }
 
       const { data } = await api.get<YoutubeTranscriptionResult>(
-        `/youtube/${videoId}/transcript/${props.lang || "en"}`
-      );
+        `/youtube/${videoId}/transcript/${props.lang || 'en'}`
+      )
 
-      return data;
+      return data
     },
     enabled: shouldFetch,
     refetchInterval: false,
@@ -77,11 +77,11 @@ export function useGetTranscriptionYouTube(props: YouTubeTranscriptRequest) {
     retry: (failureCount, error: any) => {
       // Don't retry if it's a 404 (video not found) or 403 (access denied)
       if (error?.response?.status === 404 || error?.response?.status === 403) {
-        return false;
+        return false
       }
       // Retry up to 2 times for other errors
-      return failureCount < 2;
+      return failureCount < 2
     },
     staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
-  });
+  })
 }

@@ -1,5 +1,5 @@
-import { BaseEdge, type EdgeProps, getSimpleBezierPath } from "@xyflow/react";
-import { memo } from "react";
+import { BaseEdge, type EdgeProps, getSimpleBezierPath } from '@xyflow/react'
+import { memo } from 'react'
 
 function DefaultEdge_({
   id,
@@ -19,7 +19,7 @@ function DefaultEdge_({
     targetX,
     targetY,
     targetPosition,
-  });
+  })
 
   return (
     <BaseEdge
@@ -28,7 +28,7 @@ function DefaultEdge_({
       path={edgePath}
       style={style}
     />
-  );
+  )
 }
 
-export const DefaultEdge = memo(DefaultEdge_);
+export const DefaultEdge = memo(DefaultEdge_)

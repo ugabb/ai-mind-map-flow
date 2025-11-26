@@ -1,4 +1,4 @@
-import { getVideoIdYouTube } from "./get-video-id-youtube";
+import { getVideoIdYouTube } from './get-video-id-youtube'
 
 /**
  * Converts a YouTube URL to an embed URL that can be used in an iframe
@@ -6,14 +6,14 @@ import { getVideoIdYouTube } from "./get-video-id-youtube";
  * @returns The embed URL or null if the URL is invalid
  */
 export function getYouTubeEmbedUrl(url: string): string | null {
-  if (!url || typeof url !== "string" || url.trim() === "") {
-    return null;
+  if (!url || typeof url !== 'string' || url.trim() === '') {
+    return null
   }
 
-  const videoId = getVideoIdYouTube(url);
+  const videoId = getVideoIdYouTube(url)
   if (!videoId) {
-    return null;
+    return null
   }
 
-  return `https://www.youtube.com/embed/${videoId}`;
+  return `https://www.youtube.com/embed/${videoId}`
 }

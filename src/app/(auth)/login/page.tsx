@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { FcGoogle } from "react-icons/fc";
-import { ImSpinner8 } from "react-icons/im";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
+import { useForm } from 'react-hook-form'
+import { FcGoogle } from 'react-icons/fc'
+import { ImSpinner8 } from 'react-icons/im'
+import { z } from 'zod'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -14,38 +14,38 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/authClient";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { authClient } from '@/lib/authClient'
+import { cn } from '@/lib/utils'
 
 const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
-});
+})
 
-export type LoginFormValues = z.infer<typeof loginSchema>;
+export type LoginFormValues = z.infer<typeof loginSchema>
 
 export default function Login() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-  });
+  })
 
   const onSubmit = async (data: LoginFormValues) => {
     await authClient.signIn.email({
       email: data.email,
       password: data.password,
-      callbackURL: "/home",
+      callbackURL: '/home',
       rememberMe: true,
-    });
-  };
+    })
+  }
 
   const handleGoogleLogin = async () => {
     await authClient.signIn.social({
-      provider: "google",
+      provider: 'google',
       callbackURL: `${process.env.NEXT_PUBLIC_APP_URL}/home`,
-    });
-  };
+    })
+  }
 
   return (
     <div className="p-5">
@@ -72,7 +72,7 @@ export default function Login() {
                     <Input
                       {...field}
                       className={cn({
-                        "border-red-500 focus-visible:ring-red-500":
+                        'border-red-500 focus-visible:ring-red-500':
                           form.formState.errors.password,
                       })}
                       placeholder="E-mail"
@@ -100,7 +100,7 @@ export default function Login() {
                     <Input
                       {...field}
                       className={cn({
-                        "border-red-500 focus-visible:ring-red-500":
+                        'border-red-500 focus-visible:ring-red-500':
                           form.formState.errors.password,
                       })}
                       placeholder="Password"
@@ -126,7 +126,7 @@ export default function Login() {
               {form.formState.isSubmitting ? (
                 <ImSpinner8 className="size-5 animate-spin text-primary-foreground" />
               ) : (
-                "Sign In"
+                'Sign In'
               )}
             </Button>
             <div className="space-x-2">
@@ -135,7 +135,7 @@ export default function Login() {
               </span>
               <Link
                 className="text-primary text-sm transition-all hover:underline"
-                href={"/sign-up"}
+                href={'/sign-up'}
               >
                 Click here!
               </Link>
@@ -150,5 +150,5 @@ export default function Login() {
         </form>
       </Form>
     </div>
-  );
+  )
 }

@@ -1,25 +1,25 @@
-"use client";
+'use client'
 
-import Placeholder from "@tiptap/extension-placeholder";
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { type Node, NodeResizer, useReactFlow } from "@xyflow/react";
-import { memo, useCallback, useEffect, useState } from "react";
-import { indigo } from "tailwindcss/colors";
-import { Toolbar } from "@/components/Toolbar";
-import { fontSizes } from "@/constants/values";
-import type { DataNode } from "@/hooks/useNodes";
-import { cn } from "@/lib/utils";
-import type { ExtendedNode } from "@/types/node";
-import { getTextColor } from "@/utils/getTextColor";
-import { Handles } from "../Handles";
+import Placeholder from '@tiptap/extension-placeholder'
+import { EditorContent, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import { type Node, NodeResizer, useReactFlow } from '@xyflow/react'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { indigo } from 'tailwindcss/colors'
+import { Toolbar } from '@/components/Toolbar'
+import { fontSizes } from '@/constants/values'
+import type { DataNode } from '@/hooks/useNodes'
+import { cn } from '@/lib/utils'
+import type { ExtendedNode } from '@/types/node'
+import { getTextColor } from '@/utils/getTextColor'
+import { Handles } from '../Handles'
 
 export type Direction = {
-  top: boolean;
-  bottom: boolean;
-  left: boolean;
-  right: boolean;
-};
+  top: boolean
+  bottom: boolean
+  left: boolean
+  right: boolean
+}
 
 const Squaree = (props: ExtendedNode) => {
   const {
@@ -32,7 +32,7 @@ const Squaree = (props: ExtendedNode) => {
     positionAbsoluteY,
     targetPosition,
     sourcePosition,
-  } = props;
+  } = props
 
   const {
     deleteElements,
@@ -41,17 +41,17 @@ const Squaree = (props: ExtendedNode) => {
     addNodes,
     addEdges,
     setNodes,
-  } = useReactFlow();
+  } = useReactFlow()
 
   // Local state for the node
-  const [node, setNode] = useState<Node<DataNode> | null>(null);
-  const [isEditingText, setIsEditingText] = useState(false);
+  const [node, setNode] = useState<Node<DataNode> | null>(null)
+  const [isEditingText, setIsEditingText] = useState(false)
   const [isAddingNode, setIsAddingNode] = useState<Direction>({
     top: false,
     bottom: false,
     left: false,
     right: false,
-  });
+  })
 
   // Initialize TipTap editor
   // Supports rich text editing with keyboard shortcuts:
@@ -65,109 +65,109 @@ const Squaree = (props: ExtendedNode) => {
         },
       }),
       Placeholder.configure({
-        placeholder: "Add text",
-        emptyEditorClass: "is-editor-empty",
+        placeholder: 'Add text',
+        emptyEditorClass: 'is-editor-empty',
         showOnlyWhenEditable: false,
         considerAnyAsEmpty: true,
       }),
     ],
     content:
-      typeof data.label === "string" && data.label.trim() !== ""
+      typeof data.label === 'string' && data.label.trim() !== ''
         ? data.label
-        : "",
+        : '',
     editorProps: {
       attributes: {
         class:
-          "nodrag w-full h-full border-none cursor-text focus:outline-none text-center",
+          'nodrag w-full h-full border-none cursor-text focus:outline-none text-center',
       },
     },
     editable: isEditingText, // Only editable when explicitly editing
     onUpdate: ({ editor }) => {
       if (!editor) {
-        return;
+        return
       }
-      const content = editor.getHTML();
+      const content = editor.getHTML()
       // Update node data immediately
-      updateNodeData(id, { ...data, label: content });
+      updateNodeData(id, { ...data, label: content })
     },
     onBlur: () => {
-      setIsEditingText(false);
+      setIsEditingText(false)
       // Auto-resize node to fit content
       setTimeout(() => {
-        resizeNodeToContent();
-      }, 100);
+        resizeNodeToContent()
+      }, 100)
     },
     onFocus: () => {
-      setIsEditingText(true);
+      setIsEditingText(true)
     },
     immediatelyRender: false,
-  });
+  })
 
   // Initialize node state
   useEffect(() => {
-    const currentNode = getNode(id) as Node<DataNode>;
+    const currentNode = getNode(id) as Node<DataNode>
     if (currentNode) {
-      setNode(currentNode);
-      if (editor && typeof currentNode.data.label === "string") {
-        editor.commands.setContent(currentNode.data.label);
+      setNode(currentNode)
+      if (editor && typeof currentNode.data.label === 'string') {
+        editor.commands.setContent(currentNode.data.label)
       }
     }
-  }, [id, getNode, editor]);
+  }, [id, getNode, editor])
 
   // Update editor content when data changes externally
   useEffect(() => {
-    if (editor && typeof data.label === "string" && !isEditingText) {
-      const currentContent = editor.getHTML();
+    if (editor && typeof data.label === 'string' && !isEditingText) {
+      const currentContent = editor.getHTML()
       if (currentContent !== data.label) {
-        editor.commands.setContent(data.label);
+        editor.commands.setContent(data.label)
       }
     }
-  }, [data.label, editor, isEditingText]);
+  }, [data.label, editor, isEditingText])
 
   // Update editor editable state when editing mode changes
   useEffect(() => {
     if (editor) {
-      editor.setEditable(isEditingText);
+      editor.setEditable(isEditingText)
     }
-  }, [editor, isEditingText]);
+  }, [editor, isEditingText])
 
   const handleAddSideNode = useCallback(
     (direction: string) => {
-      if (direction === "left" || direction === "right") {
+      if (direction === 'left' || direction === 'right') {
         if (!width) {
-          return;
+          return
         }
         const newNode: Node = {
           id: crypto.randomUUID(),
           position: {
             x:
               positionAbsoluteX +
-              (direction === "left"
+              (direction === 'left'
                 ? (-width as number) - 100
                 : (width as number) + 100),
             y: positionAbsoluteY,
           },
-          data: { label: "", color: data.color },
-          type: "square",
+          data: { label: '', color: data.color },
+          type: 'square',
           width,
           height,
           expandParent: true,
-        };
+        }
 
         const newEdge = {
           id: `${id}-${newNode.id}`,
           source: id,
           target: newNode.id,
           sourceHandle: direction,
-          targetHandle: direction === "left" ? "right" : "left",
-          type: "default",
-        };
+          targetHandle: direction === 'left' ? 'right' : 'left',
+          type: 'default',
+        }
 
-        addNodes(newNode);
-        addEdges(newEdge);
+        addNodes(newNode)
+        addEdges(newEdge)
       } else {
         if (!height) {
-          return;
+          return
         }
         const newNode: Node = {
           id: crypto.randomUUID(),
@@ -175,28 +175,28 @@ const Squaree = (props: ExtendedNode) => {
             x: positionAbsoluteX,
             y:
               positionAbsoluteY +
-              (direction === "top"
+              (direction === 'top'
                 ? (-height as number) - 100
                 : (height as number) + 100),
           },
-          data: { label: "", color: data.color },
-          type: "square",
+          data: { label: '', color: data.color },
+          type: 'square',
           width,
           height,
           expandParent: true,
-        };
+        }
 
         const newEdge = {
           id: `${id}-${newNode.id}`,
           source: id,
           target: newNode.id,
           sourceHandle: direction,
-          targetHandle: direction === "bottom" ? "top" : "bottom",
-          type: "default",
-        };
+          targetHandle: direction === 'bottom' ? 'top' : 'bottom',
+          type: 'default',
+        }
 
-        addNodes(newNode);
-        addEdges(newEdge);
+        addNodes(newNode)
+        addEdges(newEdge)
       }
     },
     [
@@ -209,12 +209,12 @@ const Squaree = (props: ExtendedNode) => {
       positionAbsoluteY,
       width,
     ]
-  );
+  )
 
   // Handle clicking on the node to enable editing
   const handleNodeClick = useCallback(
     (e: React.MouseEvent) => {
-      e.stopPropagation();
+      e.stopPropagation()
 
       // First ensure the node is selected if it isn't already
       if (!selected) {
@@ -223,93 +223,93 @@ const Squaree = (props: ExtendedNode) => {
             ...node,
             selected: node.id === id,
           }))
-        );
-        return;
+        )
+        return
       }
 
       // If already selected and not editing, enable editing
       if (selected && !isEditingText && editor) {
-        setIsEditingText(true);
+        setIsEditingText(true)
         // Focus the editor after state update
         setTimeout(() => {
-          editor.commands.focus();
-        }, 0);
+          editor.commands.focus()
+        }, 0)
       }
     },
     [selected, isEditingText, editor, setNodes, id]
-  );
+  )
 
   const handleDeleteNode = useCallback(() => {
     if (id) {
-      const nodesToDelete = [{ id }];
-      deleteElements({ nodes: nodesToDelete });
+      const nodesToDelete = [{ id }]
+      deleteElements({ nodes: nodesToDelete })
     }
-  }, [deleteElements, id]);
+  }, [deleteElements, id])
 
   const handleUpdateNodeColor = useCallback(
     (color: string) => {
       if (!color) {
-        return;
+        return
       }
-      const textColor = getTextColor(color);
+      const textColor = getTextColor(color)
 
-      updateNodeData(id, { ...data, color, textColor });
+      updateNodeData(id, { ...data, color, textColor })
       setNode((prevNode) => {
         if (prevNode) {
-          return { ...prevNode, data: { ...prevNode.data, color, textColor } };
+          return { ...prevNode, data: { ...prevNode.data, color, textColor } }
         }
-        return prevNode;
-      });
+        return prevNode
+      })
     },
     [data, id, updateNodeData]
-  );
+  )
 
   const handleUpdateTextSize = useCallback(
-    (size: "sm" | "md" | "lg" | "xl") => {
-      const fontSize = fontSizes[size];
-      updateNodeData(id, { ...data, fontSize });
+    (size: 'sm' | 'md' | 'lg' | 'xl') => {
+      const fontSize = fontSizes[size]
+      updateNodeData(id, { ...data, fontSize })
       setNode((prevNode) => {
         if (prevNode) {
-          return { ...prevNode, data: { ...prevNode.data, fontSize } };
+          return { ...prevNode, data: { ...prevNode.data, fontSize } }
         }
-        return prevNode;
-      });
+        return prevNode
+      })
     },
     [id, data, updateNodeData]
-  );
+  )
 
   // Auto-resize node to fit content
   const resizeNodeToContent = useCallback(() => {
     if (!editor) {
-      return;
+      return
     }
 
     // Create a temporary element to measure content size
-    const tempDiv = document.createElement("div");
-    tempDiv.className = "content-measure";
-    tempDiv.style.position = "absolute";
-    tempDiv.style.visibility = "hidden";
-    tempDiv.style.pointerEvents = "none";
-    tempDiv.style.maxWidth = "none";
+    const tempDiv = document.createElement('div')
+    tempDiv.className = 'content-measure'
+    tempDiv.style.position = 'absolute'
+    tempDiv.style.visibility = 'hidden'
+    tempDiv.style.pointerEvents = 'none'
+    tempDiv.style.maxWidth = 'none'
     tempDiv.style.fontSize =
-      node?.data?.fontSize || data.fontSize || `${fontSizes.md}px`;
-    tempDiv.style.fontFamily = "inherit";
-    tempDiv.style.padding = "16px"; // Match node padding
-    tempDiv.style.textAlign = "center";
-    tempDiv.innerHTML = editor.getHTML();
+      node?.data?.fontSize || data.fontSize || `${fontSizes.md}px`
+    tempDiv.style.fontFamily = 'inherit'
+    tempDiv.style.padding = '16px' // Match node padding
+    tempDiv.style.textAlign = 'center'
+    tempDiv.innerHTML = editor.getHTML()
 
-    document.body.appendChild(tempDiv);
+    document.body.appendChild(tempDiv)
 
     // Measure content
-    const contentWidth = Math.max(tempDiv.scrollWidth, 200); // Minimum width
-    const contentHeight = Math.max(tempDiv.scrollHeight, 200); // Minimum height
+    const contentWidth = Math.max(tempDiv.scrollWidth, 200) // Minimum width
+    const contentHeight = Math.max(tempDiv.scrollHeight, 200) // Minimum height
 
     // Add some padding for comfort
-    const newWidth = Math.max(contentWidth + 40, width || 300);
-    const newHeight = Math.max(contentHeight + 40, height || 200);
+    const newWidth = Math.max(contentWidth + 40, width || 300)
+    const newHeight = Math.max(contentHeight + 40, height || 200)
 
     // Clean up
-    document.body.removeChild(tempDiv);
+    document.body.removeChild(tempDiv)
 
     // Update node size if content is larger
     if (newWidth > (width || 0) || newHeight > (height || 0)) {
@@ -323,47 +323,39 @@ const Squaree = (props: ExtendedNode) => {
               }
             : n
         )
-      );
+      )
     }
-  }, [
-    editor,
-    node?.data?.fontSize,
-    data.fontSize,
-    width,
-    height,
-    id,
-    setNodes,
-  ]);
+  }, [editor, node?.data?.fontSize, data.fontSize, width, height, id, setNodes])
 
   // Handle delete key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (selected && !isEditingText && event.key === "Delete" && id) {
-        const nodesToDelete = [{ id }];
-        deleteElements({ nodes: nodesToDelete });
+      if (selected && !isEditingText && event.key === 'Delete' && id) {
+        const nodesToDelete = [{ id }]
+        deleteElements({ nodes: nodesToDelete })
       }
-    };
+    }
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown)
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [selected, isEditingText, id, deleteElements]);
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selected, isEditingText, id, deleteElements])
 
   return (
     <div
       className={cn(
-        "relative flex items-center justify-center rounded-lg p-2",
+        'relative flex items-center justify-center rounded-lg p-2',
         {
-          "ring-2 ring-blue-500": selected,
-          "cursor-pointer": !isEditingText,
-          "cursor-text": isEditingText,
+          'ring-2 ring-blue-500': selected,
+          'cursor-pointer': !isEditingText,
+          'cursor-text': isEditingText,
         }
       )}
       onClick={handleNodeClick}
       style={{
         backgroundColor: node?.data?.color || data.color || indigo[300],
-        color: node?.data?.textColor || data.textColor || "#000000",
+        color: node?.data?.textColor || data.textColor || '#000000',
         width,
         height,
         fontSize: node?.data?.fontSize || data.fontSize || fontSizes.md,
@@ -400,7 +392,7 @@ const Squaree = (props: ExtendedNode) => {
       <div
         className="flex h-full w-full items-center justify-center p-2"
         style={{
-          pointerEvents: isEditingText ? "all" : "none",
+          pointerEvents: isEditingText ? 'all' : 'none',
         }}
       >
         {isEditingText ? (
@@ -408,40 +400,40 @@ const Squaree = (props: ExtendedNode) => {
             className="nodrag h-full w-full"
             editor={editor}
             style={{
-              pointerEvents: "all",
-              minHeight: "100%",
+              pointerEvents: 'all',
+              minHeight: '100%',
             }}
           />
         ) : (
           <div
             className="prose-mirror-content flex h-full w-full items-center justify-center break-words text-center"
             style={{
-              wordWrap: "break-word",
-              overflowWrap: "break-word",
-              hyphens: "auto",
-              pointerEvents: "none",
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              hyphens: 'auto',
+              pointerEvents: 'none',
             }}
           >
             {(() => {
-              const content = editor?.getHTML() || "";
+              const content = editor?.getHTML() || ''
               const isEmpty =
-                !content || content === "<p></p>" || content.trim() === "";
+                !content || content === '<p></p>' || content.trim() === ''
 
               if (isEmpty && selected) {
                 return (
                   <span className="text-muted-foreground italic">Add text</span>
-                );
+                )
               }
               if (isEmpty) {
-                return "";
+                return ''
               }
-              return <div dangerouslySetInnerHTML={{ __html: content }} />;
+              return <div dangerouslySetInnerHTML={{ __html: content }} />
             })()}
           </div>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export const Square = memo(Squaree);
+export const Square = memo(Squaree)

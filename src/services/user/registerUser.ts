@@ -1,16 +1,16 @@
-import axios from "axios";
+import axios from 'axios'
 
 type RegisterUserResponse = {
-  status: number;
-  message?: string;
-};
+  status: number
+  message?: string
+}
 
 type RegisterUserRequest = {
-  name: string;
-  email: string;
-  password: string;
-  profilePicture?: string;
-};
+  name: string
+  email: string
+  password: string
+  profilePicture?: string
+}
 
 export async function registerUser(
   data: RegisterUserRequest
@@ -20,19 +20,18 @@ export async function registerUser(
     email: data.email,
     password: data.password,
     ...(data.profilePicture && { profilePicture: data.profilePicture }),
-  };
+  }
   try {
     const { status, data: reqData } = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/user`,
       formData
-    );
+    )
 
-    return { status };
+    return { status }
   } catch (err) {
-    console.log(err);
     if (axios.isAxiosError(err) && err.response) {
-      return { status: 400, message: err.response.data.message };
+      return { status: 400, message: err.response.data.message }
     }
-    return { status: 400, message: "An unknown error occurred" };
+    return { status: 400, message: 'An unknown error occurred' }
   }
 }

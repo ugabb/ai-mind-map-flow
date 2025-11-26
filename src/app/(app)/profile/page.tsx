@@ -3,5 +3,5 @@ export default function Profile() {
     <div>
       <h1>Profile</h1>
     </div>
-  );
+  )
 }

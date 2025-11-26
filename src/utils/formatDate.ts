@@ -1,3 +1,3 @@
-import { format } from "date-fns";
+import { format } from 'date-fns'
 
-export const formatDateTime = (date: string) => format(new Date(date), "HH:mm");
+export const formatDateTime = (date: string) => format(new Date(date), 'HH:mm')

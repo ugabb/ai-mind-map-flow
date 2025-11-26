@@ -1,17 +1,17 @@
-import type { Edge, Node, ReactFlowJsonObject } from "@xyflow/react";
-import type { MindMapResponse } from "@/types/mind-map";
-import { api } from "../axios";
+import type { Edge, Node, ReactFlowJsonObject } from '@xyflow/react'
+import type { MindMapResponse } from '@/types/mind-map'
+import { api } from '../axios'
 
 export type SaveMindMapResponse = {
-  message: string;
-  data: MindMapResponse;
-  error?: any;
-};
+  message: string
+  data: MindMapResponse
+  error?: any
+}
 export type SaveMindRequest = {
-  title: string;
-  mindMap: ReactFlowJsonObject<Node, Edge>;
-  userId: string;
-};
+  title: string
+  mindMap: ReactFlowJsonObject<Node, Edge>
+  userId: string
+}
 
 export async function saveMindMap({
   title,
@@ -25,11 +25,10 @@ export async function saveMindMap({
         title,
         mindMap,
       }
-    );
+    )
 
-    return data.data;
+    return data.data
   } catch (error) {
-    console.error(error);
-    throw new Error(`Failed to save mind map: ${error}`);
+    throw new Error(`Failed to save mind map: ${error}`)
   }
 }

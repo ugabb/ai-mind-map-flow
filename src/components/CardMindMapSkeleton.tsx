@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const CardMindMapSkeleton = () => (
   <div className="flex flex-col rounded-xl border border-border p-3">
@@ -8,4 +8,4 @@ export const CardMindMapSkeleton = () => (
       <Skeleton className="h-4 w-1/4" />
     </div>
   </div>
-);
+)

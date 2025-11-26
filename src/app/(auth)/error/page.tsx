@@ -4,5 +4,5 @@ export default function ErrorPage() {
       <h1>Authentication Error</h1>
       <p>There was an error with the authentication provider.</p>
     </div>
-  );
+  )
 }

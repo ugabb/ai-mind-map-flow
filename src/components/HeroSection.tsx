@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { motion } from "framer-motion";
-import { ArrowUpRight, Link as LinkIcon, Search, Upload } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { motion } from 'framer-motion'
+import { ArrowUpRight, Link as LinkIcon, Search, Upload } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 export const HeroSection = () => {
-  const [_isModalOpen, setIsModalOpen] = useState(false);
+  const [_isModalOpen, setIsModalOpen] = useState(false)
 
   const handlePasteClick = () => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   return (
     <div className="w-full">
@@ -38,14 +38,14 @@ export const HeroSection = () => {
         >
           {[
             {
-              label: "Upload",
-              sub: "File, audio, video",
+              label: 'Upload',
+              sub: 'File, audio, video',
               Icon: Upload,
               onClick: () => {},
             },
             {
-              label: "Paste",
-              sub: "YouTube, website, text",
+              label: 'Paste',
+              sub: 'YouTube, website, text',
               Icon: LinkIcon,
               onClick: handlePasteClick,
             },
@@ -90,14 +90,14 @@ export const HeroSection = () => {
         >
           {[
             {
-              label: "Upload",
-              sub: "File, audio, video",
+              label: 'Upload',
+              sub: 'File, audio, video',
               Icon: Upload,
               onClick: () => {},
             },
             {
-              label: "Paste",
-              sub: "YouTube, website, text",
+              label: 'Paste',
+              sub: 'YouTube, website, text',
               Icon: LinkIcon,
               onClick: handlePasteClick,
             },
@@ -156,5 +156,5 @@ export const HeroSection = () => {
         defaultUploadType="YTB_URL"
       /> */}
     </div>
-  );
-};
+  )
+}

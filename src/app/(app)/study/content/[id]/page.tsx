@@ -1,23 +1,23 @@
-import { ActionsSection } from "@/components/ContentPage/ActionsSection";
-import { ContentProvider } from "@/components/ContentPage/ContentContext";
-import { ContentSection } from "@/components/ContentPage/ContentSection";
+import { ActionsSection } from '@/components/ContentPage/ActionsSection'
+import { ContentProvider } from '@/components/ContentPage/ContentContext'
+import { ContentSection } from '@/components/ContentPage/ContentSection'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import { getContentById } from "@/services/content/get-content-by-id";
+} from '@/components/ui/resizable'
+import { getContentById } from '@/services/content/get-content-by-id'
 
 export default async function ContentPage({
   params,
 }: {
-  params: { id: string };
+  params: { id: string }
 }) {
-  const { id } = params;
-  const { content } = await getContentById(id as string);
+  const { id } = params
+  const { content } = await getContentById(id as string)
   const rawTranscription = content.transcription.chunks
     .map((chunk) => chunk.text)
-    .join(" ");
+    .join(' ')
   return (
     <ContentProvider
       content={content}
@@ -36,5 +36,5 @@ export default async function ContentPage({
         </ResizablePanelGroup>
       </div>
     </ContentProvider>
-  );
+  )
 }

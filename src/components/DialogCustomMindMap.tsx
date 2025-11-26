@@ -1,45 +1,45 @@
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { useNodeStore } from "@/store/NodeStore";
-import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+import { useNodeStore } from '@/store/NodeStore'
+import { Button } from './ui/button'
+import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
 
 function DialogCustomMindMap() {
-  const [mindMapData, setMindMapData] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const { setMindMapToGenerate } = useNodeStore();
+  const [mindMapData, setMindMapData] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+  const { setMindMapToGenerate } = useNodeStore()
 
   const handleSubmit = () => {
     if (!mindMapData.trim()) {
-      toast.error("Please enter mind map data");
-      return;
+      toast.error('Please enter mind map data')
+      return
     }
 
     try {
       // Validate JSON format
-      const data = JSON.parse(mindMapData);
-      setMindMapToGenerate(data);
-      setIsOpen(false);
-      setMindMapData("");
-      toast.success("Mind map data applied successfully!");
+      const data = JSON.parse(mindMapData)
+      setMindMapToGenerate(data)
+      setIsOpen(false)
+      setMindMapData('')
+      toast.success('Mind map data applied successfully!')
     } catch (_error) {
-      toast.error("Invalid JSON format. Please check your input.");
+      toast.error('Invalid JSON format. Please check your input.')
     }
-  };
+  }
 
   const exampleData = {
-    name: "Root Topic",
+    name: 'Root Topic',
     children: [
       {
-        name: "Subtopic 1",
-        children: [{ name: "Detail 1.1" }, { name: "Detail 1.2" }],
+        name: 'Subtopic 1',
+        children: [{ name: 'Detail 1.1' }, { name: 'Detail 1.2' }],
       },
       {
-        name: "Subtopic 2",
-        children: [{ name: "Detail 2.1" }, { name: "Detail 2.2" }],
+        name: 'Subtopic 2',
+        children: [{ name: 'Detail 2.1' }, { name: 'Detail 2.2' }],
       },
     ],
-  };
+  }
 
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
@@ -75,8 +75,8 @@ function DialogCustomMindMap() {
           <div className="flex justify-end space-x-3">
             <Button
               onClick={() => {
-                setIsOpen(false);
-                setMindMapData("");
+                setIsOpen(false)
+                setMindMapData('')
               }}
               variant="outline"
             >
@@ -87,7 +87,7 @@ function DialogCustomMindMap() {
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
 
-export default DialogCustomMindMap;
+export default DialogCustomMindMap

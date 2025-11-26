@@ -1,36 +1,36 @@
-import Placeholder from "@tiptap/extension-placeholder";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import Placeholder from '@tiptap/extension-placeholder'
+import { useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 import {
   type Connection,
   type Edge,
   type Node,
   useReactFlow,
-} from "@xyflow/react";
-import { useCallback, useState } from "react";
-import type { Direction } from "@/components/Custom Nodes/Square/Squaree";
-import { useNodeStore } from "@/store/NodeStore";
+} from '@xyflow/react'
+import { useCallback, useState } from 'react'
+import type { Direction } from '@/components/Custom Nodes/Square/Squaree'
+import { useNodeStore } from '@/store/NodeStore'
 
 export type DataNode = {
-  label: string;
-  key?: string;
-  value?: any;
-  color?: string;
-  textColor?: string;
-  fontSize?: number;
-};
+  label: string
+  key?: string
+  value?: any
+  color?: string
+  textColor?: string
+  fontSize?: number
+}
 
 type useNodeProps = {
-  id: string;
-  selected: boolean;
-  width: number;
-  height: number;
-  positionAbsoluteX: number;
-  positionAbsoluteY: number;
-  label?: string;
-  updateNodeData: (id: string, data: DataNode) => void;
-  color?: string;
-};
+  id: string
+  selected: boolean
+  width: number
+  height: number
+  positionAbsoluteX: number
+  positionAbsoluteY: number
+  label?: string
+  updateNodeData: (id: string, data: DataNode) => void
+  color?: string
+}
 
 export const useNode = (props: useNodeProps) => {
   const {
@@ -43,24 +43,24 @@ export const useNode = (props: useNodeProps) => {
     label,
     updateNodeData,
     color,
-  } = props;
-  const [node, setNode] = useState<Node<DataNode> | null>(null);
+  } = props
+  const [node, setNode] = useState<Node<DataNode> | null>(null)
 
   const [isAddingNode, setIsAddingNode] = useState<Direction>({
     top: false,
     bottom: false,
     left: false,
     right: false,
-  });
+  })
 
   const { isEditingNode, activeIsEditingNode, disableIsEditingNode } =
-    useNodeStore();
+    useNodeStore()
 
-  const { getEdge, addEdges, addNodes, deleteElements } = useReactFlow();
+  const { getEdge, addEdges, addNodes, deleteElements } = useReactFlow()
 
   const handleInputBlur = useCallback(() => {
-    disableIsEditingNode(); // Exit editing mode in the store
-  }, [disableIsEditingNode]);
+    disableIsEditingNode() // Exit editing mode in the store
+  }, [disableIsEditingNode])
 
   const handleNewConnections = useCallback(
     (newConnection: Connection) => {
@@ -70,48 +70,48 @@ export const useNode = (props: useNodeProps) => {
         target: newConnection.target,
         sourceHandle: newConnection.sourceHandle,
         targetHandle: newConnection.targetHandle,
-        type: "default",
-      };
-      addEdges(newEdge);
+        type: 'default',
+      }
+      addEdges(newEdge)
     },
     [addEdges, id]
-  );
+  )
 
   const handleAddSideNode = useCallback(
     (direction: string) => {
-      if (direction === "left" || direction === "right") {
+      if (direction === 'left' || direction === 'right') {
         if (!width) {
-          return;
+          return
         }
         const newNode: Node = {
           id: crypto.randomUUID(),
           position: {
             x:
               positionAbsoluteX +
-              (direction === "left"
+              (direction === 'left'
                 ? (-width as number) - 100
                 : (width as number) + 100),
             y: positionAbsoluteY,
           },
-          data: { label: "", color },
-          type: "square",
+          data: { label: '', color },
+          type: 'square',
           width,
           height,
           expandParent: true,
-        };
+        }
 
         const newConnection: Connection = {
           source: id!,
           target: newNode.id,
           sourceHandle: direction,
-          targetHandle: direction === "left" ? "right" : "left",
-        };
+          targetHandle: direction === 'left' ? 'right' : 'left',
+        }
 
-        addNodes(newNode);
-        handleNewConnections(newConnection);
+        addNodes(newNode)
+        handleNewConnections(newConnection)
       } else {
         if (!height) {
-          return;
+          return
         }
         const newNode: Node = {
           id: crypto.randomUUID(),
@@ -119,25 +119,25 @@ export const useNode = (props: useNodeProps) => {
             x: positionAbsoluteX,
             y:
               positionAbsoluteY +
-              (direction === "top"
+              (direction === 'top'
                 ? (-height as number) - 100
                 : (height as number) + 100),
           },
-          data: { label: "", color },
-          type: "square",
+          data: { label: '', color },
+          type: 'square',
           width,
           height,
           expandParent: true,
-        };
+        }
         const newConnection: Connection = {
           source: id,
           target: newNode.id,
           sourceHandle: direction,
-          targetHandle: direction === "bottom" ? "top" : "bottom",
-        };
+          targetHandle: direction === 'bottom' ? 'top' : 'bottom',
+        }
 
-        addNodes(newNode);
-        handleNewConnections(newConnection);
+        addNodes(newNode)
+        handleNewConnections(newConnection)
       }
     },
     [
@@ -150,56 +150,55 @@ export const useNode = (props: useNodeProps) => {
       positionAbsoluteY,
       width,
     ]
-  );
+  )
 
   const handleDeleteNodeByPressEnter = useCallback(
     (event: KeyboardEvent) => {
-      if (selected && event.key === "Delete" && id) {
-        const nodesToDelete = [{ id }];
-        deleteElements({ nodes: nodesToDelete });
+      if (selected && event.key === 'Delete' && id) {
+        const nodesToDelete = [{ id }]
+        deleteElements({ nodes: nodesToDelete })
       }
     },
     [deleteElements, selected, id]
-  );
+  )
 
   const editor = useEditor({
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: "Enter text here",
-        emptyEditorClass: "bg-muted",
+        placeholder: 'Enter text here',
+        emptyEditorClass: 'bg-muted',
       }),
     ],
     content: label,
     editorProps: {
       attributes: {
         class:
-          "nodrag h-full w-full  border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3 truncate z-50 hover:bg-muted/50 rounded-lg",
+          'nodrag h-full w-full  border-none cursor-text mx-auto focus:outline-none flex justify-center items-center text-left text-wrap p-3 truncate z-50 hover:bg-muted/50 rounded-lg',
       },
     },
     onBlur: handleInputBlur,
     onUpdate: ({ editor }) => {
       if (!editor) {
-        return;
+        return
       }
-      console.log("editor", editor.getHTML());
-      const content = editor.getHTML();
-      updateNodeData(id, { label: content });
+      const content = editor.getHTML()
+      updateNodeData(id, { label: content })
     },
     immediatelyRender: false,
-  });
+  })
 
   const handleEnableEditing = useCallback(() => {
     if (!selected) {
-      return; // Only enable editing if node is selected
+      return // Only enable editing if node is selected
     }
 
-    activeIsEditingNode(); // Set editing mode in the store
+    activeIsEditingNode() // Set editing mode in the store
 
     if (editor) {
-      editor.commands.focus();
+      editor.commands.focus()
     }
-  }, [selected, activeIsEditingNode, editor]);
+  }, [selected, activeIsEditingNode, editor])
 
   return {
     node,
@@ -212,5 +211,5 @@ export const useNode = (props: useNodeProps) => {
     handleAddSideNode,
     handleDeleteNodeByPressEnter,
     editor,
-  };
-};
+  }
+}

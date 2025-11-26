@@ -2,36 +2,36 @@ import {
   getNodesBounds,
   getViewportForBounds,
   useReactFlow,
-} from "@xyflow/react";
-import { toPng } from "html-to-image";
-import { PiArrowDown } from "react-icons/pi";
-import { zinc } from "tailwindcss/colors";
+} from '@xyflow/react'
+import { toPng } from 'html-to-image'
+import { PiArrowDown } from 'react-icons/pi'
+import { zinc } from 'tailwindcss/colors'
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip'
 
 function downloadImage(dataUrl: string) {
-  const a = document.createElement("a");
+  const a = document.createElement('a')
 
-  a.setAttribute("download", "reactflow.png");
-  a.setAttribute("href", dataUrl);
-  a.click();
+  a.setAttribute('download', 'reactflow.png')
+  a.setAttribute('href', dataUrl)
+  a.click()
 }
 
-const imageWidth = 3840;
-const imageHeight = 2160;
+const imageWidth = 3840
+const imageHeight = 2160
 
 function Export() {
-  const { getNodes } = useReactFlow();
+  const { getNodes } = useReactFlow()
   const onClick = () => {
     // we calculate a transform for the nodes so that all nodes are visible
     // we then overwrite the transform of the `.react-flow__viewport` element
     // with the style option of the html-to-image library
-    const nodesBounds = getNodesBounds(getNodes());
+    const nodesBounds = getNodesBounds(getNodes())
     const viewport = getViewportForBounds(
       nodesBounds,
       imageWidth,
@@ -39,14 +39,14 @@ function Export() {
       0.5,
       2,
       1
-    );
+    )
 
     const reactFlow = document.querySelector(
-      ".react-flow__viewport"
-    ) as HTMLElement;
+      '.react-flow__viewport'
+    ) as HTMLElement
 
     if (!reactFlow) {
-      return;
+      return
     }
 
     toPng(reactFlow, {
@@ -59,8 +59,8 @@ function Export() {
         height: `${imageHeight}px`,
         transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
       },
-    }).then(downloadImage);
-  };
+    }).then(downloadImage)
+  }
 
   return (
     <TooltipProvider delayDuration={200}>
@@ -76,7 +76,7 @@ function Export() {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  );
+  )
 }
 
-export default Export;
+export default Export

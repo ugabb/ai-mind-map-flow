@@ -1,25 +1,25 @@
-import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import { Toaster } from "react-hot-toast";
-import "./styles/globals.css";
+import type { Metadata } from 'next'
+import { Poppins } from 'next/font/google'
+import { Toaster } from 'react-hot-toast'
+import './styles/globals.css'
 
 const poppins = Poppins({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-});
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+})
 
-import { CustomQueryClientProvider } from "@/components/CustomQueryClientProvider";
-import { ThemeProvider } from "@/components/theme-provider";
+import { CustomQueryClientProvider } from '@/components/CustomQueryClientProvider'
+import { ThemeProvider } from '@/components/theme-provider'
 
 export const metadata: Metadata = {
-  title: "Ai Mind Map",
-  description: "By Gabriel Barros",
-};
+  title: 'Ai Mind Map',
+  description: 'By Gabriel Barros',
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -35,5 +35,5 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

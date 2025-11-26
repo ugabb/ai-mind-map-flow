@@ -1,9 +1,9 @@
 export function nameAbreviation(name: string) {
   if (!name) {
-    return "";
+    return ''
   }
   return name
-    .split(" ")
+    .split(' ')
     .map((n) => n[0])
-    .join("");
+    .join('')
 }

@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import type React from "react";
-import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { FcGoogle } from "react-icons/fc";
-import { ImSpinner8 } from "react-icons/im";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import type React from 'react'
+import { useCallback, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { FcGoogle } from 'react-icons/fc'
+import { ImSpinner8 } from 'react-icons/im'
+import { z } from 'zod'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -19,10 +19,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/authClient";
-import { handleUploadProfilePicture } from "@/services/user/uploadProfilePicture";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { authClient } from '@/lib/authClient'
+import { handleUploadProfilePicture } from '@/services/user/uploadProfilePicture'
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -30,24 +30,24 @@ const signUpSchema = z.object({
   confirmPassword: z.string().min(8),
   name: z.string(),
   profilePicture: z.instanceof(File).optional(),
-});
+})
 
-export type SignUpFormValues = z.infer<typeof signUpSchema>;
+export type SignUpFormValues = z.infer<typeof signUpSchema>
 
 export default function SignUp() {
-  const [preview, setPreview] = useState<string | null>(null);
-  const [_error, setError] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null)
+  const [_error, setError] = useState<string | null>(null)
 
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
-  });
+  })
 
-  const router = useRouter();
+  const router = useRouter()
 
   const onSubmit = async (data: SignUpFormValues) => {
-    let profilePictureURL = "";
+    let profilePictureURL = ''
     if (data.profilePicture) {
-      profilePictureURL = await handleUploadProfilePicture(data.profilePicture);
+      profilePictureURL = await handleUploadProfilePicture(data.profilePicture)
     }
 
     const { data: response, error } = await authClient.signUp.email({
@@ -55,65 +55,63 @@ export default function SignUp() {
       name: data.name,
       password: data.password,
       image: profilePictureURL,
-    });
+    })
     if (response?.user) {
-      toast.success("Account created successfully");
-      router.push("/login");
+      toast.success('Account created successfully')
+      router.push('/login')
     }
     if (error) {
-      toast.error(`Error creating account: ${error.message}`);
+      toast.error(`Error creating account: ${error.message}`)
     }
-  };
+  }
 
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault();
-      setError(null); // Reset any existing errors
-      form.setValue("profilePicture", undefined);
+      event.preventDefault()
+      setError(null) // Reset any existing errors
+      form.setValue('profilePicture', undefined)
 
-      const files = event.dataTransfer.files;
+      const files = event.dataTransfer.files
       if (files.length > 0) {
-        const file = files[0]; // Assuming a single file upload
-        if (file.type.startsWith("image/")) {
-          const objectUrl = URL.createObjectURL(file); // Create a preview URL for the image
-          setPreview(objectUrl); // Set preview
-          console.log(file);
-          form.setValue("profilePicture", file); // Set the file in the form
+        const file = files[0] // Assuming a single file upload
+        if (file.type.startsWith('image/')) {
+          const objectUrl = URL.createObjectURL(file) // Create a preview URL for the image
+          setPreview(objectUrl) // Set preview
+          form.setValue('profilePicture', file) // Set the file in the form
         } else {
-          setError("Please drop an image file (e.g., .jpg, .png)"); // Handle non-image files
-          setPreview(null); // Clear any previous preview
+          setError('Please drop an image file (e.g., .jpg, .png)') // Handle non-image files
+          setPreview(null) // Clear any previous preview
         }
       }
     },
     [form.setValue]
-  );
+  )
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+  }
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setError(null); // Reset any existing errors
-    form.setValue("profilePicture", undefined); // Reset the file in the form
-    console.log(event.target.files);
+    setError(null) // Reset any existing errors
+    form.setValue('profilePicture', undefined) // Reset the file in the form
 
-    const files = event.target.files;
+    const files = event.target.files
     if (files && files.length > 0) {
-      const file = files[0];
-      if (file.type.startsWith("image/")) {
-        const objectUrl = URL.createObjectURL(file); // Create a URL for preview
-        setPreview(objectUrl); // Set the preview
-        form.setValue("profilePicture", file); // Set the file in the form
+      const file = files[0]
+      if (file.type.startsWith('image/')) {
+        const objectUrl = URL.createObjectURL(file) // Create a URL for preview
+        setPreview(objectUrl) // Set the preview
+        form.setValue('profilePicture', file) // Set the file in the form
       } else {
-        setError("Please select an image file (e.g., .jpg, .png)");
-        setPreview(null);
+        setError('Please select an image file (e.g., .jpg, .png)')
+        setPreview(null)
       }
     }
-  };
+  }
 
   const handleRemove = () => {
-    setPreview(null); // Remove preview
-  };
+    setPreview(null) // Remove preview
+  }
 
   return (
     <div className="min-w-[533px] px-5 py-20">
@@ -171,7 +169,7 @@ export default function SignUp() {
                       {...field}
                       className={`${
                         form.formState?.errors?.password &&
-                        "border border-red-500"
+                        'border border-red-500'
                       }`}
                       placeholder="Password"
                       type="password"
@@ -200,7 +198,7 @@ export default function SignUp() {
                       {...field}
                       className={`${
                         form.formState?.errors?.confirmPassword &&
-                        "border border-red-500"
+                        'border border-red-500'
                       } w-full`}
                       placeholder="Password"
                       type="password"
@@ -245,7 +243,7 @@ export default function SignUp() {
                         accept="image/*"
                         className={`${
                           form.formState?.errors?.confirmPassword &&
-                          "border border-red-500"
+                          'border border-red-500'
                         } w-full`}
                         onChange={handleFileSelect}
                         onDragOver={handleDragOver}
@@ -276,7 +274,7 @@ export default function SignUp() {
               {form.formState.isSubmitting ? (
                 <ImSpinner8 className="size-5 animate-spin text-primary-foreground" />
               ) : (
-                "Sign Up"
+                'Sign Up'
               )}
             </Button>
             <div className="space-x-2">
@@ -285,7 +283,7 @@ export default function SignUp() {
               </span>
               <Link
                 className="text-primary text-sm transition-all hover:underline"
-                href={"/login"}
+                href={'/login'}
               >
                 Click here!
               </Link>
@@ -300,5 +298,5 @@ export default function SignUp() {
         </form>
       </Form>
     </div>
-  );
+  )
 }

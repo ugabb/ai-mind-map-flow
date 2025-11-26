@@ -1,9 +1,9 @@
-"use client";
+'use client'
 
-import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
+import { motion } from 'framer-motion'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
 import {
   FaBars,
   FaBrain,
@@ -14,16 +14,16 @@ import {
   FaPlay,
   FaStar,
   FaVideo,
-} from "react-icons/fa";
-import { Badge } from "@/components/ui/badge";
+} from 'react-icons/fa'
+import { Badge } from '@/components/ui/badge'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import {
   Sheet,
   SheetContent,
@@ -31,91 +31,91 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { linkSocials } from "@/constants/values";
+} from '@/components/ui/sheet'
+import { linkSocials } from '@/constants/values'
 
 const navigation = [
-  { name: "Log In", href: "/login" },
-  { name: "Sign Up", href: "/sign-up" },
-  { name: "Github", href: linkSocials.github },
-  { name: "Linkedin", href: linkSocials.linkedin },
-];
+  { name: 'Log In', href: '/login' },
+  { name: 'Sign Up', href: '/sign-up' },
+  { name: 'Github', href: linkSocials.github },
+  { name: 'Linkedin', href: linkSocials.linkedin },
+]
 
 export default function LandingPageHome() {
-  const [_mobileMenuOpen, _setMobileMenuOpen] = useState(false);
+  const [_mobileMenuOpen, _setMobileMenuOpen] = useState(false)
 
   const features = [
     {
       icon: <FaVideo className="h-8 w-8 text-primary" />,
-      title: "Video Processing",
+      title: 'Video Processing',
       description:
-        "Upload videos from YouTube or local files and let AI extract key concepts automatically.",
+        'Upload videos from YouTube or local files and let AI extract key concepts automatically.',
     },
     {
       icon: <FaBrain className="h-8 w-8 text-primary" />,
-      title: "AI-Powered Analysis",
+      title: 'AI-Powered Analysis',
       description:
-        "Advanced AI algorithms analyze content and create structured mind maps with hierarchical relationships.",
+        'Advanced AI algorithms analyze content and create structured mind maps with hierarchical relationships.',
     },
     {
       icon: <FaDownload className="h-8 w-8 text-primary" />,
-      title: "Export & Share",
+      title: 'Export & Share',
       description:
-        "Export your mind maps in multiple formats and share them with your study groups or colleagues.",
+        'Export your mind maps in multiple formats and share them with your study groups or colleagues.',
     },
-  ];
+  ]
 
   const pricingPlans = [
     {
-      name: "Free",
-      price: "$0",
-      period: "forever",
-      description: "Perfect for getting started",
+      name: 'Free',
+      price: '$0',
+      period: 'forever',
+      description: 'Perfect for getting started',
       features: [
-        "3 mind maps per month",
-        "Basic AI processing",
-        "Standard export formats",
-        "Community support",
+        '3 mind maps per month',
+        'Basic AI processing',
+        'Standard export formats',
+        'Community support',
       ],
-      cta: "Get Started",
-      href: "/sign-up",
+      cta: 'Get Started',
+      href: '/sign-up',
       popular: false,
     },
     {
-      name: "Pro",
-      price: "$9",
-      period: "per month",
-      description: "For serious learners",
+      name: 'Pro',
+      price: '$9',
+      period: 'per month',
+      description: 'For serious learners',
       features: [
-        "Unlimited mind maps",
-        "Advanced AI processing",
-        "All export formats",
-        "Priority support",
-        "Custom themes",
-        "Collaboration tools",
+        'Unlimited mind maps',
+        'Advanced AI processing',
+        'All export formats',
+        'Priority support',
+        'Custom themes',
+        'Collaboration tools',
       ],
-      cta: "Start Free Trial",
-      href: "/sign-up",
+      cta: 'Start Free Trial',
+      href: '/sign-up',
       popular: true,
     },
     {
-      name: "Team",
-      price: "$29",
-      period: "per month",
-      description: "For teams and organizations",
+      name: 'Team',
+      price: '$29',
+      period: 'per month',
+      description: 'For teams and organizations',
       features: [
-        "Everything in Pro",
-        "Team collaboration",
-        "Admin dashboard",
-        "Custom integrations",
-        "Dedicated support",
-        "Advanced analytics",
+        'Everything in Pro',
+        'Team collaboration',
+        'Admin dashboard',
+        'Custom integrations',
+        'Dedicated support',
+        'Advanced analytics',
       ],
-      cta: "Contact Sales",
-      href: "/contact",
+      cta: 'Contact Sales',
+      href: '/contact',
       popular: false,
     },
-  ];
+  ]
 
   return (
     <div className="min-h-screen bg-background">
@@ -217,7 +217,7 @@ export default function LandingPageHome() {
             className="-translate-x-1/2 relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] rotate-[30deg] bg-gradient-to-tr from-primary/20 to-accent/20 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
             style={{
               clipPath:
-                "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
             }}
           />
         </div>
@@ -304,7 +304,7 @@ export default function LandingPageHome() {
             className="-translate-x-1/2 relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] bg-gradient-to-tr from-primary/20 to-accent/20 opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
             style={{
               clipPath:
-                "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
             }}
           />
         </div>
@@ -411,24 +411,24 @@ export default function LandingPageHome() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {[
               {
-                number: "1",
-                title: "Upload Video",
+                number: '1',
+                title: 'Upload Video',
                 description:
-                  "Upload a video from YouTube or your device. Our AI supports all major video formats.",
+                  'Upload a video from YouTube or your device. Our AI supports all major video formats.',
                 icon: <FaVideo className="h-8 w-8" />,
               },
               {
-                number: "2",
-                title: "AI Processing",
+                number: '2',
+                title: 'AI Processing',
                 description:
-                  "Our advanced AI analyzes the content and extracts key concepts, relationships, and insights.",
+                  'Our advanced AI analyzes the content and extracts key concepts, relationships, and insights.',
                 icon: <FaBrain className="h-8 w-8" />,
               },
               {
-                number: "3",
-                title: "Study & Learn",
+                number: '3',
+                title: 'Study & Learn',
                 description:
-                  "Review your personalized mind map, export it, and share it with your study group.",
+                  'Review your personalized mind map, export it, and share it with your study group.',
                 icon: <FaDownload className="h-8 w-8" />,
               },
             ].map((step, index) => (
@@ -493,7 +493,7 @@ export default function LandingPageHome() {
                 )}
                 <Card
                   className={`h-full ${
-                    plan.popular ? "shadow-lg ring-2 ring-primary" : ""
+                    plan.popular ? 'shadow-lg ring-2 ring-primary' : ''
                   }`}
                 >
                   <CardHeader className="pb-8 text-center">
@@ -527,8 +527,8 @@ export default function LandingPageHome() {
                     <Link
                       className={`block w-full rounded-md px-4 py-2 text-center font-semibold text-sm transition-all duration-200 ${
                         plan.popular
-                          ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                          : "border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
+                          ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                          : 'border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground'
                       }`}
                       href={plan.href}
                     >
@@ -684,7 +684,7 @@ export default function LandingPageHome() {
               &copy; 2024 AI Mind Map. All rights reserved.
             </p>
             <p className="text-muted-foreground text-sm">
-              Made with ❤️ by{" "}
+              Made with ❤️ by{' '}
               <Link
                 className="font-medium text-primary hover:underline"
                 href={linkSocials.githubProfile}
@@ -697,5 +697,5 @@ export default function LandingPageHome() {
         </div>
       </footer>
     </div>
-  );
+  )
 }

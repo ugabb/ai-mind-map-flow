@@ -1,36 +1,36 @@
-import type { User } from "next-auth";
-import { ImSpinner8 } from "react-icons/im";
-import { PiPaperPlaneTilt } from "react-icons/pi";
+import type { User } from 'next-auth'
+import { ImSpinner8 } from 'react-icons/im'
+import { PiPaperPlaneTilt } from 'react-icons/pi'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { useContent } from "../ContentPage/hooks/useContent";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+} from '@/components/ui/dialog'
+import { useContent } from '../ContentPage/hooks/useContent'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
 
 type GenerateMindMapModalProps = {
-  open?: boolean;
-  onClose?: () => void;
-  currentUser: User | undefined;
-  title?: string;
-};
+  open?: boolean
+  onClose?: () => void
+  currentUser: User | undefined
+  title?: string
+}
 
 export const GenerateContentUrlModal = ({
   open,
   onClose,
   currentUser,
-  title = "Paste Content URL",
+  title = 'Paste Content URL',
 }: GenerateMindMapModalProps) => {
   const { url, isGeneratingContent, handleUrlChange, generateContent } =
-    useContent(currentUser?.id as string);
+    useContent(currentUser?.id as string)
 
   const handleClose = () => {
-    onClose?.();
-  };
+    onClose?.()
+  }
 
   return (
     <Dialog onOpenChange={handleClose} open={open}>
@@ -69,13 +69,13 @@ export const GenerateContentUrlModal = ({
           {!isGeneratingContent && (
             <>
               {isGeneratingContent
-                ? "Loading Transcription..."
-                : "Generate Mind Map"}
+                ? 'Loading Transcription...'
+                : 'Generate Mind Map'}
               <PiPaperPlaneTilt className="ml-2 size-5 text-white" />
             </>
           )}
         </Button>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

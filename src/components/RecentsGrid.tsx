@@ -1,45 +1,45 @@
-"use client";
+'use client'
 
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { RecentCard } from "./RecentCard";
+import { motion } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { RecentCard } from './RecentCard'
 
 type RecentItem = {
-  id: string;
-  title: string;
-  subtitle?: string;
-  timestamp: string;
-  thumbnail?: string;
-  type?: "video" | "document";
-};
+  id: string
+  title: string
+  subtitle?: string
+  timestamp: string
+  thumbnail?: string
+  type?: 'video' | 'document'
+}
 
 type RecentsGridProps = {
-  items?: RecentItem[];
-  onViewAll?: () => void;
-  onItemClick?: (item: RecentItem) => void;
-  onItemDelete?: (item: RecentItem) => void;
-  onItemEdit?: (item: RecentItem) => void;
-  onItemShare?: (item: RecentItem) => void;
-};
+  items?: RecentItem[]
+  onViewAll?: () => void
+  onItemClick?: (item: RecentItem) => void
+  onItemDelete?: (item: RecentItem) => void
+  onItemEdit?: (item: RecentItem) => void
+  onItemShare?: (item: RecentItem) => void
+}
 
 // Mock data for demonstration
 const mockItems: RecentItem[] = [
   {
-    id: "1",
-    title: "você tá CANSADO ou é PREGUIÇOSO???",
-    subtitle: "A short clip about life",
-    timestamp: "20 minutes ago",
-    thumbnail: "https://i.ytimg.com/vi/fwjk2YF-HBM/maxresdefault.jpg", // You can replace with actual thumbnails
-    type: "video",
+    id: '1',
+    title: 'você tá CANSADO ou é PREGUIÇOSO???',
+    subtitle: 'A short clip about life',
+    timestamp: '20 minutes ago',
+    thumbnail: 'https://i.ytimg.com/vi/fwjk2YF-HBM/maxresdefault.jpg', // You can replace with actual thumbnails
+    type: 'video',
   },
   {
-    id: "2",
-    title: "Machine Learning - CS229 Lecture Notes",
+    id: '2',
+    title: 'Machine Learning - CS229 Lecture Notes',
     subtitle: "Andrew Ng's course files",
-    timestamp: "1 day ago",
-    type: "document",
+    timestamp: '1 day ago',
+    type: 'document',
   },
-];
+]
 
 export const RecentsGrid = ({
   items = mockItems,
@@ -109,5 +109,5 @@ export const RecentsGrid = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}

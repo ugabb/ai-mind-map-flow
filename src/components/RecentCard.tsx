@@ -1,48 +1,48 @@
-"use client";
+'use client'
 
-import { motion } from "framer-motion";
-import { Edit, MoreHorizontal, Share, Trash2 } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { motion } from 'framer-motion'
+import { Edit, MoreHorizontal, Share, Trash2 } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
 
 type RecentCardProps = {
-  title: string;
-  subtitle?: string;
-  timestamp: string;
-  thumbnail?: string;
-  type?: "video" | "document";
-  className?: string;
-  onClick?: () => void;
-  onDelete?: () => void;
-  onEdit?: () => void;
-  onShare?: () => void;
-};
+  title: string
+  subtitle?: string
+  timestamp: string
+  thumbnail?: string
+  type?: 'video' | 'document'
+  className?: string
+  onClick?: () => void
+  onDelete?: () => void
+  onEdit?: () => void
+  onShare?: () => void
+}
 
 export const RecentCard = ({
   title,
   subtitle,
   timestamp,
   thumbnail,
-  type = "document",
+  type = 'document',
   className,
   onClick,
   onDelete,
   onEdit,
   onShare,
 }: RecentCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false)
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false)
 
   return (
     <motion.div
       className={cn(
-        "group relative cursor-pointer overflow-hidden rounded-2xl border border-border/50 bg-card transition-all duration-200 hover:border-border hover:shadow-black/5 hover:shadow-lg",
+        'group relative cursor-pointer overflow-hidden rounded-2xl border border-border/50 bg-card transition-all duration-200 hover:border-border hover:shadow-black/5 hover:shadow-lg',
         className
       )}
       onClick={onClick}
@@ -91,8 +91,8 @@ export const RecentCard = ({
               <Button
                 className="h-8 w-8 rounded-full bg-background/80 shadow-sm backdrop-blur-sm hover:bg-background/90"
                 onClick={(e) => {
-                  e.stopPropagation();
-                  setIsPopoverOpen(!isPopoverOpen);
+                  e.stopPropagation()
+                  setIsPopoverOpen(!isPopoverOpen)
                 }}
                 size="icon"
                 variant="secondary"
@@ -110,9 +110,9 @@ export const RecentCard = ({
                   <Button
                     className="h-8 justify-start"
                     onClick={(e) => {
-                      e.stopPropagation();
-                      onEdit();
-                      setIsPopoverOpen(false);
+                      e.stopPropagation()
+                      onEdit()
+                      setIsPopoverOpen(false)
                     }}
                     size="sm"
                     variant="ghost"
@@ -125,9 +125,9 @@ export const RecentCard = ({
                   <Button
                     className="h-8 justify-start"
                     onClick={(e) => {
-                      e.stopPropagation();
-                      onShare();
-                      setIsPopoverOpen(false);
+                      e.stopPropagation()
+                      onShare()
+                      setIsPopoverOpen(false)
                     }}
                     size="sm"
                     variant="ghost"
@@ -140,9 +140,9 @@ export const RecentCard = ({
                   <Button
                     className="h-8 justify-start text-destructive hover:bg-destructive/10 hover:text-destructive"
                     onClick={(e) => {
-                      e.stopPropagation();
-                      onDelete();
-                      setIsPopoverOpen(false);
+                      e.stopPropagation()
+                      onDelete()
+                      setIsPopoverOpen(false)
                     }}
                     size="sm"
                     variant="ghost"
@@ -168,5 +168,5 @@ export const RecentCard = ({
         <p className="text-muted-foreground text-xs">{timestamp}</p>
       </div>
     </motion.div>
-  );
-};
+  )
+}

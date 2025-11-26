@@ -1,14 +1,14 @@
-import Image from "next/image";
-import Link from "next/link";
-import type { MindMapResponse } from "@/types/mind-map";
-import { formatDateTime } from "@/utils/formatDate";
+import Image from 'next/image'
+import Link from 'next/link'
+import type { MindMapResponse } from '@/types/mind-map'
+import { formatDateTime } from '@/utils/formatDate'
 
 type CardMindMapProps = {
-  mindMap: MindMapResponse;
-};
+  mindMap: MindMapResponse
+}
 
 export const CardMindMap = (props: CardMindMapProps) => {
-  const { mindMap } = props;
+  const { mindMap } = props
 
   return (
     <Link
@@ -29,5 +29,5 @@ export const CardMindMap = (props: CardMindMapProps) => {
         </p>
       </div>
     </Link>
-  );
-};
+  )
+}

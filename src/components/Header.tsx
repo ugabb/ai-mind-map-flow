@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { ModeToggle } from "@/components/mode-toggle";
-import { Button } from "@/components/ui/button";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ModeToggle } from '@/components/mode-toggle'
+import { Button } from '@/components/ui/button'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 
 export const Header = () => (
   <div className="z-20 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -16,4 +16,4 @@ export const Header = () => (
       </div>
     </div>
   </div>
-);
+)

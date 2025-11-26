@@ -1,7 +1,7 @@
 export default function AuthLayout({
   children, // will be a page or nested layout
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <section className="flex h-screen place-items-center bg-gradient-to-t from-muted to-transparent lg:grid lg:grid-cols-2">
@@ -14,5 +14,5 @@ export default function AuthLayout({
         {children}
       </section>
     </section>
-  );
+  )
 }

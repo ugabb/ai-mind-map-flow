@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { motion } from "framer-motion";
-import { Clock, LayoutGrid, LifeBuoy, Plus, Search } from "lucide-react";
-import Link from "next/link";
-import type { User } from "next-auth";
-import { Button } from "@/components/ui/button";
+import { motion } from 'framer-motion'
+import { Clock, LayoutGrid, LifeBuoy, Plus, Search } from 'lucide-react'
+import Link from 'next/link'
+import type { User } from 'next-auth'
+import { Button } from '@/components/ui/button'
 import {
   Sidebar,
   SidebarContent,
@@ -19,15 +19,15 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { UserAvatar } from "./UserAvatar";
+} from '@/components/ui/sidebar'
+import { UserAvatar } from './UserAvatar'
 
 type AppSidebarProps = {
-  currentUser?: User;
-};
+  currentUser?: User
+}
 
 export function AppSidebar({ currentUser }: AppSidebarProps) {
-  const { state } = useSidebar();
+  const { state } = useSidebar()
   return (
     <Sidebar className="bg-sidebar p-3 px-2">
       <SidebarHeader>
@@ -58,7 +58,7 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
         <SidebarGroup>
           <SidebarGroupLabel>Recents</SidebarGroupLabel>
           <SidebarMenu>
-            {["Você tá CANSADO…", "Machine Learning - CS22…"].map((title) => (
+            {['Você tá CANSADO…', 'Machine Learning - CS22…'].map((title) => (
               <SidebarMenuItem key={title}>
                 <SidebarMenuButton className="justify-start">
                   <Clock className="size-4" />
@@ -102,5 +102,5 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
         </motion.div>
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

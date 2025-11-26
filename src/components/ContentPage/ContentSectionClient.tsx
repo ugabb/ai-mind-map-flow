@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { useRef } from "react";
-import type { Content } from "@/types/content";
-import { TranscriptSection } from "./TranscriptSection";
-import type { YouTubePlayerRef } from "./YouTubePlayer";
-import { YouTubePlayer } from "./YouTubePlayer";
+import { useRef } from 'react'
+import type { Content } from '@/types/content'
+import { TranscriptSection } from './TranscriptSection'
+import type { YouTubePlayerRef } from './YouTubePlayer'
+import { YouTubePlayer } from './YouTubePlayer'
 
 type ContentSectionClientProps = {
-  content: Content;
-};
+  content: Content
+}
 
 export function ContentSectionClient({ content }: ContentSectionClientProps) {
-  const youtubePlayerRef = useRef<YouTubePlayerRef>(null);
+  const youtubePlayerRef = useRef<YouTubePlayerRef>(null)
 
   return (
     <div className="flex h-full flex-col gap-6 px-2">
@@ -28,5 +28,5 @@ export function ContentSectionClient({ content }: ContentSectionClientProps) {
         youtubePlayerRef={youtubePlayerRef}
       />
     </div>
-  );
+  )
 }

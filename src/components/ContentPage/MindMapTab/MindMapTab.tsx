@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   addEdge,
@@ -17,31 +17,31 @@ import {
   type ReactFlowInstance,
   useEdgesState,
   useNodesState,
-} from "@xyflow/react";
-import { useCallback, useLayoutEffect, useState } from "react";
-import "@xyflow/react/dist/style.css";
-import ELK from "elkjs/lib/elk.bundled.js";
-import toast from "react-hot-toast";
-import { ImSpinner8 } from "react-icons/im";
-import { Square } from "@/components/Custom Nodes/Square/Squaree";
-import { DefaultEdge } from "@/components/edges/DefaultEdges";
-import { Menubar } from "@/components/Menubar";
-import { useNodeStore } from "@/store/NodeStore";
-import convertJsonToReactFlow from "@/utils/convertJsonToReactFlow";
-import { EmptyMindMap } from "./EmptyMindMap";
+} from '@xyflow/react'
+import { useCallback, useLayoutEffect, useState } from 'react'
+import '@xyflow/react/dist/style.css'
+import ELK from 'elkjs/lib/elk.bundled.js'
+import toast from 'react-hot-toast'
+import { ImSpinner8 } from 'react-icons/im'
+import { Square } from '@/components/Custom Nodes/Square/Squaree'
+import { DefaultEdge } from '@/components/edges/DefaultEdges'
+import { Menubar } from '@/components/Menubar'
+import { useNodeStore } from '@/store/NodeStore'
+import convertJsonToReactFlow from '@/utils/convertJsonToReactFlow'
+import { EmptyMindMap } from './EmptyMindMap'
 
-const elk = new ELK();
+const elk = new ELK()
 
 //Elk options for layouting the tree
 const elkOptions = {
-  "elk.algorithm": "mrtree",
-  "elk.layered.spacing.nodeNodeBetweenLayers": "200",
-  "elk.spacing.nodeNode": "150",
-  "elk.edgeRouting": "SPLINES",
-  "elk.layered.nodePlacement.strategy": "SIMPLE",
-  "elk.mrtree.edgeRoutingMode": "AVOID_OVERLAP",
-  "elk.animate": "true",
-};
+  'elk.algorithm': 'mrtree',
+  'elk.layered.spacing.nodeNodeBetweenLayers': '200',
+  'elk.spacing.nodeNode': '150',
+  'elk.edgeRouting': 'SPLINES',
+  'elk.layered.nodePlacement.strategy': 'SIMPLE',
+  'elk.mrtree.edgeRoutingMode': 'AVOID_OVERLAP',
+  'elk.animate': 'true',
+}
 
 /**
  *
@@ -56,21 +56,21 @@ const getLayoutedElements = (
   options = elkOptions
 ) => {
   const graph = {
-    id: "root",
+    id: 'root',
     layoutOptions: options,
     children: nodes.map((node) => ({
       ...node,
       // Adjust the target and source handle positions based on the layout direction
       // and the element's position relative to its parent
-      targetPosition: "top" as const,
-      sourcePosition: "bottom" as const,
+      targetPosition: 'top' as const,
+      sourcePosition: 'bottom' as const,
     })),
     edges: edges.map((edge) => ({
       id: edge.id,
       sources: [edge.source],
       targets: [edge.target],
     })),
-  };
+  }
 
   return elk
     .layout(graph)
@@ -83,57 +83,53 @@ const getLayoutedElements = (
         })) || [],
       edges: layoutedGraph.edges,
     }))
-    .catch((error) => {
-      console.error("Error layouting the graph:", error);
-      return null;
-    });
-};
+    .catch((_error) => null)
+}
 
-const nodeTypes = { square: Square };
-const edgesTypes = { default: DefaultEdge };
+const nodeTypes = { square: Square }
+const edgesTypes = { default: DefaultEdge }
 
 export function MindMapTab() {
-  const [nodes, setNodes] = useNodesState<Node>([]);
-  const [edges, setEdges] = useEdgesState<Edge>([]);
+  const [nodes, setNodes] = useNodesState<Node>([])
+  const [edges, setEdges] = useEdgesState<Edge>([])
   const {
     isCreatingNode,
     mindMapToGenerate,
     mindMapLoadingRequest,
     currentMindMap,
-  } = useNodeStore();
+  } = useNodeStore()
 
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null)
 
   const onNodesChange = useCallback(
     (changes: NodeChange<Node>[]) => {
-      console.log("onNodesChange", rfInstance?.toObject());
-      setNodes((nds) => applyNodeChanges(changes, nds));
+      setNodes((nds) => applyNodeChanges(changes, nds))
     },
-    [setNodes, rfInstance?.toObject]
-  );
+    [setNodes]
+  )
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange<Edge>[]) => {
-      setEdges((eds) => applyEdgeChanges(changes, eds));
+      setEdges((eds) => applyEdgeChanges(changes, eds))
     },
     [setEdges]
-  );
+  )
 
   const handleMouseMove = useCallback(
     (event: any) => {
       if (!isCreatingNode) {
-        return;
+        return
       }
-      setMousePosition({ x: event.clientX, y: event.clientY });
+      setMousePosition({ x: event.clientX, y: event.clientY })
     },
     [isCreatingNode]
-  );
+  )
 
   const onConnect = useCallback(
     (connection: Connection) => setEdges((eds) => addEdge(connection, eds)),
     [setEdges]
-  );
+  )
 
   /**
    * @param {*} direction an object contains direction. for elkjs to know which direction layouting to use for the tree
@@ -144,42 +140,41 @@ export function MindMapTab() {
       { direction }: { direction: any },
       initialNodes: any[][] | null = null
     ) => {
-      const opts = { ...elkOptions, "elk.direction": direction };
-      const ns = initialNodes === null ? nodes : initialNodes[0];
-      const es = initialNodes === null ? edges : initialNodes[1];
+      const opts = { ...elkOptions, 'elk.direction': direction }
+      const ns = initialNodes === null ? nodes : initialNodes[0]
+      const es = initialNodes === null ? edges : initialNodes[1]
       getLayoutedElements(ns, es, opts).then((layoutedGraph) => {
         if (layoutedGraph) {
-          const { nodes: layoutedNodes, edges: layoutedEdges } = layoutedGraph;
+          const { nodes: layoutedNodes, edges: layoutedEdges } = layoutedGraph
           // @ts-expect-error
-          setNodes(layoutedNodes);
+          setNodes(layoutedNodes)
           // @ts-expect-error
-          setEdges(layoutedEdges);
+          setEdges(layoutedEdges)
         } else {
-          toast.error("Error layouting the graph");
+          toast.error('Error layouting the graph')
         }
-      });
+      })
     },
     [setNodes, setEdges, edges, nodes]
-  );
+  )
 
   useLayoutEffect(() => {
-    console.log("mindMapToGenerate", mindMapToGenerate);
     if (mindMapToGenerate) {
-      const [newNodes, newEdges] = convertJsonToReactFlow(mindMapToGenerate);
-      setNodes(newNodes);
-      setEdges(newEdges);
-      onLayout({ direction: "DOWN" }, [newNodes, newEdges]);
+      const [newNodes, newEdges] = convertJsonToReactFlow(mindMapToGenerate)
+      setNodes(newNodes)
+      setEdges(newEdges)
+      onLayout({ direction: 'DOWN' }, [newNodes, newEdges])
     }
-  }, [mindMapToGenerate, onLayout, setEdges, setNodes]);
+  }, [mindMapToGenerate, onLayout, setEdges, setNodes])
 
   useLayoutEffect(() => {
     if (currentMindMap) {
-      const [newNodes, newEdges] = convertJsonToReactFlow(currentMindMap);
-      setNodes(newNodes);
-      setEdges(newEdges);
-      onLayout({ direction: "DOWN" }, [newNodes, newEdges]);
+      const [newNodes, newEdges] = convertJsonToReactFlow(currentMindMap)
+      setNodes(newNodes)
+      setEdges(newEdges)
+      onLayout({ direction: 'DOWN' }, [newNodes, newEdges])
     }
-  }, [currentMindMap, onLayout, setEdges, setNodes]);
+  }, [currentMindMap, onLayout, setEdges, setNodes])
 
   return (
     <div className="h-full overflow-hidden rounded-lg border">
@@ -190,12 +185,12 @@ export function MindMapTab() {
           className="h-full w-full"
           connectionMode={ConnectionMode.Loose}
           defaultEdgeOptions={{
-            type: "default",
+            type: 'default',
             markerEnd: {
               type: MarkerType.Arrow,
               width: 25,
               height: 25,
-              color: "hsl(var(--muted-foreground))",
+              color: 'hsl(var(--muted-foreground))',
             },
           }}
           edges={edges}
@@ -217,10 +212,10 @@ export function MindMapTab() {
             <div
               className="min-h-[200px] min-w-[200px] rounded bg-primary/20"
               style={{
-                position: "absolute",
+                position: 'absolute',
                 left: mousePosition?.x - 8,
                 top: mousePosition?.y - 8,
-                pointerEvents: "none", // Allow clicks to pass through
+                pointerEvents: 'none', // Allow clicks to pass through
                 zIndex: 1, // Ensure it's above the background
               }}
             />
@@ -238,5 +233,5 @@ export function MindMapTab() {
         </ReactFlow>
       )}
     </div>
-  );
+  )
 }
