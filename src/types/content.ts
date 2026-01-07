@@ -4,7 +4,6 @@ export type TranscriptChunk = {
   text: string
   offset: number
   duration: number
-  transcriptId: string
 }
 
 export type Transcription = {
@@ -14,10 +13,10 @@ export type Transcription = {
   createdAt: string
   updatedAt: string
   contentId: string
-  chunks: TranscriptChunk[]
+  transcriptChunks: TranscriptChunk[]
 }
 
-export type Content = {
+export type Study = {
   id: string
   title: string
   content: string
@@ -27,5 +26,5 @@ export type Content = {
   updatedAt: string
   userId: string
 
-  transcription: Transcription
+  transcript: Transcription
 }

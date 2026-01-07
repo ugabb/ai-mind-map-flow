@@ -1,16 +1,16 @@
 'use client'
 
 import { useRef } from 'react'
-import type { Content } from '@/types/content'
+import type { Study, Transcription } from '@/types/content'
 import { TranscriptSection } from './TranscriptSection'
 import type { YouTubePlayerRef } from './YouTubePlayer'
 import { YouTubePlayer } from './YouTubePlayer'
 
 type ContentSectionClientProps = {
-  content: Content
+  study: Study
 }
 
-export function ContentSectionClient({ content }: ContentSectionClientProps) {
+export function ContentSectionClient({ study }: ContentSectionClientProps) {
   const youtubePlayerRef = useRef<YouTubePlayerRef>(null)
 
   return (
@@ -18,15 +18,17 @@ export function ContentSectionClient({ content }: ContentSectionClientProps) {
       {/* YouTube Video Section */}
       <YouTubePlayer
         ref={youtubePlayerRef}
-        sourceUrl={content.sourceUrl}
-        title={content.title}
+        sourceUrl={study.sourceUrl}
+        title={study.title}
       />
 
       {/* Transcription Section */}
+      {study.transcript && (
       <TranscriptSection
-        transcription={content.transcription}
-        youtubePlayerRef={youtubePlayerRef}
-      />
+          transcript={study.transcript}
+          youtubePlayerRef={youtubePlayerRef}
+        />
+      )}
     </div>
   )
 }

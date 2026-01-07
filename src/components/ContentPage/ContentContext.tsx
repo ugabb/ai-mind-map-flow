@@ -1,12 +1,12 @@
 'use client'
 
 import { createContext, type ReactNode, useContext } from 'react'
-import type { Content } from '@/types/content'
+import type { Study } from '@/types/content'
 
 type ContentContextType = {
   contentId: string
   rawTranscription: string
-  content: Content
+  content: Study
 }
 
 const ContentContext = createContext<ContentContextType | undefined>(undefined)
@@ -15,7 +15,7 @@ type ContentProviderProps = {
   children: ReactNode
   contentId: string
   rawTranscription: string
-  content: Content
+  content: Study
 }
 
 export function ContentProvider({

@@ -1,8 +1,8 @@
-'use client'
 
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { RecentCard } from './RecentCard'
+import { api } from '@/services/axios'
 
 type RecentItem = {
   id: string
@@ -16,7 +16,6 @@ type RecentItem = {
 type RecentsGridProps = {
   items?: RecentItem[]
   onViewAll?: () => void
-  onItemClick?: (item: RecentItem) => void
   onItemDelete?: (item: RecentItem) => void
   onItemEdit?: (item: RecentItem) => void
   onItemShare?: (item: RecentItem) => void
@@ -44,7 +43,6 @@ const mockItems: RecentItem[] = [
 export const RecentsGrid = ({
   items = mockItems,
   onViewAll,
-  onItemClick,
   onItemDelete,
   onItemEdit,
   onItemShare,
@@ -85,7 +83,7 @@ export const RecentsGrid = ({
             }}
           >
             <RecentCard
-              onClick={() => onItemClick?.(item)}
+              id={item.id}
               onDelete={() => onItemDelete?.(item)}
               onEdit={() => onItemEdit?.(item)}
               onShare={() => onItemShare?.(item)}

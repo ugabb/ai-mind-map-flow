@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Edit, MoreHorizontal, Share, Trash2 } from 'lucide-react'
+import { Edit, Image, MoreHorizontal, Share, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,8 +10,11 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import Link from 'next/link'
 
 type RecentCardProps = {
+  id: string
   title: string
   subtitle?: string
   timestamp: string
@@ -25,6 +28,7 @@ type RecentCardProps = {
 }
 
 export const RecentCard = ({
+  id,
   title,
   subtitle,
   timestamp,
@@ -51,21 +55,15 @@ export const RecentCard = ({
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.98 }}
     >
+      <Link href={`/study/content/${id}`}>
       {/* Thumbnail */}
       <div className="relative aspect-video overflow-hidden bg-muted">
-        {thumbnail ? (
-          <img
-            alt={title}
-            className="h-full w-full object-cover"
-            src={thumbnail}
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
-            <div className="font-bold text-4xl text-primary/20">
-              {title.charAt(0).toUpperCase()}
-            </div>
-          </div>
-        )}
+        <Avatar className='w-full h-full object-cover'>
+          <AvatarImage src={thumbnail ?? ''} />
+          <AvatarFallback className='text-2xl'>
+            <Image className='size-6 text-muted-foreground'/>
+          </AvatarFallback>
+        </Avatar>
 
         {/* Play button for videos */}
         {/* {type === "video" && (
@@ -167,6 +165,7 @@ export const RecentCard = ({
         )}
         <p className="text-muted-foreground text-xs">{timestamp}</p>
       </div>
+      </Link>
     </motion.div>
   )
 }

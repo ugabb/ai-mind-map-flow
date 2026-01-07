@@ -1,20 +1,12 @@
-'use client'
-
 import { HeroSection } from '@/components/HeroSection'
-import { RecentsGrid } from '@/components/RecentsGrid'
+import { RecentsGridClient } from './recents-grid-client'
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex flex-col">
       <HeroSection />
       <div className="mt-8">
-        <RecentsGrid
-          onItemClick={(_item) => {}}
-          onItemDelete={(_item) => {}}
-          onItemEdit={(_item) => {}}
-          onItemShare={(_item) => {}}
-          onViewAll={() => {}}
-        />
+        <RecentsGridClient />
       </div>
       {/* <MindMapList currentUser={currentUser} /> */}
     </div>

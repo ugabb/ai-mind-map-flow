@@ -7,6 +7,7 @@ import {
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
 import { getContentById } from '@/services/content/get-content-by-id'
+import { getStudyById } from '@/services/study/get-study-by-id'
 
 export default async function ContentPage({
   params,
@@ -14,20 +15,21 @@ export default async function ContentPage({
   params: { id: string }
 }) {
   const { id } = params
-  const { content } = await getContentById(id as string)
-  const rawTranscription = content.transcription.chunks
-    .map((chunk) => chunk.text)
-    .join(' ')
+  // const { content } = await getContentById(id as string)
+  const { study, transcript } = await getStudyById(id as string)
+  console.log("study", study)
+  console.log("transcript", transcript)
+  const rawTranscription = study.content ?? ''
   return (
     <ContentProvider
-      content={content}
+      content={study}
       contentId={id}
       rawTranscription={rawTranscription}
     >
       <div className="h-full w-full py-6">
         <ResizablePanelGroup className="h-full" direction="horizontal">
           <ResizablePanel minSize={30}>
-            <ContentSection content={content} />
+            <ContentSection study={study} />
           </ResizablePanel>
           <ResizableHandle />
           <ResizablePanel minSize={30}>

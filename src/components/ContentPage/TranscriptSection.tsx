@@ -28,12 +28,12 @@ function TranscriptBox({
 }
 
 type TranscriptSectionProps = {
-  transcription: Transcription
+  transcript: Transcription
   youtubePlayerRef: React.RefObject<YouTubePlayerRef>
 }
 
 export function TranscriptSection({
-  transcription,
+  transcript,
   youtubePlayerRef,
 }: TranscriptSectionProps) {
   // Calculate transcription time in [HH:MM:SS] format
@@ -50,7 +50,7 @@ export function TranscriptSection({
   }
 
   // Function to concatenate 3 chunks into one larger transcript box
-  const concatChunks = (chunks: typeof transcription.chunks) => {
+  const concatChunks = (chunks: typeof transcript.transcriptChunks) => {
     const groupedChunks = []
 
     for (let i = 0; i < chunks.length; i += 3) {
@@ -77,7 +77,7 @@ export function TranscriptSection({
       </h3>
       <ScrollArea className="h-full">
         <div className="space-y-2 text-muted-foreground leading-relaxed">
-          {concatChunks(transcription.chunks).map((chunk) => {
+          {concatChunks(transcript.transcriptChunks).map((chunk) => {
             const firstChunk = chunk[0]
             const combinedText = chunk.map((chunk) => chunk.text).join(' ')
             return (

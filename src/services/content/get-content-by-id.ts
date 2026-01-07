@@ -1,14 +1,13 @@
-import type { Content } from '@/types/content'
-import { getServerSideAPIClient } from '../axios-server'
+import type { Study } from '@/types/content'
+import { api } from '../axios'
 
 type GetContentByIdResponse = {
-  content: Content
+  content: Study
 }
 
 export async function getContentById(
   id: string
 ): Promise<GetContentByIdResponse> {
-  const api = await getServerSideAPIClient()
   const { data } = await api.get<GetContentByIdResponse>(`/content/${id}`)
   return data
 }

@@ -1,12 +1,12 @@
-import type { Content } from '@/types/content'
+import type { Study, Transcription } from '@/types/content'
 import { ContentSectionClient } from './ContentSectionClient'
 
 type ContentSectionProps = {
-  content: Content
+  study: Study
 }
 
 export function ContentSection(props: ContentSectionProps) {
-  const { content } = props
+  const { study } = props
 
-  return <ContentSectionClient content={content} />
+  return <ContentSectionClient study={study} />
 }
